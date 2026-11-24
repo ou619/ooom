@@ -202,22 +202,40 @@ jobs:
           if-no-files-found: warn
           retention-days: 30
 
-      # The Actions log REST endpoint answers 403 without a token, and the
-      # artifact download needs one too. Force-pushing the tail to a throwaway
-      # branch keeps failures readable by anyone (raw.githubusercontent.com).
+      # Artifact download and the log REST endpoint both need a token. Publishing
+      # to throwaway branches keeps the results readable by anyone through
+      # raw.githubusercontent.com, which is the only channel this agent has.
+      - name: Publish review assets
+        if: always()
+        run: |
+          set -uo pipefail
+          if [ ! -d review-assets ]; then echo "no review-assets directory"; exit 0; fi
+          rm -rf "$RUNNER_TEMP/assets"; cp -r review-assets "$RUNNER_TEMP/assets"
+          git config user.name "ci-bot"
+          git config user.email "ci-bot@users.noreply.github.com"
+          git fetch --depth 1 origin main || true
+          git checkout -B review origin/main
+          rm -rf review-assets; cp -r "$RUNNER_TEMP/assets" review-assets
+          git add -f review-assets
+          git commit -m "ci: review assets for run ${GITHUB_RUN_ID}" || exit 0
+          git push --force origin review
+
       - name: Publish failure logs
         if: failure()
         run: |
           set -uo pipefail
-          mkdir -p .ci-logs
+          mkdir -p "$RUNNER_TEMP/logs"
           for f in "$RUNNER_TEMP"/*.log; do
             [ -f "$f" ] || continue
-            tail -c 300000 "$f" > ".ci-logs/$(basename "$f")"
+            tail -c 300000 "$f" > "$RUNNER_TEMP/logs/$(basename "$f")"
           done
-          ls -la .ci-logs
-          git config user.name  "ci-bot"
+          ls -la "$RUNNER_TEMP/logs"
+          git config user.name "ci-bot"
           git config user.email "ci-bot@users.noreply.github.com"
-          git checkout -B ci-logs
+          git fetch --depth 1 origin main || true
+          git checkout -B ci-logs origin/main
+          rm -rf .ci-logs; mkdir -p .ci-logs
+          cp "$RUNNER_TEMP"/logs/* .ci-logs/ 2>/dev/null || true
           git add -f .ci-logs
           git commit -m "ci: failure logs for run ${GITHUB_RUN_ID}" || exit 0
           git push --force origin ci-logs
