@@ -1,0 +1,152 @@
+name: iOS Simulator Review
+
+# Cloud-side review loop: build the real app for the iPhone simulator on a
+# GitHub-hosted Apple Silicon runner, launch it, and publish screenshots plus a
+# short screen recording. No signing, no secrets, no device.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ios-simulator-review-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    runs-on: macos-26
+    timeout-minutes: 150
+    env:
+      SCHEME: Minis
+      REVIEW_DERIVED: ${{ github.workspace }}/build/derived
+    steps:
+      - name: Confirm Apple Silicon runner
+        run: |
+          uname -m
+          test "$(uname -m)" = arm64 || { echo 'Need an arm64 macOS runner; the iOS deps only ship arm64.' >&2; exit 1; }
+
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Show toolchain
+        run: |
+          set -x
+          xcodebuild -version
+          xcrun --sdk iphonesimulator --show-sdk-version
+          xcode-select -p
+          go version || true
+          python3 --version
+
+      - name: Install build prerequisites
+        run: |
+          brew install ninja llvm libarchive pkg-config go
+          python3 -m pip install --upgrade meson
+
+      # The deps are built from source and never committed, so cache them.
+      # Key ties the cache to the pinned submodules and the build scripts.
+      - name: Cache native dependencies
+        id: deps-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            deps/libs
+            deps/include
+            deps/resources
+            deps/frameworks
+          key: deps-sim-${{ runner.os }}-${{ hashFiles('deps/*.sh', '.gitmodules') }}-${{ github.ref_name }}
+
+      - name: Build native dependencies for the simulator
+        if: steps.deps-cache.outputs.cache-hit != 'true'
+        run: |
+          set -euxo pipefail
+          # Same order as BUILDING.md: lame before ffmpeg or MP3 silently vanishes.
+          bash deps/build_lame.sh --simulator
+          bash deps/build_ffmpeg.sh --simulator
+          bash deps/build_ish.sh --simulator
+          bash deps/prepare_alpine_rootfs.sh
+          bash deps/build_rclone_ios.sh
+
+      - name: Write build-time provider config
+        run: |
+          cp src/ios/Configs/ProviderCustomization.xcconfig.example \
+             src/ios/Configs/ProviderCustomization.xcconfig
+
+      - name: Pick an available iPhone simulator
+        id: sim
+        run: |
+          set -euo pipefail
+          xcrun simctl list devices available --json > /tmp/devices.json
+          python3 - <<'PY' > /tmp/pick.env
+          import json, sys
+          data = json.load(open('/tmp/devices.json'))['devices']
+          wanted = ('iPhone 17 Pro', 'iPhone 17', 'iPhone Air', 'iPhone 16')
+          for runtime in sorted(data, reverse=True):
+              if not runtime.startswith('com.apple.CoreSimulator.SimRuntime.iOS-'):
+                  continue
+              for device in data[runtime]:
+                  if device.get('isAvailable') and any(w in device['name'] for w in wanted):
+                      print(f"UDID={device['udid']}")
+                      print(f"NAME={device['name']}")
+                      print(f"RUNTIME={runtime}")
+                      sys.exit(0)
+          sys.exit('No available iPhone simulator on this runner.')
+          PY
+          cat /tmp/pick.env >> "$GITHUB_OUTPUT"
+          cat /tmp/pick.env
+
+      - name: Build the app for the simulator
+        run: |
+          set -euo pipefail
+          xcodebuild \
+            -project src/ios/Minis.xcodeproj \
+            -scheme "$SCHEME" \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination "platform=iOS Simulator,id=${{ steps.sim.outputs.UDID }}" \
+            -derivedDataPath "$REVIEW_DERIVED" \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Boot, install, launch, capture
+        id: capture
+        run: |
+          set -euo pipefail
+          UDID='${{ steps.sim.outputs.UDID }}'
+          APP="$REVIEW_DERIVED/Build/Products/Debug-iphonesimulator/Minis.app"
+          test -d "$APP"
+          BUNDLE=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$APP/Info.plist")
+          mkdir -p review-assets
+          echo "bundle=$BUNDLE" >> "$GITHUB_OUTPUT"
+          echo "udid=$UDID" >> "$GITHUB_OUTPUT"
+
+          xcrun simctl bootstatus "$UDID" -b
+          # Light appearance keeps layout review deterministic.
+          xcrun simctl ui "$UDID" appearance light || true
+          xcrun simctl install "$UDID" "$APP"
+          xcrun simctl launch --console-pty "$UDID" "$BUNDLE" > review-assets/launch.log 2>&1 &
+          sleep 20
+          xcrun simctl io "$UDID" screenshot review-assets/01-launch.png || true
+
+          # A few seconds of motion makes animation and scroll chrome visible.
+          xcrun simctl io "$UDID" recordVideo --codec=h264 --force review-assets/launch.mp4 &
+          REC=$!
+          sleep 12
+          kill -INT "$REC" 2>/dev/null || true
+          wait "$REC" 2>/dev/null || true
+
+          xcrun simctl io "$UDID" screenshot review-assets/02-after.png || true
+          xcrun simctl spawn "$UDID" log show --last 3m \
+            --predicate "process == 'Minis'" --style compact > review-assets/app.log 2>&1 || true
+          ls -la review-assets
+
+      - name: Upload review artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: minis-simulator-review
+          path: review-assets
+          if-no-files-found: warn
+          retention-days: 30
