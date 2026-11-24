@@ -87,7 +87,8 @@ jobs:
           path: |
             deps/libs
             deps/include
-          key: sim-media-${{ runner.os }}-${{ hashFiles('deps/build_lame.sh', 'deps/build_ffmpeg.sh') }}
+            deps/frameworks
+          key: sim-media-v2-${{ runner.os }}-${{ hashFiles('deps/build_lame.sh', 'deps/build_ffmpeg.sh') }}
           restore-keys: |
             sim-media-${{ runner.os }}-
 
@@ -113,7 +114,8 @@ jobs:
           path: |
             deps/libs
             deps/include
-          key: sim-media-${{ runner.os }}-${{ hashFiles('deps/build_lame.sh', 'deps/build_ffmpeg.sh') }}
+            deps/frameworks
+          key: sim-media-v2-${{ runner.os }}-${{ hashFiles('deps/build_lame.sh', 'deps/build_ffmpeg.sh') }}
 
       - name: Deps 3/5 iSH
         run: |
