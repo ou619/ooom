@@ -58,6 +58,13 @@ jobs:
           python3 -m venv "$RUNNER_TEMP/mesonenv"
           "$RUNNER_TEMP/mesonenv/bin/pip" install --upgrade pip meson
           echo "$RUNNER_TEMP/mesonenv/bin" >> "$GITHUB_PATH"
+          # iSH links the arm64 guest VDSO with `clang -fuse-ld=lld`. Homebrew
+          # llvm is keg-only, so ld.lld is not on PATH and clang rejects the
+          # flag with "invalid linker name". Expose only the linker, not the
+          # whole llvm bin dir, so the system clang keeps winning for targets.
+          mkdir -p "$RUNNER_TEMP/llvmbin"
+          ln -sf /opt/homebrew/opt/llvm/bin/ld.lld "$RUNNER_TEMP/llvmbin/ld.lld"
+          echo "$RUNNER_TEMP/llvmbin" >> "$GITHUB_PATH"
           "$RUNNER_TEMP/mesonenv/bin/meson" --version
           go version
           ninja --version
