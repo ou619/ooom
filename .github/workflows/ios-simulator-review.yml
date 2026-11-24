@@ -62,63 +62,77 @@ jobs:
           # llvm is keg-only, so ld.lld is not on PATH and clang rejects the
           # flag with "invalid linker name". Expose only the linker, not the
           # whole llvm bin dir, so the system clang keeps winning for targets.
+          # iSH links the arm64 guest VDSO with `clang -fuse-ld=lld`. Homebrew
+          # ships that linker in its own keg-only `lld` formula (the `llvm`
+          # formula has no ld.lld), so put just the linker on PATH instead of a
+          # whole llvm bin dir that would shadow the system clang.
+          brew list lld >/dev/null 2>&1 || brew install lld
+          LLD=/opt/homebrew/opt/lld/bin/ld.lld
+          [ -x "$LLD" ] || LLD=/opt/homebrew/opt/llvm/bin/ld.lld
           mkdir -p "$RUNNER_TEMP/llvmbin"
-          ln -sf /opt/homebrew/opt/llvm/bin/ld.lld "$RUNNER_TEMP/llvmbin/ld.lld"
+          ln -sf "$LLD" "$RUNNER_TEMP/llvmbin/ld.lld"
           echo "$RUNNER_TEMP/llvmbin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/llvmbin/ld.lld" --version
           "$RUNNER_TEMP/mesonenv/bin/meson" --version
           go version
           ninja --version
 
-      # The deps are built from source and never committed, so cache them.
-      # Key ties the cache to the pinned submodules and the build scripts.
-      - name: Cache native dependencies
-        id: deps-cache
+      # lame + ffmpeg are the slow half of the dependency build and never
+      # change unless their scripts do, so they get their own cache that is
+      # saved as soon as they finish. Without it every iSH failure costs
+      # another full media rebuild before the useful step is even reached.
+      - name: Cache media dependencies
+        id: media-cache
         uses: actions/cache@v4
         with:
           path: |
             deps/libs
             deps/include
-            deps/resources
-            deps/frameworks
-          key: deps-sim-${{ runner.os }}-${{ hashFiles('deps/*.sh', '.gitmodules') }}-${{ github.ref_name }}
+          key: sim-media-${{ runner.os }}-${{ hashFiles('deps/build_lame.sh', 'deps/build_ffmpeg.sh') }}
+          restore-keys: |
+            sim-media-${{ runner.os }}-
 
       # Split into one step per dependency on purpose: the Actions log endpoint
       # answers 403 to unauthenticated callers, so each step also tees its
       # output to $RUNNER_TEMP, and "Publish failure logs" ships those files.
       - name: Deps 1/5 lame
-        if: steps.deps-cache.outputs.cache-hit != 'true'
+        if: steps.media-cache.outputs.cache-hit != 'true'
         run: |
           set -euxo pipefail
           bash deps/build_lame.sh --simulator 2>&1 | tee "$RUNNER_TEMP/lame.log"
-          ls -la deps/libs/iphonesimulator || true
 
       - name: Deps 2/5 ffmpeg
-        if: steps.deps-cache.outputs.cache-hit != 'true'
+        if: steps.media-cache.outputs.cache-hit != 'true'
         run: |
           set -euxo pipefail
           bash deps/build_ffmpeg.sh --simulator 2>&1 | tee "$RUNNER_TEMP/ffmpeg.log"
-          ls -la deps/libs/iphonesimulator || true
+
+      - name: Save media dependencies
+        if: always() && steps.media-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            deps/libs
+            deps/include
+          key: sim-media-${{ runner.os }}-${{ hashFiles('deps/build_lame.sh', 'deps/build_ffmpeg.sh') }}
 
       - name: Deps 3/5 iSH
-        if: steps.deps-cache.outputs.cache-hit != 'true'
         run: |
           set -euxo pipefail
           bash deps/build_ish.sh --simulator 2>&1 | tee "$RUNNER_TEMP/ish.log"
-          ls -la deps/libs/iphonesimulator || true
+          ls -la deps/libs/iphonesimulator
 
       - name: Deps 4/5 alpine rootfs
-        if: steps.deps-cache.outputs.cache-hit != 'true'
         run: |
           set -euxo pipefail
           bash deps/prepare_alpine_rootfs.sh 2>&1 | tee "$RUNNER_TEMP/rootfs.log"
-          ls -la deps/resources || true
+          ls -la deps/resources
 
       - name: Deps 5/5 rclone
-        if: steps.deps-cache.outputs.cache-hit != 'true'
         run: |
           set -euxo pipefail
           bash deps/build_rclone_ios.sh 2>&1 | tee "$RUNNER_TEMP/rclone.log"
-          ls -la deps/frameworks || true
+          ls -la deps/frameworks
 
       - name: Write build-time provider config
         run: |
