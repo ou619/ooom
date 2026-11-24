@@ -47,6 +47,7 @@ jobs:
 
       - name: Install build prerequisites
         run: |
+          exec > >(tee "$RUNNER_TEMP/install.log") 2>&1
           set -x
           # Runner images already ship some of these; only install what is missing.
           brew list ninja         >/dev/null 2>&1 || brew install ninja
@@ -58,10 +59,6 @@ jobs:
           python3 -m venv "$RUNNER_TEMP/mesonenv"
           "$RUNNER_TEMP/mesonenv/bin/pip" install --upgrade pip meson
           echo "$RUNNER_TEMP/mesonenv/bin" >> "$GITHUB_PATH"
-          # iSH links the arm64 guest VDSO with `clang -fuse-ld=lld`. Homebrew
-          # llvm is keg-only, so ld.lld is not on PATH and clang rejects the
-          # flag with "invalid linker name". Expose only the linker, not the
-          # whole llvm bin dir, so the system clang keeps winning for targets.
           # iSH links the arm64 guest VDSO with `clang -fuse-ld=lld`. Homebrew
           # ships that linker in its own keg-only `lld` formula (the `llvm`
           # formula has no ld.lld), so put just the linker on PATH instead of a
@@ -164,6 +161,7 @@ jobs:
 
       - name: Build the app for the simulator
         run: |
+          exec > >(tee "$RUNNER_TEMP/build.log") 2>&1
           set -euo pipefail
           xcodebuild \
             -project src/ios/Minis.xcodeproj \
@@ -178,6 +176,7 @@ jobs:
       - name: Boot, install, launch, capture
         id: capture
         run: |
+          exec > >(tee "$RUNNER_TEMP/capture.log") 2>&1
           set -euo pipefail
           UDID='${{ steps.sim.outputs.UDID }}'
           APP="$REVIEW_DERIVED/Build/Products/Debug-iphonesimulator/Minis.app"
@@ -243,13 +242,26 @@ jobs:
             [ -f "$f" ] || continue
             tail -c 300000 "$f" > "$RUNNER_TEMP/logs/$(basename "$f")"
           done
-          ls -la "$RUNNER_TEMP/logs"
+          ls -la "$RUNNER_TEMP/logs" || true
           git config user.name "ci-bot"
           git config user.email "ci-bot@users.noreply.github.com"
           git fetch --depth 1 origin main || true
           git checkout -B ci-logs origin/main
           rm -rf .ci-logs; mkdir -p .ci-logs
           cp "$RUNNER_TEMP"/logs/* .ci-logs/ 2>/dev/null || true
+          # The run id makes every failure produce a real change. Identical logs
+          # from two runs used to make `git commit` a no-op, which silently kept
+          # the branch stale and hid the fact that nothing had advanced.
+          {
+            echo "run_id=${GITHUB_RUN_ID}"
+            echo "run_number=${GITHUB_RUN_NUMBER}"
+            echo "commit=${GITHUB_SHA}"
+            echo "job_status=${{ job.status }}"
+            echo "captured_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "--- logs ---"
+            for f in .ci-logs/*; do [ -f "$f" ] && echo "$(wc -c < "$f") $(basename "$f")"; done
+          } > .ci-logs/meta.txt
+          cat .ci-logs/meta.txt
           git add -f .ci-logs
           git commit -m "ci: failure logs for run ${GITHUB_RUN_ID}" || exit 0
           git push --force origin ci-logs
