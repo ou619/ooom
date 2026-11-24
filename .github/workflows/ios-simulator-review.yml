@@ -127,12 +127,31 @@ jobs:
 
       - name: Deps 5/5 rclone
         env:
-          # go-json-experiment/json targets encoding/json/v2, which is behind
-          # this experiment switch. Without it the build dies with
-          # "undefined: json.SkipFunc".
+          # go-json-experiment/json targets the encoding/json/v2 API that only
+          # Go 1.25/1.26 expose behind this switch. The image ships Go 1.27,
+          # where those symbols are gone, so pin the toolchain instead.
           GOEXPERIMENT: jsonv2
         run: |
           set -euxo pipefail
+          echo "image go: $(go version)"
+          curl -fsSL "https://go.dev/dl/?mode=json&include=all" -o "$RUNNER_TEMP/go.json"
+          python3 - "$RUNNER_TEMP/go.json" > "$RUNNER_TEMP/go.txt" <<'PY'
+          import json, sys
+          for rel in json.load(open(sys.argv[1])):
+              if not rel["version"].startswith("go1.25."):
+                  continue
+              for f in rel["files"]:
+                  if f["filename"].endswith("darwin-arm64.tar.gz") and f["kind"] == "archive":
+                      print(rel["version"], f["filename"])
+                      raise SystemExit
+          raise SystemExit("no go1.25 darwin-arm64 archive found")
+          PY
+          cat "$RUNNER_TEMP/go.txt"
+          read -r GO_VER GO_TARBALL < "$RUNNER_TEMP/go.txt"
+          curl -fsSL "https://go.dev/dl/$GO_TARBALL" -o "$RUNNER_TEMP/go.tgz"
+          mkdir -p "$RUNNER_TEMP/goroot"
+          tar -xzf "$RUNNER_TEMP/go.tgz" -C "$RUNNER_TEMP/goroot"
+          export PATH="$RUNNER_TEMP/goroot/go/bin:$PATH"
           go version
           bash deps/build_rclone_ios.sh 2>&1 | tee "$RUNNER_TEMP/rclone.log"
           ls -la deps/frameworks
