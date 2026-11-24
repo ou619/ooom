@@ -42,8 +42,20 @@ jobs:
 
       - name: Install build prerequisites
         run: |
-          brew install ninja llvm libarchive pkg-config go
-          python3 -m pip install --upgrade meson
+          set -x
+          # Runner images already ship some of these; only install what is missing.
+          brew list ninja         >/dev/null 2>&1 || brew install ninja
+          brew list libarchive    >/dev/null 2>&1 || brew install libarchive
+          brew list pkg-config    >/dev/null 2>&1 || brew install pkg-config
+          brew list llvm          >/dev/null 2>&1 || brew install llvm
+          command -v go           >/dev/null 2>&1 || brew install go
+          # Homebrew Python is externally managed (PEP 668), so meson goes into a venv.
+          python3 -m venv "$RUNNER_TEMP/mesonenv"
+          "$RUNNER_TEMP/mesonenv/bin/pip" install --upgrade pip meson
+          echo "$RUNNER_TEMP/mesonenv/bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/mesonenv/bin/meson" --version
+          go version
+          ninja --version
 
       # The deps are built from source and never committed, so cache them.
       # Key ties the cache to the pinned submodules and the build scripts.
