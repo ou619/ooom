@@ -190,6 +190,10 @@ jobs:
         run: |
           exec > >(tee "$RUNNER_TEMP/build.log") 2>&1
           set -euo pipefail
+          # Ad-hoc sign instead of disabling signing: an unsigned simulator build
+          # carries no entitlements, so FileManager.containerURL(forSecurity
+          # ApplicationGroupIdentifier:) returns nil and the app crashes on the
+          # first launch (AIChatViewModel+RequestBudget.swift:424 force-unwrap).
           xcodebuild \
             -project src/ios/Minis.xcodeproj \
             -scheme "$SCHEME" \
@@ -197,8 +201,13 @@ jobs:
             -sdk iphonesimulator \
             -destination "platform=iOS Simulator,id=${{ steps.sim.outputs.UDID }}" \
             -derivedDataPath "$REVIEW_DERIVED" \
-            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_ALLOWED=YES \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY=- \
+            DEVELOPMENT_TEAM= \
             build
+          APP="$REVIEW_DERIVED/Build/Products/Debug-iphonesimulator/Minis.app"
+          codesign -d --entitlements - "$APP" || true
 
       - name: Boot, install, launch, capture
         id: capture
