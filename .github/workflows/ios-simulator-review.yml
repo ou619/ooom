@@ -11,7 +11,9 @@ on:
 
 concurrency:
   group: ios-simulator-review-${{ github.ref }}
-  cancel-in-progress: true
+  # Never let a queued run kill the one already building: a cancelled run
+  # reports no step data at all, which is indistinguishable from "still queued".
+  cancel-in-progress: false
 
 jobs:
   review:
