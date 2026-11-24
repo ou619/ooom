@@ -126,8 +126,14 @@ jobs:
           ls -la deps/resources
 
       - name: Deps 5/5 rclone
+        env:
+          # go-json-experiment/json targets encoding/json/v2, which is behind
+          # this experiment switch. Without it the build dies with
+          # "undefined: json.SkipFunc".
+          GOEXPERIMENT: jsonv2
         run: |
           set -euxo pipefail
+          go version
           bash deps/build_rclone_ios.sh 2>&1 | tee "$RUNNER_TEMP/rclone.log"
           ls -la deps/frameworks
 
