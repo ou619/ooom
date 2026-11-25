@@ -1,0 +1,7 @@
+url=https://sake-receipt-whatever-thousands.trycloudflare.com
+run_id=45562982214
+commit=20d97c4a16d4f0c2cec80d6bd7ff940f9e227347
+started_at=2026-11-25T07:04:09Z
+duration_minutes=60
+device=6478AFFB-AE17-412A-A1E5-51BCFFD300B6
+bundle=com.openminis.app
