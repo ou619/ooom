@@ -305,11 +305,13 @@ struct SessionAvatarPicker: ViewModifier {
                 matching: .images,
                 photoLibrary: .shared()
             )
-            .onChange(of: item) { _, newItem in
+            // Single-parameter `onChange` on purpose: the two-parameter closure
+            // form is iOS 17+, and this target still deploys below that.
+            .onChange(of: item) { newItem in
                 guard let newItem else { return }
                 Task { await apply(newItem) }
             }
-            .onChange(of: restoreTick) { _, _ in
+            .onChange(of: restoreTick) { _ in
                 Task { await restoreDefault() }
             }
             .alert(AppLocalized("这张图片无法使用"), isPresented: $errorShown) {
