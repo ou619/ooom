@@ -229,6 +229,18 @@ jobs:
           xcrun simctl ui "$UDID" appearance light || true
           xcrun simctl install "$UDID" "$APP"
 
+          DATA=$(xcrun simctl get_app_container "$UDID" "$BUNDLE" data)
+          DB="$DATA/Library/MinisChat/minis.db"
+
+          # The debug server's auth switch defaults to ON (DebugAuth.swift:58
+          # reads debug.auth.required, default true), and a paired envelope
+          # cannot be produced from a shell. Flipping the pref through the
+          # simulator's own defaults keeps cfprefsd coherent; writing the plist
+          # by hand would be silently overwritten on the app's first launch.
+          xcrun simctl spawn "$UDID" defaults write "$BUNDLE" debug.auth.required -bool NO \
+            || echo "defaults write failed; public RPC will answer 401"
+          xcrun simctl spawn "$UDID" defaults read "$BUNDLE" debug.auth.required || true
+
           # First launch exists only to let the app create its schema and its
           # Library/MinisChat container. A fresh install has no database, so
           # this is the only window where the file can be written from outside.
@@ -237,8 +249,6 @@ jobs:
           xcrun simctl terminate "$UDID" "$BUNDLE" > /dev/null 2>&1 || true
           sleep 2
 
-          DATA=$(xcrun simctl get_app_container "$UDID" "$BUNDLE" data)
-          DB="$DATA/Library/MinisChat/minis.db"
           test -f "$DB"
           ls -la "$DB"
           # Direct writes are the only option: the in-app debug RPC is
