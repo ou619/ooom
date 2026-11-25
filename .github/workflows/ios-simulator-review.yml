@@ -91,7 +91,12 @@ jobs:
             cp .github/ci/assets/soul-demo.gif "$MEM/SOUL.icon.gif"
             rm -f "$MEM/SOUL.icon.png"
             python3 .github/ci/seed_soul_icon.py "$MEM/SOUL.md" "SOUL.icon.gif"
-            ls -la "$MEM"
+            echo "--- SOUL.md ---"
+            head -20 "$MEM/SOUL.md" || true
+            echo "--- memory dir ---"
+            ls -la "$MEM" || true
+            echo "--- sidecars anywhere in the group ---"
+            find "$GROUP" -maxdepth 4 -name 'SOUL*' -print 2>/dev/null || true
           else
             echo "::warning::app-group container not found; the soul GIF was not seeded"
           fi
@@ -138,6 +143,13 @@ jobs:
           kill -INT "$RECTOP" 2>/dev/null || true
           wait "$RECTOP" 2>/dev/null || true
           xcrun simctl io "$UDID" screenshot review-assets/02c-chat-top-after.png || true
+          # Three stills 0.4 s apart: a looping GIF changes between them, a
+          # static fallback icon does not. Comparing them offline is cheaper
+          # than trusting a screenshot that may have caught frame 0.
+          for i in 1 2 3; do
+            xcrun simctl io "$UDID" screenshot "review-assets/02d-frame-$i.png" || true
+            sleep 0.4
+          done
 
           # Scroll so the tool capsule and the markdown table are on screen too;
           # one screenshot of the top of the transcript shows neither.
