@@ -250,11 +250,34 @@ jobs:
           sleep 20
           xcrun simctl io "$UDID" screenshot review-assets/01-launch.png || true
 
-          # The deep link lands on the seeded conversation, so the capture shows
-          # a real transcript instead of the first-run checklist.
-          xcrun simctl openurl "$UDID" "minis://sessions/seed-review-session" || true
-          sleep 8
+          # The URL scheme is not usable here: simctl openurl makes SpringBoard
+          # put up an "Open in Minis?" confirmation, and nothing in this job can
+          # tap it. debug.openSession posts the same .openSessionFromIntent
+          # notification the deep link would, without a system dialog.
+          RPC=http://127.0.0.1:8321/rpc
+          curl -s -m 10 http://127.0.0.1:8321/schema > review-assets/debug-schema.txt || true
+          cat review-assets/debug-schema.txt || true
+          rpc() {
+            curl -s -m 20 -X POST "$RPC" -H 'Content-Type: application/json' -d "$1" || true
+          }
+          rpc '{"jsonrpc":"2.0","id":1,"method":"debug.openSession","params":{"sessionId":"seed-review-session"}}' \
+            > review-assets/rpc-open-session.json || true
+          cat review-assets/rpc-open-session.json || true
+          # If the debug server is off (or already paired), fall back to the URL
+          # scheme so the attempt is still visible in the log.
+          if ! grep -q '"ok":true' review-assets/rpc-open-session.json 2>/dev/null; then
+            echo "debug.openSession did not confirm; falling back to the URL scheme"
+            xcrun simctl openurl "$UDID" "minis://sessions/seed-review-session" || true
+          fi
+          sleep 5
           xcrun simctl io "$UDID" screenshot review-assets/02-chat.png || true
+
+          # Scroll so the tool capsule and the markdown table are on screen too;
+          # one screenshot of the top of the transcript cannot show either.
+          rpc '{"jsonrpc":"2.0","id":2,"method":"debug.scroll","params":{"x":196,"y":620,"deltaX":0,"deltaY":-620}}' \
+            > review-assets/rpc-scroll.json || true
+          sleep 3
+          xcrun simctl io "$UDID" screenshot review-assets/03-chat-scrolled.png || true
 
           # A few seconds of motion makes animation and scroll chrome visible.
           xcrun simctl io "$UDID" recordVideo --codec=h264 --force review-assets/launch.mp4 &
@@ -263,7 +286,7 @@ jobs:
           kill -INT "$REC" 2>/dev/null || true
           wait "$REC" 2>/dev/null || true
 
-          xcrun simctl io "$UDID" screenshot review-assets/03-after.png || true
+          xcrun simctl io "$UDID" screenshot review-assets/04-after.png || true
           xcrun simctl spawn "$UDID" log show --last 3m \
             --predicate "process == 'Minis'" --style compact > review-assets/app.log 2>&1 || true
           ls -la review-assets
