@@ -241,7 +241,10 @@ phone.addEventListener('pointerup', async (event) => {
     return;
   }
   if (Math.hypot(dx, dy) < 12) return;
-  const sign = $('#invert').checked ? 1 : -1;
+  // Measured on a live session: deltaY < 0 moves the content up, deltaY > 0 moves
+  // it down. A drag below the start point must therefore send a POSITIVE deltaY,
+  // so the default sign is +1 and the checkbox only inverts it.
+  const sign = $('#invert').checked ? -1 : 1;
   // Gesture deltas are in points too, so divide the pixel travel by the scale.
   await rpc('debug.scroll', {
     x: state.x, y: state.y,
