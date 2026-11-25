@@ -22,7 +22,7 @@ on:
       duration_minutes:
         description: 'How long to keep the session alive (minutes, max 330)'
         required: false
-        default: '45'
+        default: '60'
   push:
     branches: [remote]
 
@@ -120,21 +120,40 @@ jobs:
           BUNDLE: ${{ steps.buildsim.outputs.bundle_id }}
         run: |
           set -euo pipefail
-          # Launch arguments land in NSArgumentDomain, which wins over the
-          # stored preference, so this single argument is enough to let the
-          # public RPC answer; the `defaults` write below makes it stick even
-          # for launches that do not pass the argument.
-          xcrun simctl launch "$UDID" "$BUNDLE" -debug.auth.required NO > /dev/null 2>&1 || true
-          sleep 5
-          xcrun simctl spawn "$UDID" defaults write "$BUNDLE" debug.auth.required -bool NO \
-            > /dev/null 2>&1 || echo "defaults write failed; the launch argument still applies"
-          sleep 4
-          xcrun simctl io "$UDID" screenshot "$RUNNER_TEMP/00-started.png" > /dev/null 2>&1 || true
-          # Prove the debug server actually answers before opening a tunnel.
-          code=$(curl -s -o /dev/null -w '%{http_code}' -m 10 http://127.0.0.1:8321/schema || true)
+          # Order matters and the app must not be running: UserDefaults keeps an
+          # in-process cache, so a preference written after launch is invisible
+          # to the running app. A launch argument does not help either —
+          # `-debug.auth.required NO` lands in NSArgumentDomain as the STRING
+          # "NO", and `object(forKey:) as? Bool` fails on that, falling back to
+          # the default `true` (DebugAuth.swift:58).
+          xcrun simctl terminate "$UDID" "$BUNDLE" > /dev/null 2>&1 || true
+          sleep 1
+          xcrun simctl spawn "$UDID" defaults write "$BUNDLE" debug.auth.required -bool NO
+          echo -n "stored debug.auth.required = "
+          xcrun simctl spawn "$UDID" defaults read "$BUNDLE" debug.auth.required || true
+
+          xcrun simctl launch "$UDID" "$BUNDLE" > /dev/null 2>&1
+          for i in $(seq 1 40); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' -m 5 http://127.0.0.1:8321/schema || true)
+            [ "$code" = "200" ] && break
+            sleep 1
+          done
           echo "debug server /schema -> $code"
           curl -s -m 10 http://127.0.0.1:8321/schema || true
           test "$code" = "200"
+
+          sleep 3
+          xcrun simctl io "$UDID" screenshot "$RUNNER_TEMP/00-started.png" > /dev/null 2>&1 || true
+
+          # Fail here, before a tunnel exists, if the RPC still needs pairing:
+          # a published URL that answers 401 is worse than no URL at all.
+          shot_code=$(curl -s -o "$RUNNER_TEMP/rpc-selftest.json" -w '%{http_code}' -m 30 \
+            -X POST http://127.0.0.1:8321/rpc -H 'Content-Type: application/json' \
+            -d '{"jsonrpc":"2.0","id":1,"method":"debug.screenshot","params":{"scale":2}}' || true)
+          echo "rpc debug.screenshot -> $shot_code"
+          head -c 200 "$RUNNER_TEMP/rpc-selftest.json" || true
+          echo
+          test "$shot_code" = "200"
 
       - name: Open the review session
         run: |
@@ -201,7 +220,7 @@ jobs:
           URL: ${{ steps.tunnel.outputs.url }}
           UDID: ${{ steps.buildsim.outputs.udid }}
           BUNDLE: ${{ steps.buildsim.outputs.bundle_id }}
-          DURATION: ${{ inputs.duration_minutes || '45' }}
+          DURATION: ${{ inputs.duration_minutes || '60' }}
         run: |
           set -euo pipefail
           git config user.name "minis-ci"
@@ -225,7 +244,7 @@ jobs:
 
       - name: Keep the session alive
         env:
-          DURATION: ${{ inputs.duration_minutes || '45' }}
+          DURATION: ${{ inputs.duration_minutes || '60' }}
           URL: ${{ steps.tunnel.outputs.url }}
         run: |
           set -uo pipefail
