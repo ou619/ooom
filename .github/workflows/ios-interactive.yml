@@ -279,7 +279,10 @@ jobs:
           cat .remote/url.txt
           git add -f .remote/url.txt
           git commit -m "remote: session for run ${GITHUB_RUN_ID}"
-          git push origin HEAD:refs/heads/remote-url
+          # Force: this branch is a scratchboard rebased onto main every run, so a
+          # plain push is always rejected as non-fast-forward. The review
+          # workflow already force-pushes its publish branches for that reason.
+          git push --force origin HEAD:refs/heads/remote-url
 
       - name: Keep the session alive
         env:
@@ -340,4 +343,4 @@ jobs:
           ls -la .ci-logs || true
           git add -f .ci-logs
           git commit -m "logs: interactive run ${GITHUB_RUN_ID}"
-          git push origin HEAD:refs/heads/ci-logs
+          git push --force origin HEAD:refs/heads/ci-logs
