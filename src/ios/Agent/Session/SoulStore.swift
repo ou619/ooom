@@ -691,122 +691,99 @@ struct SoulIconView: View {
     }
 }
 
-/// [T-soul-gif-icon] The only UIKit view in the Soul icon path: a
-/// `UIImageView` looping pre-decoded GIF frames.
+/// [T-soul-gif-icon] SwiftUI-native playback: `TimelineView(.animation)` ticks on
+/// the display link and the frame index is derived from the timeline date.
 ///
-/// `animationImages` is used rather than `UIImage.animatedImage(with:duration:)`
-/// because the latter flattens every frame to one duration, so a GIF timed at
-/// 80ms/500ms would play at the wrong rhythm. It also makes pause/resume
-/// trivial, which the Reduce Motion / Low Power Mode rules need (a real stop
-/// on a frame, not a rebuilt still image).
-///
-/// Decoding is memoised on the coordinator: `updateUIView` runs on every
-/// enclosing body pass, and decoding a GIF there (the pitfall this codebase
-/// calls out for `UIImage(data:)` in a body) would burn main-thread time for
-/// nothing. Only a changed `icon` string re-decodes.
-private struct SoulAnimatedIconView: UIViewRepresentable {
+/// This replaced a `UIImageView` + `animationImages` representable that was
+/// MEASURED frozen in the CI simulator: three screenshots 0.4s apart came back
+/// byte-identical while the log reported 12 decoded frames, no Reduce Motion, no
+/// Low Power Mode and a composed animated image. Rather than keep guessing at
+/// UIKit lifecycle inside a `UIHostingConfiguration` cell, the playback clock now
+/// comes from SwiftUI itself.
+private struct SoulAnimatedIconView: View {
     let icon: String
     let isPaused: Bool
     let cornerRadius: CGFloat
 
-    func makeCoordinator() -> Coordinator { Coordinator() }
+    /// Loop origin. Views are drawn from `context.date` rather than accumulated,
+    /// so a body pass can never leave the loop at a stale frame.
+    @State private var startedAt = Date()
 
-    final class Coordinator {
-        var decodedIcon: String?
-        var frames: [UIImage] = []
-        var duration: TimeInterval = 0
-        var stillFrame: UIImage?
-        /// Frames composed into ONE `UIImage`. UIImageView animates an animated
-        /// image by itself, so nothing has to call `startAnimating()` and no
-        /// body pass can reset the loop by reassigning `animationImages`.
-        var animatedUIImage: UIImage?
-        /// Last applied play/pause state, so a body pass that did not change
-        /// it does not restart the loop from frame 0.
-        var appliedPaused: Bool?
+    var body: some View {
+        let box = SoulGIFCache.frames(for: icon)
+        let count = box?.frames.count ?? 0
+        TimelineView(.animation(minimumInterval: 1.0 / 30.0,
+                                paused: isPaused || count < 2)) { context in
+            // A paused timeline stops ticking, so the first frame is correct for
+            // Reduce Motion and Low Power Mode alike.
+            if let image = frame(of: box, at: context.date) {
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius,
+                                                style: .continuous))
+            } else {
+                Color.clear
+            }
+        }
+        .onAppear { SoulGIFCache.note(frames: count, paused: isPaused) }
+        .onChange(of: isPaused) { paused in SoulGIFCache.note(frames: count, paused: paused) }
     }
 
-    func makeUIView(context: Context) -> UIImageView {
-        let view = LoopingGIFView()
-        // Same fill/crop contract as the static branch: a non-square GIF fills
-        // the square frame and is clipped, never letterboxed.
-        view.contentMode = .scaleAspectFill
-        view.clipsToBounds = true
-        view.backgroundColor = .clear
-        view.isUserInteractionEnabled = false
-        return view
-    }
-
-    func updateUIView(_ uiView: UIImageView, context: Context) {
-        uiView.layer.cornerRadius = cornerRadius
-        uiView.layer.cornerCurve = .continuous
-        uiView.layer.masksToBounds = true
-
-        let coordinator = context.coordinator
-        if coordinator.decodedIcon != icon {
-            coordinator.decodedIcon = icon
-            let data = SoulIconImage.gifData(from: icon) ?? Data()
-            let animation = SoulIconImage.animatedGIF(from: data)
-            coordinator.frames = animation?.frames ?? []
-            coordinator.duration = animation?.duration ?? 0
-            coordinator.stillFrame = SoulIconImage.firstGIFFrame(from: data)
-            coordinator.animatedUIImage = SoulIconImage.animatedUIImage(
-                frames: coordinator.frames,
-                duration: coordinator.duration)
-            coordinator.appliedPaused = nil
-            // A decoder that hands back 12 identical frames looks exactly like
-            // a frozen animation, so record whether the frames actually differ.
-            let firstBytes = coordinator.frames.first?.pngData()
-            let lastBytes = coordinator.frames.last?.pngData()
-            AppLogger(category: "Soul").info(
-                "[SoulGIF] decode frames=\(coordinator.frames.count)"
-                    + " firstEqLast=\(firstBytes == lastBytes)"
-                    + " composed=\(coordinator.animatedUIImage?.images != nil)")
-        }
-
-        // Fewer than two frames means there is nothing to animate, so the
-        // still presentation is correct regardless of the settings.
-        let showStill = isPaused || coordinator.frames.count < 2
-        let changed = coordinator.appliedPaused != showStill
-        if changed {
-            coordinator.appliedPaused = showStill
-            // One line per state change, so `log show` can answer "did the
-            // header actually get an animated icon, and if not, which switch
-            // paused it" without a debugger attached to a CI simulator.
-            AppLogger(category: "Soul").info(
-                "[SoulGIF] frames=\(coordinator.frames.count)"
-                    + " dur=\(String(format: "%.2f", coordinator.duration))"
-                    + " still=\(showStill)"
-                    + " reduceMotion=\(UIAccessibility.isReduceMotionEnabled)"
-                    + " lowPower=\(ProcessInfo.processInfo.isLowPowerModeEnabled)")
-        }
-
-        if showStill {
-            // The still is also what an offscreen export sees
-            // (ChatExportRenderer), so this branch must stay renderable.
-            guard changed || uiView.image !== coordinator.stillFrame else { return }
-            uiView.animationImages = nil
-            uiView.image = coordinator.stillFrame ?? coordinator.frames.first
-        } else {
-            guard changed || uiView.image !== coordinator.animatedUIImage else { return }
-            uiView.animationImages = nil
-            uiView.image = coordinator.animatedUIImage ?? coordinator.stillFrame
-        }
+    private func frame(of box: SoulGIFFrames?, at date: Date) -> UIImage? {
+        guard let box, box.frames.count > 1, box.duration > 0 else { return box?.frames.first }
+        let elapsed = date.timeIntervalSince(startedAt)
+        guard elapsed.isFinite else { return box.frames.first }
+        let progress = elapsed.truncatingRemainder(dividingBy: box.duration) / box.duration
+        let index = min(box.frames.count - 1, max(0, Int(progress * Double(box.frames.count))))
+        return box.frames[index]
     }
 }
 
-/// Re-attaching a cell detaches and re-attaches this view, and `startAnimating()`
-/// called before that attach does nothing. Restarting in `didMoveToWindow` is
-/// what makes the loop survive collection-view reuse.
-private final class LoopingGIFView: UIImageView {
-    override func didMoveToWindow() {
-        super.didMoveToWindow()
-        // Re-attaching tears down the layer that carried the loop, so hand the
-        // same animated image to the view once more. Assigning it afresh is what
-        // restarts playback; there is no `startAnimating()` equivalent to call.
-        if window != nil, let animated = image, animated.images != nil {
-            image = nil
-            image = animated
-        }
+/// Decoded frames for one icon payload, shared by every surface that shows it.
+final class SoulGIFFrames: NSObject {
+    let frames: [UIImage]
+    let duration: TimeInterval
+
+    init(frames: [UIImage], duration: TimeInterval) {
+        self.frames = frames
+        self.duration = duration
+    }
+}
+
+/// Memoises GIF decodes by payload. `NSCache` is thread-safe and evicts under
+/// memory pressure, which matters because one icon can decode from a few MB of
+/// base64 into tens of MB of bitmaps.
+enum SoulGIFCache {
+    private static let cache = NSCache<NSString, SoulGIFFrames>()
+    /// Last reported playback state, so the log carries one line per change
+    /// instead of one line per display-link tick.
+    private static var lastReported: String?
+
+    static func frames(for icon: String) -> SoulGIFFrames? {
+        let key = NSString(string: "\(icon.count):\(icon.hashValue)")
+        if let hit = cache.object(forKey: key) { return hit }
+        guard let data = SoulIconImage.gifData(from: icon),
+              let animation = SoulIconImage.animatedGIF(from: data),
+              !animation.frames.isEmpty else { return nil }
+        let box = SoulGIFFrames(frames: animation.frames, duration: animation.duration)
+        cache.setObject(box, forKey: key)
+        AppLogger(category: "Soul").info(
+            "[SoulGIF] decode frames=\(animation.frames.count)"
+                + " dur=\(String(format: "%.2f", animation.duration))")
+        return box
+    }
+
+    /// One line per presentation change, so `log show` can answer "was it
+    /// animated, and which switch paused it" without a debugger attached.
+    static func note(frames: Int, paused: Bool) {
+        let state = "\(frames)/\(paused)"
+        guard state != lastReported else { return }
+        lastReported = state
+        AppLogger(category: "Soul").info(
+            "[SoulGIF] play frames=\(frames) paused=\(paused)"
+                + " reduceMotion=\(UIAccessibility.isReduceMotionEnabled)"
+                + " lowPower=\(ProcessInfo.processInfo.isLowPowerModeEnabled)")
     }
 }
 
