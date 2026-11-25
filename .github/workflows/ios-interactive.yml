@@ -110,12 +110,20 @@ jobs:
           DB="$CONTAINER/Library/MinisChat/minis.db"
           echo "container=$CONTAINER"
           mkdir -p "$CONTAINER/Library/MinisChat"
-          xcrun simctl launch "$UDID" "$BUNDLE" > /dev/null 2>&1 || true
-          for i in $(seq 1 60); do
+          # `simctl launch` blocks until SpringBoard reports the launch, and on a
+          # cold simulator that never returned within 18 minutes of wall clock.
+          # Start it detached, wait for the database file instead of the launch
+          # call, then stop it — the review workflow always backgrounded this
+          # call, which is why it never hit the same wall.
+          xcrun simctl launch "$UDID" "$BUNDLE" > "$RUNNER_TEMP/first-launch.log" 2>&1 &
+          LAUNCH_PID=$!
+          for i in $(seq 1 120); do
             if [ -f "$DB" ]; then echo "database appeared after ${i}s"; break; fi
             sleep 1
           done
-          sleep 4
+          kill "$LAUNCH_PID" 2>/dev/null || true
+          cat "$RUNNER_TEMP/first-launch.log" 2>/dev/null || true
+          sleep 2
           xcrun simctl terminate "$UDID" "$BUNDLE" > /dev/null 2>&1 || true
           sleep 2
           if [ -f "$DB" ]; then ls -la "$DB"; else echo "no database yet; the seed step will skip"; fi
@@ -157,12 +165,18 @@ jobs:
           echo -n "stored debug.auth.required = "
           xcrun simctl spawn "$UDID" defaults read "$BUNDLE" debug.auth.required || true
 
-          xcrun simctl launch "$UDID" "$BUNDLE" > /dev/null 2>&1
+          # Detach the launch: `simctl launch` waits for SpringBoard to confirm it
+          # and that wait has been observed to exceed 18 minutes on a cold
+          # simulator. The app keeps running after this client is killed.
+          xcrun simctl launch "$UDID" "$BUNDLE" > "$RUNNER_TEMP/launch-client.log" 2>&1 &
+          LAUNCH_PID=$!
           for i in $(seq 1 40); do
             code=$(curl -s -o /dev/null -w '%{http_code}' -m 5 http://127.0.0.1:8321/schema || true)
             [ "$code" = "200" ] && break
             sleep 1
           done
+          kill "$LAUNCH_PID" 2>/dev/null || true
+          cat "$RUNNER_TEMP/launch-client.log" 2>/dev/null || true
           echo "debug server /schema -> $code"
           curl -s -m 10 http://127.0.0.1:8321/schema || true
           test "$code" = "200"
