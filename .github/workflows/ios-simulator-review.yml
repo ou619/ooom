@@ -3,6 +3,9 @@ name: iOS Simulator Review
 # Cloud-side review loop: build the real app for the iPhone simulator on a
 # GitHub-hosted Apple Silicon runner, launch it, and publish screenshots plus a
 # short screen recording. No signing, no secrets, no device.
+#
+# The build half lives in .github/actions/build-simulator so this workflow and
+# ios-interactive.yml cannot drift apart.
 
 on:
   workflow_dispatch:
@@ -19,227 +22,37 @@ jobs:
   review:
     runs-on: macos-26
     timeout-minutes: 150
-    # Needed only by the "Publish failure logs" step: it force-pushes the log
-    # tail to the ci-logs branch so the logs can be read without a token
-    # (the REST log endpoint answers 403 to unauthenticated callers).
+    # Needed only by the publish steps: they force-push logs and assets to
+    # throwaway branches so the results can be read without a token (the REST
+    # log endpoint answers 403 to unauthenticated callers).
     permissions:
       contents: write
-    env:
-      SCHEME: Minis
-      REVIEW_DERIVED: ${{ github.workspace }}/build/derived
     steps:
-      - name: Confirm Apple Silicon runner
-        run: |
-          uname -m
-          test "$(uname -m)" = arm64 || { echo 'Need an arm64 macOS runner; the iOS deps only ship arm64.' >&2; exit 1; }
-
       - uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Show toolchain
-        run: |
-          set -x
-          xcodebuild -version
-          xcrun --sdk iphonesimulator --show-sdk-version
-          xcode-select -p
-          go version || true
-          python3 --version
-
-      - name: Install build prerequisites
-        run: |
-          exec > >(tee "$RUNNER_TEMP/install.log") 2>&1
-          set -x
-          # Runner images already ship some of these; only install what is missing.
-          brew list ninja         >/dev/null 2>&1 || brew install ninja
-          brew list libarchive    >/dev/null 2>&1 || brew install libarchive
-          brew list pkg-config    >/dev/null 2>&1 || brew install pkg-config
-          brew list llvm          >/dev/null 2>&1 || brew install llvm
-          command -v go           >/dev/null 2>&1 || brew install go
-          # Homebrew Python is externally managed (PEP 668), so meson goes into a venv.
-          python3 -m venv "$RUNNER_TEMP/mesonenv"
-          "$RUNNER_TEMP/mesonenv/bin/pip" install --upgrade pip meson
-          echo "$RUNNER_TEMP/mesonenv/bin" >> "$GITHUB_PATH"
-          # iSH links the arm64 guest VDSO with `clang -fuse-ld=lld`. Homebrew
-          # ships that linker in its own keg-only `lld` formula (the `llvm`
-          # formula has no ld.lld), so put just the linker on PATH instead of a
-          # whole llvm bin dir that would shadow the system clang.
-          brew list lld >/dev/null 2>&1 || brew install lld
-          LLD=/opt/homebrew/opt/lld/bin/ld.lld
-          [ -x "$LLD" ] || LLD=/opt/homebrew/opt/llvm/bin/ld.lld
-          mkdir -p "$RUNNER_TEMP/llvmbin"
-          ln -sf "$LLD" "$RUNNER_TEMP/llvmbin/ld.lld"
-          echo "$RUNNER_TEMP/llvmbin" >> "$GITHUB_PATH"
-          "$RUNNER_TEMP/llvmbin/ld.lld" --version
-          "$RUNNER_TEMP/mesonenv/bin/meson" --version
-          go version
-          ninja --version
-
-      # lame + ffmpeg are the slow half of the dependency build and never
-      # change unless their scripts do, so they get their own cache that is
-      # saved as soon as they finish. Without it every iSH failure costs
-      # another full media rebuild before the useful step is even reached.
-      - name: Cache media dependencies
-        id: media-cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            deps/libs
-            deps/include
-            deps/frameworks
-          key: sim-media-v2-${{ runner.os }}-${{ hashFiles('deps/build_lame.sh', 'deps/build_ffmpeg.sh') }}
-          restore-keys: |
-            sim-media-${{ runner.os }}-
-
-      # Split into one step per dependency on purpose: the Actions log endpoint
-      # answers 403 to unauthenticated callers, so each step also tees its
-      # output to $RUNNER_TEMP, and "Publish failure logs" ships those files.
-      - name: Deps 1/5 lame
-        if: steps.media-cache.outputs.cache-hit != 'true'
-        run: |
-          set -euxo pipefail
-          bash deps/build_lame.sh --simulator 2>&1 | tee "$RUNNER_TEMP/lame.log"
-
-      - name: Deps 2/5 ffmpeg
-        if: steps.media-cache.outputs.cache-hit != 'true'
-        run: |
-          set -euxo pipefail
-          bash deps/build_ffmpeg.sh --simulator 2>&1 | tee "$RUNNER_TEMP/ffmpeg.log"
-
-      - name: Save media dependencies
-        if: always() && steps.media-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
-        with:
-          path: |
-            deps/libs
-            deps/include
-            deps/frameworks
-          key: sim-media-v2-${{ runner.os }}-${{ hashFiles('deps/build_lame.sh', 'deps/build_ffmpeg.sh') }}
-
-      - name: Deps 3/5 iSH
-        run: |
-          set -euxo pipefail
-          bash deps/build_ish.sh --simulator 2>&1 | tee "$RUNNER_TEMP/ish.log"
-          ls -la deps/libs/iphonesimulator
-
-      - name: Deps 4/5 alpine rootfs
-        run: |
-          set -euxo pipefail
-          bash deps/prepare_alpine_rootfs.sh 2>&1 | tee "$RUNNER_TEMP/rootfs.log"
-          ls -la deps/resources
-
-      - name: Deps 5/5 rclone
-        env:
-          # go-json-experiment/json targets the encoding/json/v2 API that only
-          # Go 1.25/1.26 expose behind this switch. The image ships Go 1.27,
-          # where those symbols are gone, so pin the toolchain instead.
-          GOEXPERIMENT: jsonv2
-        run: |
-          set -euxo pipefail
-          echo "image go: $(go version)"
-          curl -fsSL "https://go.dev/dl/?mode=json&include=all" -o "$RUNNER_TEMP/go.json"
-          python3 - "$RUNNER_TEMP/go.json" > "$RUNNER_TEMP/go.txt" <<'PY'
-          import json, sys
-          for rel in json.load(open(sys.argv[1])):
-              if not rel["version"].startswith("go1.25."):
-                  continue
-              for f in rel["files"]:
-                  if f["filename"].endswith("darwin-arm64.tar.gz") and f["kind"] == "archive":
-                      print(rel["version"], f["filename"])
-                      raise SystemExit
-          raise SystemExit("no go1.25 darwin-arm64 archive found")
-          PY
-          cat "$RUNNER_TEMP/go.txt"
-          read -r GO_VER GO_TARBALL < "$RUNNER_TEMP/go.txt"
-          curl -fsSL "https://go.dev/dl/$GO_TARBALL" -o "$RUNNER_TEMP/go.tgz"
-          mkdir -p "$RUNNER_TEMP/goroot"
-          tar -xzf "$RUNNER_TEMP/go.tgz" -C "$RUNNER_TEMP/goroot"
-          export PATH="$RUNNER_TEMP/goroot/go/bin:$PATH"
-          go version
-          bash deps/build_rclone_ios.sh 2>&1 | tee "$RUNNER_TEMP/rclone.log"
-          ls -la deps/frameworks
-
-      - name: Write build-time provider config
-        run: |
-          cp src/ios/Configs/ProviderCustomization.xcconfig.example \
-             src/ios/Configs/ProviderCustomization.xcconfig
-
-      - name: Pick an available iPhone simulator
-        id: sim
-        run: |
-          set -euo pipefail
-          xcrun simctl list devices available --json > /tmp/devices.json
-          python3 - <<'PY' > /tmp/pick.env
-          import json, sys
-          data = json.load(open('/tmp/devices.json'))['devices']
-          wanted = ('iPhone 17 Pro', 'iPhone 17', 'iPhone Air', 'iPhone 16')
-          for runtime in sorted(data, reverse=True):
-              if not runtime.startswith('com.apple.CoreSimulator.SimRuntime.iOS-'):
-                  continue
-              for device in data[runtime]:
-                  if device.get('isAvailable') and any(w in device['name'] for w in wanted):
-                      print(f"UDID={device['udid']}")
-                      print(f"NAME={device['name']}")
-                      print(f"RUNTIME={runtime}")
-                      sys.exit(0)
-          sys.exit('No available iPhone simulator on this runner.')
-          PY
-          cat /tmp/pick.env >> "$GITHUB_OUTPUT"
-          cat /tmp/pick.env
-
-      - name: Build the app for the simulator
-        run: |
-          exec > >(tee "$RUNNER_TEMP/build.log") 2>&1
-          set -euo pipefail
-          # Ad-hoc sign instead of disabling signing: an unsigned simulator build
-          # carries no entitlements, so FileManager.containerURL(forSecurity
-          # ApplicationGroupIdentifier:) returns nil and the app crashes on the
-          # first launch (AIChatViewModel+RequestBudget.swift:424 force-unwrap).
-          xcodebuild \
-            -project src/ios/Minis.xcodeproj \
-            -scheme "$SCHEME" \
-            -configuration Debug \
-            -sdk iphonesimulator \
-            -destination "platform=iOS Simulator,id=${{ steps.sim.outputs.UDID }}" \
-            -derivedDataPath "$REVIEW_DERIVED" \
-            CODE_SIGNING_ALLOWED=YES \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGN_IDENTITY=- \
-            DEVELOPMENT_TEAM= \
-            build
-          APP="$REVIEW_DERIVED/Build/Products/Debug-iphonesimulator/Minis.app"
-          codesign -d --entitlements - "$APP" || true
+      - name: Build for the simulator
+        id: buildsim
+        uses: ./.github/actions/build-simulator
 
       - name: Boot, install, launch, capture
         id: capture
+        env:
+          UDID: ${{ steps.buildsim.outputs.udid }}
+          APP: ${{ steps.buildsim.outputs.app_path }}
+          BUNDLE: ${{ steps.buildsim.outputs.bundle_id }}
         run: |
           exec > >(tee "$RUNNER_TEMP/capture.log") 2>&1
           set -euo pipefail
-          UDID='${{ steps.sim.outputs.UDID }}'
-          APP="$REVIEW_DERIVED/Build/Products/Debug-iphonesimulator/Minis.app"
           test -d "$APP"
-          BUNDLE=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$APP/Info.plist")
           mkdir -p review-assets
-          echo "bundle=$BUNDLE" >> "$GITHUB_OUTPUT"
-          echo "udid=$UDID" >> "$GITHUB_OUTPUT"
 
           xcrun simctl bootstatus "$UDID" -b
           # Light appearance keeps layout review deterministic.
           xcrun simctl ui "$UDID" appearance light || true
           xcrun simctl install "$UDID" "$APP"
-
-          DATA=$(xcrun simctl get_app_container "$UDID" "$BUNDLE" data)
-          DB="$DATA/Library/MinisChat/minis.db"
-
-          # The debug server's auth switch defaults to ON (DebugAuth.swift:58
-          # reads debug.auth.required, default true), and a paired envelope
-          # cannot be produced from a shell. Flipping the pref through the
-          # simulator's own defaults keeps cfprefsd coherent; writing the plist
-          # by hand would be silently overwritten on the app's first launch.
-          xcrun simctl spawn "$UDID" defaults write "$BUNDLE" debug.auth.required -bool NO \
-            || echo "defaults write failed; public RPC will answer 401"
-          xcrun simctl spawn "$UDID" defaults read "$BUNDLE" debug.auth.required || true
 
           # First launch exists only to let the app create its schema and its
           # Library/MinisChat container. A fresh install has no database, so
@@ -249,6 +62,8 @@ jobs:
           xcrun simctl terminate "$UDID" "$BUNDLE" > /dev/null 2>&1 || true
           sleep 2
 
+          DATA=$(xcrun simctl get_app_container "$UDID" "$BUNDLE" data)
+          DB="$DATA/Library/MinisChat/minis.db"
           test -f "$DB"
           ls -la "$DB"
           # Direct writes are the only option: the in-app debug RPC is
@@ -256,25 +71,27 @@ jobs:
           sqlite3 "$DB" < .github/ci/seed-review-session.sql
           sqlite3 "$DB" "SELECT count(*) FROM sessions;"
 
+          # The debug server's auth switch defaults to ON (DebugAuth.swift:58),
+          # and a paired envelope cannot be produced from a shell. Flipping the
+          # pref through the simulator's own defaults keeps cfprefsd coherent;
+          # hand-writing the plist is overwritten on the app's next launch.
+          xcrun simctl spawn "$UDID" defaults write "$BUNDLE" debug.auth.required -bool NO \
+            || echo "defaults write failed; public RPC will answer 401"
+
           xcrun simctl launch --console-pty "$UDID" "$BUNDLE" > review-assets/launch.log 2>&1 &
           sleep 20
           xcrun simctl io "$UDID" screenshot review-assets/01-launch.png || true
 
-          # The URL scheme is not usable here: simctl openurl makes SpringBoard
-          # put up an "Open in Minis?" confirmation, and nothing in this job can
-          # tap it. debug.openSession posts the same .openSessionFromIntent
-          # notification the deep link would, without a system dialog.
+          # simctl openurl makes SpringBoard put up an "Open in Minis?"
+          # confirmation and nothing here can tap it, so navigate through the
+          # app's own debug RPC: debug.openSession posts the very notification
+          # the deep link would, without a system dialog.
           RPC=http://127.0.0.1:8321/rpc
           curl -s -m 10 http://127.0.0.1:8321/schema > review-assets/debug-schema.txt || true
-          cat review-assets/debug-schema.txt || true
-          rpc() {
-            curl -s -m 20 -X POST "$RPC" -H 'Content-Type: application/json' -d "$1" || true
-          }
+          rpc() { curl -s -m 20 -X POST "$RPC" -H 'Content-Type: application/json' -d "$1" || true; }
           rpc '{"jsonrpc":"2.0","id":1,"method":"debug.openSession","params":{"sessionId":"seed-review-session"}}' \
             > review-assets/rpc-open-session.json || true
           cat review-assets/rpc-open-session.json || true
-          # If the debug server is off (or already paired), fall back to the URL
-          # scheme so the attempt is still visible in the log.
           if ! grep -q '"ok":true' review-assets/rpc-open-session.json 2>/dev/null; then
             echo "debug.openSession did not confirm; falling back to the URL scheme"
             xcrun simctl openurl "$UDID" "minis://sessions/seed-review-session" || true
@@ -283,7 +100,7 @@ jobs:
           xcrun simctl io "$UDID" screenshot review-assets/02-chat.png || true
 
           # Scroll so the tool capsule and the markdown table are on screen too;
-          # one screenshot of the top of the transcript cannot show either.
+          # one screenshot of the top of the transcript shows neither.
           rpc '{"jsonrpc":"2.0","id":2,"method":"debug.scroll","params":{"x":196,"y":620,"deltaX":0,"deltaY":-620}}' \
             > review-assets/rpc-scroll.json || true
           sleep 3
@@ -346,7 +163,7 @@ jobs:
           cp "$RUNNER_TEMP"/logs/* .ci-logs/ 2>/dev/null || true
           # The run id makes every failure produce a real change. Identical logs
           # from two runs used to make `git commit` a no-op, which silently kept
-          # the branch stale and hid the fact that nothing had advanced.
+          # the branch stale and hid that nothing had advanced.
           {
             echo "run_id=${GITHUB_RUN_ID}"
             echo "run_number=${GITHUB_RUN_NUMBER}"
@@ -360,4 +177,3 @@ jobs:
           git add -f .ci-logs
           git commit -m "ci: failure logs for run ${GITHUB_RUN_ID}" || exit 0
           git push --force origin ci-logs
-

@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Minis 云模拟器 · 遥控台</title>
+<style>
+  :root{
+    --paper:#f4f2ec; --ink:#1d1c19; --muted:#6c6a63; --line:#d9d5c9;
+    --accent:#2f6f5e; --accent-ink:#f4f2ec; --warn:#9a4b32;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:var(--paper); color:var(--ink);
+    font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    display:flex; flex-direction:column;
+  }
+  header{
+    display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;
+    padding:14px 18px 12px; border-bottom:1px solid var(--line);
+  }
+  header h1{font-size:15px; font-weight:650; margin:0; letter-spacing:.01em}
+  header .hint{color:var(--muted); font-size:12px}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--muted);display:inline-block;margin-right:5px}
+  .dot.live{background:var(--accent)}
+  .dot.dead{background:var(--warn)}
+  main{flex:1; display:grid; grid-template-columns:minmax(300px,420px) 1fr; gap:0; min-height:0}
+  @media (max-width:820px){ main{grid-template-columns:1fr} }
+  .stage{
+    display:flex; align-items:flex-start; justify-content:center;
+    padding:18px; border-right:1px solid var(--line); min-height:0; overflow:auto;
+  }
+  .phone{
+    position:relative; border-radius:26px; overflow:hidden; background:#0d0d0d;
+    box-shadow:0 12px 30px rgba(28,27,25,.22); width:100%; max-width:390px;
+    touch-action:none; cursor:crosshair;
+  }
+  .phone img{display:block; width:100%; height:auto; user-select:none; -webkit-user-drag:none}
+  .phone .boot{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#cfcabf; font-size:12px; text-align:center; padding:20px;
+  }
+  aside{padding:16px 18px 22px; overflow:auto; min-height:0}
+  section{margin-bottom:18px}
+  h2{font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted);
+     margin:0 0 8px; font-weight:600}
+  .row{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+  input[type=text], textarea, select{
+    font:inherit; color:inherit; background:#fff; border:1px solid var(--line);
+    border-radius:8px; padding:8px 10px; width:100%;
+  }
+  textarea{resize:vertical; min-height:64px; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12px}
+  button{
+    font:inherit; font-weight:600; color:var(--accent-ink); background:var(--accent);
+    border:0; border-radius:8px; padding:8px 14px; cursor:pointer;
+  }
+  button.ghost{background:transparent; color:var(--ink); border:1px solid var(--line)}
+  button:active{transform:translateY(1px)}
+  label.check{display:inline-flex; align-items:center; gap:6px; color:var(--muted); font-size:12px}
+  #log{
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11.5px; line-height:1.55;
+    background:#fff; border:1px solid var(--line); border-radius:8px; padding:8px 10px;
+    max-height:200px; overflow:auto; white-space:pre-wrap; word-break:break-all;
+  }
+  #log .ok{color:var(--accent)}
+  #log .err{color:var(--warn)}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Minis 云模拟器 · 遥控台</h1>
+  <span class="hint"><span id="link" class="dot"></span><span id="linkText">连接中…</span></span>
+  <span class="hint" id="sizeHint"></span>
+</header>
+
+<main>
+  <div class="stage">
+    <div class="phone" id="phone">
+      <img id="screen" alt="模拟器画面" width="804" height="1748">
+      <div class="boot" id="boot">正在取第一帧…</div>
+    </div>
+  </div>
+
+  <aside>
+    <section>
+      <h2>点 / 拖</h2>
+      <div class="row" style="color:var(--muted);font-size:12px">
+        画面上单击 = 轻点；按住拖动 = 滚动。双击画面可放大查看细节。
+      </div>
+      <div class="row" style="margin-top:8px">
+        <label class="check"><input type="checkbox" id="invert"> 滚动方向反向</label>
+        <label class="check"><input type="checkbox" id="pause"> 暂停取帧</label>
+        <button class="ghost" id="tapText">按文字点击</button>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <input type="text" id="labelInput" placeholder="输入界面上的文字，例如「排版评审 · 云模拟器」">
+      </div>
+    </section>
+
+    <section>
+      <h2>打字</h2>
+      <div class="row">
+        <input type="text" id="textInput" placeholder="输入要打进输入框的文字">
+        <button id="sendText">输入</button>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <span class="hint" style="color:var(--muted);font-size:12px">先点一下输入框让它获得焦点，再点「输入」。回车请在原始 RPC 里发 debug.inputText 带 \n。</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>常用动作</h2>
+      <div class="row">
+        <button class="ghost" id="openMain">打开评审会话</button>
+        <button class="ghost" id="schema">看服务信息</button>
+        <button class="ghost" id="sessions">列会话</button>
+      </div>
+    </section>
+
+    <section>
+      <h2>原始 RPC</h2>
+      <div class="grid2">
+        <input type="text" id="method" value="debug.openSession">
+        <button id="sendRpc">发送</button>
+      </div>
+      <textarea id="params" spellcheck="false">{ "sessionId": "seed-review-session" }</textarea>
+    </section>
+
+    <section>
+      <h2>日志</h2>
+      <div id="log"></div>
+    </section>
+  </aside>
+</main>
+
+<script>
+// Keep in sync with SHOT_SCALE in serve.py: /shot renders at this scale, so a
+// pixel coordinate divided by it is a point coordinate the app understands.
+const SHOT_SCALE = 2;
+const $ = (sel) => document.querySelector(sel);
+
+const screenEl = $('#screen');
+const bootEl = $('#boot');
+let lastBlobUrl = null;
+let polling = false;
+let drag = null;
+
+function log(text, cls) {
+  const el = $('#log');
+  const line = document.createElement('div');
+  if (cls) line.className = cls;
+  const stamp = new Date().toTimeString().slice(0, 8);
+  line.textContent = `[${stamp}] ${text}`;
+  el.appendChild(line);
+  el.scrollTop = el.scrollHeight;
+}
+
+async function rpc(method, params) {
+  try {
+    const response = await fetch('/rpc', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ jsonrpc: '2.0', id: 1, method, params: params || {} }),
+    });
+    const text = await response.text();
+    let parsed;
+    try { parsed = JSON.parse(text); } catch { parsed = { raw: text }; }
+    const failed = !response.ok || parsed.error;
+    log(`${method} -> ${JSON.stringify(parsed).slice(0, 400)}`, failed ? 'err' : 'ok');
+    return parsed;
+  } catch (failure) {
+    log(`${method} -> 网络错误 ${failure}`, 'err');
+    return null;
+  }
+}
+
+async function refresh() {
+  if (polling) return;
+  polling = true;
+  try {
+    const response = await fetch('/shot?t=' + Date.now(), { cache: 'no-store' });
+    if (!response.ok) {
+      const body = await response.text();
+      bootEl.style.display = 'flex';
+      bootEl.textContent = `取帧失败：${body.slice(0, 200)}`;
+      $('#link').className = 'dot dead';
+      $('#linkText').textContent = '取帧失败';
+      return;
+    }
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    screenEl.src = url;
+    if (lastBlobUrl) URL.revokeObjectURL(lastBlobUrl);
+    lastBlobUrl = url;
+    bootEl.style.display = 'none';
+    $('#link').className = 'dot live';
+    $('#linkText').textContent = '已连上模拟器';
+  } catch (failure) {
+    bootEl.style.display = 'flex';
+    bootEl.textContent = `取帧异常：${failure}`;
+    $('#link').className = 'dot dead';
+    $('#linkText').textContent = '取帧异常';
+  } finally {
+    polling = false;
+  }
+}
+
+// Screenshot pixels -> simulator points.
+function toPoint(event) {
+  const rect = screenEl.getBoundingClientRect();
+  const px = (event.clientX - rect.left) * (screenEl.naturalWidth / rect.width);
+  const py = (event.clientY - rect.top) * (screenEl.naturalHeight / rect.height);
+  return { x: Math.round(px / SHOT_SCALE * 10) / 10, y: Math.round(py / SHOT_SCALE * 10) / 10 };
+}
+
+const phone = $('#phone');
+phone.addEventListener('pointerdown', (event) => {
+  if (event.button !== undefined && event.button !== 0) return;
+  phone.setPointerCapture(event.pointerId);
+  const point = toPoint(event);
+  drag = { ...point, startX: event.clientX, startY: event.clientY, moved: 0, at: Date.now() };
+});
+phone.addEventListener('pointermove', (event) => {
+  if (!drag) return;
+  const dx = event.clientX - drag.startX;
+  const dy = event.clientY - drag.startY;
+  drag.moved = Math.max(drag.moved, Math.hypot(dx, dy));
+});
+phone.addEventListener('pointerup', async (event) => {
+  if (!drag) return;
+  const state = drag;
+  drag = null;
+  const dx = event.clientX - state.startX;
+  const dy = event.clientY - state.startY;
+  const quick = Date.now() - state.at < 700;
+  if (state.moved < 10 && quick) {
+    await rpc('debug.tap', { x: state.x, y: state.y });
+    return;
+  }
+  if (Math.hypot(dx, dy) < 12) return;
+  const sign = $('#invert').checked ? 1 : -1;
+  // Gesture deltas are in points too, so divide the pixel travel by the scale.
+  await rpc('debug.scroll', {
+    x: state.x, y: state.y,
+    deltaX: Math.round(dx / SHOT_SCALE * sign),
+    deltaY: Math.round(dy / SHOT_SCALE * sign),
+  });
+});
+phone.addEventListener('pointercancel', () => { drag = null; });
+
+$('#sendText').addEventListener('click', () => {
+  const text = $('#textInput').value;
+  if (!text) return;
+  rpc('debug.inputText', { text });
+});
+
+$('#tapText').addEventListener('click', () => {
+  const raw = $('#labelInput').value.trim();
+  if (!raw) { log('先填一个界面上的文字', 'err'); return; }
+  rpc('debug.tap', { text: raw });
+});
+
+$('#openMain').addEventListener('click', () => {
+  rpc('debug.openSession', { sessionId: 'seed-review-session' });
+});
+$('#schema').addEventListener('click', async () => {
+  const response = await fetch('/schema');
+  log(`schema -> ${(await response.text()).slice(0, 300)}`, 'ok');
+});
+$('#sessions').addEventListener('click', () => rpc('chat.sessions.list', {}));
+
+$('#sendRpc').addEventListener('click', () => {
+  const method = $('#method').value.trim();
+  let params = {};
+  const raw = $('#params').value.trim();
+  if (raw) {
+    try { params = JSON.parse(raw); }
+    catch { log('params 不是合法 JSON', 'err'); return; }
+  }
+  rpc(method, params);
+});
+
+setInterval(() => { if (!$('#pause').checked && !document.hidden) refresh(); }, 700);
+window.addEventListener('resize', () => {
+  $('#sizeHint').textContent = `${screenEl.naturalWidth / SHOT_SCALE} × ${screenEl.naturalHeight / SHOT_SCALE} pt`;
+});
+screenEl.addEventListener('load', () => {
+  $('#sizeHint').textContent = `${screenEl.naturalWidth / SHOT_SCALE} × ${screenEl.naturalHeight / SHOT_SCALE} pt`;
+});
+log('遥控台就绪。单击=轻点，拖动=滚动。');
+refresh();
+</script>
+</body>
+</html>
