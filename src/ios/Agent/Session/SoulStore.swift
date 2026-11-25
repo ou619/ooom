@@ -713,7 +713,7 @@ private struct SoulAnimatedIconView: UIViewRepresentable {
     }
 
     func makeUIView(context: Context) -> UIImageView {
-        let view = UIImageView()
+        let view = LoopingGIFView()
         // Same fill/crop contract as the static branch: a non-square GIF fills
         // the square frame and is clipped, never letterboxed.
         view.contentMode = .scaleAspectFill
@@ -742,23 +742,53 @@ private struct SoulAnimatedIconView: UIViewRepresentable {
         // Fewer than two frames means there is nothing to animate, so the
         // still presentation is correct regardless of the settings.
         let showStill = isPaused || coordinator.frames.count < 2
-        guard coordinator.appliedPaused != showStill else { return }
-        coordinator.appliedPaused = showStill
+        let changed = coordinator.appliedPaused != showStill
+        if changed {
+            coordinator.appliedPaused = showStill
+            // One line per state change, so `log show` can answer "did the
+            // header actually get an animated icon, and if not, which switch
+            // paused it" without a debugger attached to a CI simulator.
+            AppLogger(category: "Soul").info(
+                "[SoulGIF] frames=\(coordinator.frames.count)"
+                    + " dur=\(String(format: "%.2f", coordinator.duration))"
+                    + " still=\(showStill)"
+                    + " reduceMotion=\(UIAccessibility.isReduceMotionEnabled)"
+                    + " lowPower=\(ProcessInfo.processInfo.isLowPowerModeEnabled)")
+        }
 
         if showStill {
+            guard changed else { return }
             uiView.stopAnimating()
             uiView.animationImages = nil
             uiView.image = coordinator.stillFrame ?? coordinator.frames.first
         } else {
-            // `image` stays populated as the first frame even while animating:
-            // `animationImages` wins during playback, and the still is what a
-            // one-shot snapshot sees (ChatExportRenderer renders offscreen,
-            // where an animating UIImageView can otherwise come out blank).
+            // `image` stays populated with the first frame even while
+            // animating: `animationImages` wins during playback, and the still
+            // is what a one-shot snapshot sees (ChatExportRenderer renders
+            // offscreen, where an animating UIImageView can come out blank).
             uiView.image = coordinator.stillFrame ?? coordinator.frames.first
-            uiView.animationImages = coordinator.frames
-            uiView.animationDuration = max(0.1, coordinator.duration)
-            uiView.animationRepeatCount = 0
-            uiView.startAnimating()
+            if changed || uiView.animationImages == nil {
+                uiView.animationImages = coordinator.frames
+                uiView.animationDuration = max(0.1, coordinator.duration)
+                uiView.animationRepeatCount = 0
+            }
+            // `startAnimating()` on a view that is not in a window yet is a
+            // no-op UIKit never replays, which left the header frozen on frame
+            // 0 inside the collection-view cell. Re-assert on every pass and
+            // let `LoopingGIFView` restart it on attach.
+            if !uiView.isAnimating { uiView.startAnimating() }
+        }
+    }
+}
+
+/// Re-attaching a cell detaches and re-attaches this view, and `startAnimating()`
+/// called before that attach does nothing. Restarting in `didMoveToWindow` is
+/// what makes the loop survive collection-view reuse.
+private final class LoopingGIFView: UIImageView {
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        if window != nil, animationImages != nil, !isAnimating {
+            startAnimating()
         }
     }
 }
