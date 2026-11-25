@@ -223,10 +223,10 @@ check("equality guard compares wire form",
 
 let exporterSrc = sourceOf("Agent/Backup/BackupExporter.swift")
 check("backup EXPORT includes the sidecar",
-      exporterSrc.contains("name == SoulIconImage.sidecarName"))
+      exporterSrc.contains("SoulIconImage.isSidecarRef(name)"))
 let importerSrc = sourceOf("Agent/Backup/BackupImporter+Categories.swift")
 check("backup IMPORT includes the sidecar",
-      importerSrc.contains("name == SoulIconImage.sidecarName"))
+      importerSrc.contains("SoulIconImage.isSidecarRef(name)"))
 let syncSrc = sourceOf("Agent/Sync/V2/ChatStoreSyncHydrators.swift")
 check("sync pushes the wire form, not the raw file",
       syncSrc.contains("SoulStore.serializedForWire(file)"))

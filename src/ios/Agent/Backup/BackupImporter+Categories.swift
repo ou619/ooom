@@ -342,7 +342,7 @@ extension BackupImporter {
         // [T-soul-icon-sidecar] Mirror the exporter: the icon sidecar is not a
         // .md file but must restore with the persona it belongs to.
         for name in (try? fm.contentsOfDirectory(atPath: src.path)) ?? []
-        where name.hasSuffix(".md") || name == SoulIconImage.sidecarName {
+        where name.hasSuffix(".md") || SoulIconImage.isSidecarRef(name) {
             let from = src.appendingPathComponent(name)
             let to = dst.appendingPathComponent(name)
 

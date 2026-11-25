@@ -151,6 +151,22 @@ extension ChatStore {
         // device but kept locally. Non-nil = tombstoned at that timestamp.
         // See SyncV2 §3.3.
         addColumnIfMissing(table: "sessions", column: "remote_tombstoned_at", definition: "REAL")
+        // [T-session-avatar] Per-session sidebar avatar. The value is a FILE
+        // NAME inside the session's own directory
+        // (Library/MinisChat/minis/<sid>/session-avatar-<hex>.png) — never the
+        // bytes, never base64, so the session list never carries a payload.
+        // Three states:
+        //   NULL  never set (this covers every row predating this column too)
+        //   ''    the user explicitly restored the default icon. A deliberate
+        //         sentinel rather than NULL so "cleared" stays distinguishable
+        //         from "never set" — NULL reads back as "no data", which would
+        //         make a cleared avatar look like one that never existed.
+        //   else  the file name to render.
+        // Local only for now: these bytes are not part of the session record,
+        // so nothing here goes near cloud sync.
+        // Appended via this list (not CREATE TABLE) per the rule above: every
+        // column added after the first release arrives here.
+        addColumnIfMissing(table: "sessions", column: "avatar_ref", definition: "TEXT")
         // v2 sync: priority + creation order on dirty rows so migration's
         // 28k+ row backlog never starves freshly-typed user messages.
         // priority: 0 = user-driven (default), 1 = migration backlog

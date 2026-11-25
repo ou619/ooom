@@ -1,5 +1,6 @@
 import SwiftUI
 import PhotosUI
+import UniformTypeIdentifiers
 
 /// Settings page for SOUL.md — Minis's persistent personality file.
 /// Lives between Skills and Memory in the Agent Runtime section.
@@ -16,6 +17,11 @@ struct SoulSettingsView: View {
     @State private var showEmojiPrompt = false
     @State private var emojiDraft = ""
     @State private var showPhotoPicker = false
+    /// [T-soul-gif-icon] Separate from the photo picker: `.images` does hand
+    /// back a library GIF's original bytes, but an import from Files needs its
+    /// own entry point with an explicit `UTType.gif` filter — otherwise there
+    /// is no picker surface where a GIF is unambiguously allowed.
+    @State private var showGIFPicker = false
     @State private var photoItem: PhotosPickerItem? = nil
     @State private var iconError: String? = nil
     @State private var style: String = SoulMetadata.default.style
@@ -135,6 +141,7 @@ struct SoulSettingsView: View {
             showEmojiPrompt: $showEmojiPrompt,
             emojiDraft: $emojiDraft,
             showPhotoPicker: $showPhotoPicker,
+            showGIFPicker: $showGIFPicker,
             photoItem: $photoItem,
             iconError: $iconError
         ))
@@ -214,6 +221,10 @@ struct SoulSettingsView: View {
                     showEmojiPrompt = true
                 }
                 Button(AppLocalized("Choose Image…")) { showPhotoPicker = true }
+                // [T-soul-gif-icon] Explicit GIF import (see `showGIFPicker`):
+                // the only entry point where the picker itself guarantees the
+                // animated file instead of a still it may have been converted to.
+                Button(AppLocalized("Choose GIF…")) { showGIFPicker = true }
                 if !icon.isEmpty {
                     Button(AppLocalized("Use Default"), role: .destructive) { icon = "" }
                 }
@@ -523,6 +534,7 @@ private struct SoulIconEditing: ViewModifier {
     @Binding var showEmojiPrompt: Bool
     @Binding var emojiDraft: String
     @Binding var showPhotoPicker: Bool
+    @Binding var showGIFPicker: Bool
     @Binding var photoItem: PhotosPickerItem?
     @Binding var iconError: String?
 
@@ -537,6 +549,14 @@ private struct SoulIconEditing: ViewModifier {
             }
             .photosPicker(isPresented: $showPhotoPicker, selection: $photoItem,
                           matching: .images, photoLibrary: .shared())
+            // [T-soul-gif-icon] `UTType.gif` is the whole point here: this is
+            // the one surface where the system guarantees an animated GIF is
+            // what comes back, so no later decoding decision can drop frames.
+            .fileImporter(isPresented: $showGIFPicker,
+                          allowedContentTypes: [.gif],
+                          allowsMultipleSelection: false) { result in
+                loadGIF(from: result)
+            }
             // Single-parameter form: the two-parameter `onChange` is iOS 17+,
             // and this target still deploys lower.
             .onChange(of: photoItem) { newItem in
@@ -571,8 +591,24 @@ private struct SoulIconEditing: ViewModifier {
     /// Load, validate and normalize a picked photo into the stored form.
     private func applyPickedImage(_ item: PhotosPickerItem) async {
         defer { photoItem = nil }
-        guard let data = try? await item.loadTransferable(type: Data.self),
-              let image = UIImage(data: data) else {
+        guard let data = try? await item.loadTransferable(type: Data.self) else {
+            await MainActor.run { iconError = AppLocalized("That image couldn't be read.") }
+            return
+        }
+        // [T-soul-gif-icon] An animated GIF keeps its ORIGINAL bytes. Running
+        // it through `encode` (the still-image path below) re-encodes to PNG
+        // and keeps only the first frame — the exact bug this path fixes.
+        if SoulIconImage.isGIFData(data) {
+            guard data.count <= SoulIconImage.maxGIFBytes else {
+                await MainActor.run {
+                    iconError = AppLocalized("That GIF is too large. The limit is 4 MB.")
+                }
+                return
+            }
+            await MainActor.run { icon = SoulIconImage.dataURI(fromGIF: data) }
+            return
+        }
+        guard let image = UIImage(data: data) else {
             await MainActor.run { iconError = AppLocalized("That image couldn't be read.") }
             return
         }
@@ -589,5 +625,28 @@ private struct SoulIconEditing: ViewModifier {
                 iconError = AppLocalized("That image couldn't be read.")
             }
         }
+    }
+
+    /// [T-soul-gif-icon] Store a GIF chosen through the Files importer.
+    ///
+    /// Synchronous on purpose: the importer hands back a security-scoped URL
+    /// and the bytes have to be read while that scope is open.
+    private func loadGIF(from result: Result<[URL], Error>) {
+        guard case .success(let urls) = result, let url = urls.first else { return }
+        let scoped = url.startAccessingSecurityScopedResource()
+        defer { if scoped { url.stopAccessingSecurityScopedResource() } }
+        guard let data = try? Data(contentsOf: url) else {
+            iconError = AppLocalized("That GIF couldn't be read.")
+            return
+        }
+        guard SoulIconImage.isGIFData(data) else {
+            iconError = AppLocalized("That file isn't a GIF.")
+            return
+        }
+        guard data.count <= SoulIconImage.maxGIFBytes else {
+            iconError = AppLocalized("That GIF is too large. The limit is 4 MB.")
+            return
+        }
+        icon = SoulIconImage.dataURI(fromGIF: data)
     }
 }

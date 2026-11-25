@@ -237,6 +237,37 @@ extension ChatStore {
     }
 
 
+    // MARK: - [T-session-avatar] Avatar reference
+
+    /// Point one session's `avatar_ref` at an avatar file, or clear it.
+    ///
+    /// PER-SESSION: a single column of a single row. `updated_at` is
+    /// deliberately NOT written — the sidebar orders by it, so bumping it would
+    /// jump a cosmetically edited row to the top of the list (the same reason
+    /// `updateSessionModelId` leaves it alone).
+    ///
+    /// The bytes never pass through here: `ref` is the file NAME produced by
+    /// `SessionAvatarFiles.write`, and `""` is the "restore default" sentinel
+    /// (distinct from NULL, which means "never set"). Passing nil writes NULL.
+    func updateSessionAvatar(_ id: String, ref: String?) {
+        invalidateSessionListCache(sessionId: id)
+        let sql = "UPDATE sessions SET avatar_ref = ? WHERE id = ?"
+        var stmt: OpaquePointer?
+        // SQLITE_TRANSIENT: SQLite copies both strings, so the temporary
+        // NSString backing them may go away before the statement steps.
+        let transient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
+        if sqlite3_prepare_v2(db, sql, -1, &stmt, nil) == SQLITE_OK {
+            if let ref = ref {
+                sqlite3_bind_text(stmt, 1, (ref as NSString).utf8String, -1, transient)
+            } else {
+                sqlite3_bind_null(stmt, 1)
+            }
+            sqlite3_bind_text(stmt, 2, (id as NSString).utf8String, -1, transient)
+            sqlite3_step(stmt)
+        }
+        sqlite3_finalize(stmt)
+    }
+
     /// [T-ios-listsessions-perf] The session-list SELECT, shared by the full
     /// rebuild (`whereClause` empty) and the incremental patch
     /// (`whereClause` = " WHERE s.id IN (?,?,…)"). One definition so the two
@@ -281,7 +312,11 @@ extension ChatStore {
                    s.parent_session_id, s.parent_tool_use_id,
                    -- [T-ios-listsessions-perf] Appended LAST, same reason as
                    -- folder_id above: the decode reads by index.
-                   s.preview_text, s.preview_sort_order
+                   s.preview_text, s.preview_sort_order,
+                   -- [T-session-avatar] Appended LAST (index 19) for exactly the
+                   -- same reason as the two comments above: the decode reads
+                   -- columns by index, so a new one goes at the end.
+                   s.avatar_ref
             FROM sessions s\(whereClause)
             ORDER BY s.updated_at DESC
             """
@@ -369,6 +404,10 @@ extension ChatStore {
             let folderId = Self.colTextOpt(stmt, 14)
             let parentSessionId = Self.colTextOpt(stmt, 15)
             let parentToolUseId = Self.colTextOpt(stmt, 16)
+            // [T-session-avatar] nil (never set / pre-column) and "" (restored
+            // to the default) are DIFFERENT states and `colTextOpt` keeps them
+            // apart; the render layer draws the SF Symbol for both.
+            let avatarRef = Self.colTextOpt(stmt, 19)
 
             var row = ChatSession(
                 id: id, title: title, category: category, modelId: modelId,
@@ -379,6 +418,7 @@ extension ChatStore {
             )
             row.parentSessionId = parentSessionId
             row.parentToolUseId = parentToolUseId
+            row.avatarRef = avatarRef
             // The sort_order the preview came from, so a later incremental
             // update compares against a real value instead of NULL.
             let winningOrder: Int? = {

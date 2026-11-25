@@ -69,6 +69,16 @@ struct ChatSession: Identifiable, Codable, Hashable {
     /// nil for a child created without a tool block (scheduled, P2).
     var parentToolUseId: String?
 
+    /// [T-session-avatar] Sidebar avatar for this session, stored as a FILE
+    /// NAME under the session's own directory (the naming rule lives in
+    /// `SessionAvatarFiles`), never as image bytes or a base64 data URI.
+    /// `nil` = never set (or the column predates the feature); `""` = the user
+    /// explicitly restored the default icon. Readers normalise with
+    /// `avatarRef?.isEmpty == false`, so both nil and "" fall back to the
+    /// category SF Symbol — the two states stay distinct in the DB without
+    /// changing what the row draws.
+    var avatarRef: String?
+
     /// Whether this session is a hidden child of another session.
     var isChild: Bool { parentSessionId != nil }
 
@@ -118,6 +128,11 @@ struct ChatSession: Identifiable, Codable, Hashable {
             && lhs.lastSyncedAt == rhs.lastSyncedAt
             && lhs.remoteDeviceId == rhs.remoteDeviceId
             && lhs.remoteDeviceName == rhs.remoteDeviceName
+            // [T-session-avatar] Setting an avatar deliberately does NOT bump
+            // `updatedAt` (the list orders by it), so this is the only field
+            // that can report the change — without it the row would keep its
+            // old icon until some unrelated mutation bumped the diff.
+            && lhs.avatarRef == rhs.avatarRef
         // Intentionally NOT comparing `lastMessage` (long string; `updatedAt`
         // is its change proxy) or the immutable `modelId` / `createdAt`.
     }

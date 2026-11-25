@@ -129,6 +129,11 @@ struct SessionRow: View, Equatable {
             && lhs.matchSnippet == rhs.matchSnippet
             && lhs.isActiveOverride == rhs.isActiveOverride
             && lhs.isSuspendedOverride == rhs.isSuspendedOverride
+            // [T-session-avatar] An avatar change bumps neither `updatedAt` nor
+            // anything else above, so it must be compared explicitly or the row
+            // keeps drawing the previous icon.
+            && lhs.session.avatarRef == rhs.session.avatarRef
+            && lhs.avatarRefOverride == rhs.avatarRefOverride
     }
 
     let session: ChatSession
@@ -147,6 +152,12 @@ struct SessionRow: View, Equatable {
     /// observed trackers directly. [T-ios-ipad-sidebar-running-indicator-stale]
     var isActiveOverride: Bool? = nil
     var isSuspendedOverride: Bool? = nil
+    /// [T-session-avatar] Row-local optimistic value for `session.avatarRef`.
+    /// Writing an avatar invalidates the store's session-list cache, but the
+    /// sidebar only re-reads this row on its next (throttled) refresh — this
+    /// lets the row show what it just wrote without waiting. nil = use the
+    /// persisted value.
+    var avatarRefOverride: String? = nil
     @ObservedObject private var activityTracker = SessionActivityTracker.shared
     @ObservedObject private var concurrencyManager = SessionConcurrencyManager.shared
     @ObservedObject private var lockStore = SessionLockStore.shared
@@ -165,8 +176,10 @@ struct SessionRow: View, Equatable {
          isActive: Bool? = nil,
          isSuspended: Bool? = nil,
          highlightQuery: String? = nil,
-         matchSnippet: String? = nil) {
+         matchSnippet: String? = nil,
+         avatarRefOverride: String? = nil) {
         self.session = session
+        self.avatarRefOverride = avatarRefOverride
         self.isHighlighted = isHighlighted
         self.isActiveOverride = isActive
         self.isSuspendedOverride = isSuspended
@@ -221,8 +234,11 @@ struct SessionRow: View, Equatable {
 
     var body: some View {
         HStack(spacing: 8) {
-            // Provider icon with optional spinning/suspended ring
-            providerIcon
+            // Provider icon with optional spinning/suspended ring.
+            // [T-session-avatar] Same 44×44 slot and the same row height: the
+            // session's own avatar when it has one, the category SF Symbol
+            // otherwise.
+            avatarOrProviderIcon
                 .frame(width: 44, height: 44)
                 .background(iconBackgroundColor.opacity(isHighlighted ? 0.35 : 0.18))
                 .clipShape(Circle())
@@ -441,6 +457,38 @@ struct SessionRow: View, Equatable {
             .foregroundStyle(icon.color)
     }
 
+    // MARK: - [T-session-avatar] Avatar rendering
+
+    /// The session's own avatar when it has one, otherwise the category SF
+    /// Symbol it has always drawn.
+    ///
+    /// Both branches fill the SAME 44×44 slot that the caller applies, so the
+    /// row height and every ring/badge/unread overlay that follows the icon are
+    /// untouched. The caller's own `.clipShape(Circle())` does the masking,
+    /// which is why nothing here re-frames or re-clips.
+    @MainActor @ViewBuilder
+    private var avatarOrProviderIcon: some View {
+        if let avatar = avatarImage {
+            Image(uiImage: avatar)
+                .resizable()
+                .scaledToFill()
+        } else {
+            providerIcon
+        }
+    }
+
+    /// The decoded avatar for this row, if any.
+    ///
+    /// `avatarRefOverride` (the row-local value written by the picker) wins over
+    /// the persisted one so the change is visible immediately instead of after
+    /// the sidebar's throttled refresh. Both `nil` (never set) and `""`
+    /// (explicitly restored to the default) fall through to the SF Symbol.
+    @MainActor
+    private var avatarImage: UIImage? {
+        guard let ref = avatarRefOverride ?? session.avatarRef, !ref.isEmpty else { return nil }
+        return SessionAvatarCache.shared.image(sessionId: session.id, ref: ref)
+    }
+
     private var iconBackgroundColor: Color {
         categoryIcon.color
     }
@@ -609,5 +657,123 @@ private struct SuspendedRing: View {
     var body: some View {
         Circle()
             .stroke(color, style: StrokeStyle(lineWidth: 1.5, dash: [4, 3]))
+    }
+}
+
+// MARK: - [T-session-avatar] Storage
+
+/// Where a session avatar's bytes live, and the only place that decides what a
+/// legal avatar file name looks like.
+///
+/// Contract (shared with `ChatSession.avatarRef`): the DB stores a bare FILE
+/// NAME — never a path, never image bytes, never base64 — so the session-list
+/// query stays small. The bytes live beside that session's other files in
+/// `Library/MinisChat/minis/<sid>/`, which means the existing per-session
+/// cleanup paths already own the lifecycle of the directory itself.
+enum SessionAvatarFiles {
+    /// `session-avatar-<token>.png` — content-addressed like the rest of the app
+    /// and deliberately dot-free: the backup and GC walkers use
+    /// `.skipsHiddenFiles`, so a leading dot would silently exclude avatars.
+    static let namePrefix = "session-avatar-"
+    static let nameSuffix = ".png"
+
+    static func directory(for sessionId: String) -> URL {
+        AIChatViewModel.minisPersistentBase.appendingPathComponent(sessionId, isDirectory: true)
+    }
+
+    /// Strict allow-list: one path component, expected prefix/suffix, no
+    /// separator, no `..`, no leading dot, ASCII-alphanumeric token only.
+    /// Anything else is treated as "no avatar" instead of being handed to the
+    /// file system — a ref came out of the DB, so it must never be able to name
+    /// a file outside the session's own directory.
+    static func isAvatarFileName(_ name: String) -> Bool {
+        guard !name.isEmpty, name.count <= 96 else { return false }
+        guard name.hasPrefix(namePrefix), name.hasSuffix(nameSuffix) else { return false }
+        guard !name.hasPrefix(".") else { return false }
+        guard !name.contains("/"), !name.contains("\\"), !name.contains("..") else { return false }
+        let token = name.dropFirst(namePrefix.count).dropLast(nameSuffix.count)
+        guard !token.isEmpty, token.count <= 32 else { return false }
+        return token.allSatisfy { $0.isASCII && ($0.isLetter || $0.isNumber) }
+    }
+
+    /// Absolute URL for a ref that passes the allow-list, or nil.
+    static func url(for sessionId: String, fileName: String) -> URL? {
+        guard isAvatarFileName(fileName) else { return nil }
+        let base = directory(for: sessionId).standardizedFileURL
+        let url = base.appendingPathComponent(fileName).standardizedFileURL
+        // Belt and braces: the resolved parent must still be the session dir.
+        guard url.deletingLastPathComponent().path == base.path else { return nil }
+        return url
+    }
+
+    /// Write `pngData` as this session's avatar and return the new file name.
+    ///
+    /// The name carries a fresh token, so a replacement never reuses the old
+    /// name: a row still holding the previous image cannot be shown stale bytes,
+    /// and the cleanup below can never delete a file a decode is reading.
+    static func write(_ pngData: Data, for sessionId: String) throws -> String {
+        let dir = directory(for: sessionId)
+        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        var name = namePrefix + String(UUID().uuidString.prefix(8)).lowercased() + nameSuffix
+        var attempt = 0
+        while FileManager.default.fileExists(atPath: dir.appendingPathComponent(name).path), attempt < 8 {
+            name = namePrefix + String(UUID().uuidString.prefix(8)).lowercased() + nameSuffix
+            attempt += 1
+        }
+        try pngData.write(to: dir.appendingPathComponent(name), options: .atomic)
+        // Write-new-then-delete-old: had the write above thrown, the previous
+        // avatar is still on disk and the row keeps rendering it.
+        removeAll(for: sessionId, except: name)
+        return name
+    }
+
+    /// Best-effort removal of a session's avatar files, optionally keeping one.
+    /// Never throws: a failure here costs a stale file, not correctness.
+    static func removeAll(for sessionId: String, except keep: String? = nil) {
+        let dir = directory(for: sessionId)
+        guard let names = try? FileManager.default.contentsOfDirectory(atPath: dir.path) else { return }
+        for name in names where name != keep {
+            guard isAvatarFileName(name) else { continue }
+            try? FileManager.default.removeItem(at: dir.appendingPathComponent(name))
+        }
+    }
+}
+
+/// Decoded-avatar cache for the session list.
+///
+/// Rows are recycled constantly while scrolling, so re-reading and re-decoding a
+/// PNG on every pass would put file IO on the scroll path. Keyed by
+/// `"<sid>|<ref>"`: a replaced avatar gets a new token ⇒ a new ref ⇒ a cache
+/// miss, so an old picture can never be shown for a new one.
+@MainActor
+final class SessionAvatarCache {
+    static let shared = SessionAvatarCache()
+
+    private let cache: NSCache<NSString, UIImage> = {
+        let cache = NSCache<NSString, UIImage>()
+        cache.countLimit = 256
+        return cache
+    }()
+
+    private init() {}
+
+    func image(sessionId: String, ref: String) -> UIImage? {
+        let key = Self.key(sessionId: sessionId, ref: ref)
+        if let hit = cache.object(forKey: key) { return hit }
+        guard let url = SessionAvatarFiles.url(for: sessionId, fileName: ref),
+              let image = UIImage(contentsOfFile: url.path) else { return nil }
+        cache.setObject(image, forKey: key)
+        return image
+    }
+
+    /// Drop cached images for one session. `NSCache` cannot scan by prefix, so
+    /// the whole (small, count-limited) cache is dropped; scrolling refills it.
+    func invalidate(sessionId: String) {
+        _ = sessionId
+        cache.removeAllObjects()
+    }
+
+    private static func key(sessionId: String, ref: String) -> NSString {
+        "\(sessionId)|\(ref)" as NSString
     }
 }

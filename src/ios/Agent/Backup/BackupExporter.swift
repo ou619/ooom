@@ -726,7 +726,7 @@ actor BackupExporter {
         // The icon is the one non-Markdown file this directory holds; matching
         // it by name rather than widening to every extension keeps stray files
         // (editor swap files, .DS_Store) out of the package.
-        for name in names where name.hasSuffix(".md") || name == SoulIconImage.sidecarName {
+        for name in names where name.hasSuffix(".md") || SoulIconImage.isSidecarRef(name) {
             let from = src.appendingPathComponent(name)
             guard (try? from.resourceValues(forKeys: [.isRegularFileKey]))?.isRegularFile == true
             else { continue }

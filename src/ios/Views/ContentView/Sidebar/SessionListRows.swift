@@ -1,4 +1,6 @@
 import SwiftUI
+// [T-session-avatar] PhotosPicker / PhotosPickerItem live here.
+import PhotosUI
 
 // MARK: - [T-home-list-lazy-rows] One concrete row per session id
 
@@ -49,6 +51,21 @@ struct SessionStackRow: View {
     let isLastInFolder: Bool
     let menuActions: SessionMenuActionChannel
 
+    // [T-session-avatar] Row-local avatar plumbing. NOT `private`: a private
+    // stored property would make the synthesized memberwise init private and
+    // ContentView could no longer build this row. All four have defaults, so
+    // existing call sites are unaffected.
+    //
+    /// Presents the photo picker. Set from the context menu one run loop later.
+    @State var showAvatarPicker = false
+    /// The pending pick; `nil` while idle (reset after every attempt).
+    @State var avatarItem: PhotosPickerItem?
+    /// What this row just wrote, so the new avatar shows before the store's
+    /// throttled session-list refresh replaces `session`.
+    @State var avatarOverride: String?
+    /// Bumped to ask `SessionAvatarPicker` to restore the default icon.
+    @State var avatarRestoreTick = 0
+
     var body: some View {
         let _ = HomeListPerf.rowBuilt()
         Button { [menuActions, sid = session.id] in
@@ -61,7 +78,9 @@ struct SessionStackRow: View {
                 isActive: isActive,
                 isSuspended: isSuspended,
                 highlightQuery: highlightQuery,
-                matchSnippet: matchSnippet
+                matchSnippet: matchSnippet,
+                // [T-session-avatar] Row-local value wins until the refresh lands.
+                avatarRefOverride: avatarOverride
             )
             // [T-ios-session-list-equatable-jank] Gate parent-driven re-eval on
             // SessionRow's cheap custom ==.
@@ -95,7 +114,34 @@ struct SessionStackRow: View {
                 actions: menuActions
             )
             .equatable()
+            // [T-session-avatar] Plain value-only buttons rather than extending
+            // SessionContextMenu: that view is shared and Equatable by key, and
+            // knows nothing about avatars. These capture only this row's own
+            // state and the session id — never ContentView, per
+            // [T-ios-crash-contextmenu-uaf].
+            Button {
+                // One run loop later: presenting a sheet synchronously from a
+                // context-menu action races the menu's own dismissal.
+                DispatchQueue.main.async { showAvatarPicker = true }
+            } label: {
+                Label(AppLocalized("更换会话头像"), systemImage: "person.crop.circle")
+            }
+            // Only offered when there is something to restore.
+            if let currentRef = avatarOverride ?? session.avatarRef, !currentRef.isEmpty {
+                Button {
+                    avatarRestoreTick += 1
+                } label: {
+                    Label(AppLocalized("恢复默认头像"), systemImage: "arrow.uturn.backward")
+                }
+            }
         }
+        .modifier(SessionAvatarPicker(
+            sessionId: session.id,
+            isPresented: $showAvatarPicker,
+            item: $avatarItem,
+            overrideRef: $avatarOverride,
+            restoreTick: $avatarRestoreTick
+        ))
     }
 }
 
@@ -115,6 +161,13 @@ struct SessionSplitRow: View {
     let isLastInFolder: Bool
     let menuActions: SessionMenuActionChannel
 
+    // [T-session-avatar] Same four row-local values as the phone row (see the
+    // note there: they must not be `private` or the memberwise init disappears).
+    @State var showAvatarPicker = false
+    @State var avatarItem: PhotosPickerItem?
+    @State var avatarOverride: String?
+    @State var avatarRestoreTick = 0
+
     private static let highlightFill = Color(red: 183/255.0, green: 175/255.0, blue: 150/255.0).opacity(0.3)
 
     var body: some View {
@@ -125,7 +178,9 @@ struct SessionSplitRow: View {
             isActive: isActive,
             isSuspended: isSuspended,
             highlightQuery: highlightQuery,
-            matchSnippet: matchSnippet
+            matchSnippet: matchSnippet,
+            // [T-session-avatar] Row-local value wins until the refresh lands.
+            avatarRefOverride: avatarOverride
         )
         .equatable()
         .draggable(session.id)
@@ -146,8 +201,28 @@ struct SessionSplitRow: View {
                     actions: menuActions
                 )
                 .equatable()
+                // [T-session-avatar] Same two value-only items as the phone row.
+                Button {
+                    DispatchQueue.main.async { showAvatarPicker = true }
+                } label: {
+                    Label(AppLocalized("更换会话头像"), systemImage: "person.crop.circle")
+                }
+                if let currentRef = avatarOverride ?? session.avatarRef, !currentRef.isEmpty {
+                    Button {
+                        avatarRestoreTick += 1
+                    } label: {
+                        Label(AppLocalized("恢复默认头像"), systemImage: "arrow.uturn.backward")
+                    }
+                }
             }
         }
+        .modifier(SessionAvatarPicker(
+            sessionId: menuSid ?? session.id,
+            isPresented: $showAvatarPicker,
+            item: $avatarItem,
+            overrideRef: $avatarOverride,
+            restoreTick: $avatarRestoreTick
+        ))
         .tag(session.id)
         .listRowInsets(EdgeInsets())
         .listRowSeparator(.hidden)
@@ -200,5 +275,90 @@ struct SessionRowPressStyle: ButtonStyle {
         configuration.label
             .contentShape(Rectangle())
             .overlay(Color(.systemFill).opacity(configuration.isPressed ? 1 : 0).allowsHitTesting(false))
+    }
+}
+
+// MARK: - [T-session-avatar] Photo picker + apply / restore
+
+/// Photo-picker plumbing for one session row.
+///
+/// A modifier so neither row grows its own presentation chain and the phone and
+/// iPad rows behave identically. It owns the transient pick and the failure
+/// alert; the row keeps only what the row RENDERS (the resulting reference).
+struct SessionAvatarPicker: ViewModifier {
+    /// The session the avatar belongs to.
+    let sessionId: String
+    @Binding var isPresented: Bool
+    @Binding var item: PhotosPickerItem?
+    /// What the row should render from now on (`""` = restored default).
+    @Binding var overrideRef: String?
+    /// Incremented by the "restore default" menu item.
+    @Binding var restoreTick: Int
+
+    @State private var errorShown = false
+
+    func body(content: Content) -> some View {
+        content
+            .photosPicker(
+                isPresented: $isPresented,
+                selection: $item,
+                matching: .images,
+                photoLibrary: .shared()
+            )
+            .onChange(of: item) { _, newItem in
+                guard let newItem else { return }
+                Task { await apply(newItem) }
+            }
+            .onChange(of: restoreTick) { _, _ in
+                Task { await restoreDefault() }
+            }
+            .alert(AppLocalized("这张图片无法使用"), isPresented: $errorShown) {
+                Button(AppLocalized("好"), role: .cancel) { errorShown = false }
+            } message: {
+                Text(AppLocalized("读取这张图片失败，请换一张再试。"))
+            }
+    }
+
+    /// Decode → normalise → write → record the reference.
+    ///
+    /// Re-encoding through `SoulIconImage` (1:1 centre crop, ≤96px, PNG) makes a
+    /// session avatar the same kind of asset as a Soul avatar, and keeps what
+    /// the DB stores down to a file NAME.
+    @MainActor
+    private func apply(_ picked: PhotosPickerItem) async {
+        // Clear the pick either way, or re-picking the same photo is a no-op.
+        defer { item = nil }
+        guard let data = try? await picked.loadTransferable(type: Data.self),
+              let image = UIImage(data: data) else {
+            errorShown = true
+            return
+        }
+        guard case .success(let dataURI) = SoulIconImage.encode(image),
+              let png = SoulIconImage.pngData(from: dataURI) else {
+            errorShown = true
+            return
+        }
+        guard let name = try? SessionAvatarFiles.write(png, for: sessionId) else {
+            errorShown = true
+            return
+        }
+        await ChatStore.shared.updateSessionAvatar(sessionId, ref: name)
+        SessionAvatarCache.shared.invalidate(sessionId: sessionId)
+        // Row-local value: the sidebar only re-reads this row on its next
+        // (throttled) refresh, so without this the old icon stays visible.
+        overrideRef = name
+    }
+
+    /// 「恢复默认头像」: drop the bytes, then write the `''` sentinel.
+    ///
+    /// `''` instead of NULL on purpose — it records that the user CHOSE the
+    /// default, which stays distinguishable from a row that never had an
+    /// avatar. `updated_at` is untouched, so the row does not jump in the list.
+    @MainActor
+    private func restoreDefault() async {
+        SessionAvatarFiles.removeAll(for: sessionId)
+        await ChatStore.shared.updateSessionAvatar(sessionId, ref: "")
+        SessionAvatarCache.shared.invalidate(sessionId: sessionId)
+        overrideRef = ""
     }
 }

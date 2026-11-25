@@ -1,4 +1,5 @@
 import Foundation
+import ImageIO
 import SwiftUI
 import UIKit
 
@@ -18,7 +19,33 @@ enum SoulIconImage {
 
     private static let prefix = "data:image/png;base64,"
 
-    static func isDataURI(_ s: String) -> Bool { s.hasPrefix(prefix) }
+    /// [T-soul-gif-icon] Animated variant of `prefix`. In memory a GIF is
+    /// carried exactly like a PNG — one data URI — so every consumer keeps
+    /// working unchanged; only the disk layer treats the two differently
+    /// (a GIF must not be re-encoded, or the animation is lost).
+    private static let gifPrefix = "data:image/gif;base64,"
+
+    /// True for either stored image form: PNG (the original, still the only
+    /// form that inlines into the iCloud wire record) or GIF (an animated
+    /// avatar, kept in a sidecar file).
+    ///
+    /// [T-soul-gif-icon] `decode` and `pngData(from:)` do NOT infer the payload
+    /// type from this — they check their own prefix — so widening the
+    /// predicate cannot make a PNG path swallow GIF bytes.
+    static func isDataURI(_ s: String) -> Bool {
+        s.hasPrefix(prefix) || s.hasPrefix(gifPrefix)
+    }
+
+    /// True when `s` holds GIF bytes rather than a still image.
+    static func isGIFDataURI(_ s: String) -> Bool { s.hasPrefix(gifPrefix) }
+
+    /// True when raw bytes start with a GIF87a / GIF89a header. Used instead
+    /// of trusting a filename, so a renamed or restored file still decodes.
+    static func isGIFData(_ data: Data) -> Bool {
+        guard data.count >= 6 else { return false }
+        return data.prefix(6) == Data("GIF87a".utf8)
+            || data.prefix(6) == Data("GIF89a".utf8)
+    }
 
     /// Why an image was refused.
     ///
@@ -65,9 +92,14 @@ enum SoulIconImage {
     /// Decode a stored data URI back to an image. Returns nil for an emoji
     /// value or anything malformed, so callers can fall back to text.
     static func decode(_ value: String) -> UIImage? {
-        guard isDataURI(value) else { return nil }
-        let b64 = String(value.dropFirst(prefix.count))
+        // Split at the comma rather than dropping `prefix.count` characters:
+        // that is correct for both prefixes and stops depending on the two
+        // happening to be the same length.
+        guard isDataURI(value), let comma = value.firstIndex(of: ",") else { return nil }
+        let b64 = String(value[value.index(after: comma)...])
         guard let data = Data(base64Encoded: b64) else { return nil }
+        // A GIF decodes to its first frame here, which is the right still
+        // image to show when animation is paused or unsupported.
         return UIImage(data: data)
     }
 
@@ -77,18 +109,135 @@ enum SoulIconImage {
     /// app-container UUID changes that make absolute paths worthless.
     static let sidecarName = "SOUL.icon.png"
 
-    /// True when `value` names the sidecar file rather than holding bytes.
-    static func isSidecarRef(_ s: String) -> Bool { s == sidecarName }
+    /// [T-soul-gif-icon] Animated twin of `sidecarName`. SOUL.md names at most
+    /// one of the two; `SoulStore.persistIconSidecar` deletes the other on
+    /// every write so the pair can never coexist (a stale PNG would otherwise
+    /// ride backups forever, and there would be no rule for which one wins).
+    static let gifSidecarName = "SOUL.icon.gif"
 
-    /// Raw PNG bytes behind a stored data URI, or nil if not a data URI.
+    /// Both sidecar filenames, PNG first.
+    static let sidecarNames = [sidecarName, gifSidecarName]
+
+    /// True when `value` names a sidecar file rather than holding bytes.
+    static func isSidecarRef(_ s: String) -> Bool { sidecarNames.contains(s) }
+
+    /// True when `value` names the animated sidecar.
+    static func isGIFSidecarRef(_ s: String) -> Bool { s == gifSidecarName }
+
+    /// Raw PNG bytes behind a stored data URI, or nil if not a PNG data URI.
+    /// Checks its OWN prefix rather than `isDataURI`, so a GIF payload can
+    /// never be written into the PNG sidecar by mistake.
     static func pngData(from dataURI: String) -> Data? {
-        guard isDataURI(dataURI) else { return nil }
+        guard dataURI.hasPrefix(prefix) else { return nil }
         return Data(base64Encoded: String(dataURI.dropFirst(prefix.count)))
     }
 
     /// Wrap raw PNG bytes back into the canonical stored data URI.
     static func dataURI(fromPNG data: Data) -> String {
         prefix + data.base64EncodedString()
+    }
+
+    /// [T-soul-gif-icon] Raw GIF bytes behind a stored data URI, or nil if not
+    /// a GIF data URI.
+    static func gifData(from dataURI: String) -> Data? {
+        guard isGIFDataURI(dataURI) else { return nil }
+        return Data(base64Encoded: String(dataURI.dropFirst(gifPrefix.count)))
+    }
+
+    /// Wrap raw GIF bytes back into the stored data URI. The bytes pass
+    /// through untouched — re-encoding is what used to destroy the animation.
+    static func dataURI(fromGIF data: Data) -> String {
+        gifPrefix + data.base64EncodedString()
+    }
+
+    /// [T-soul-gif-icon] Ceiling on the ORIGINAL bytes accepted for an animated
+    /// icon. The inline PNG path keeps its own 64 KB text cap
+    /// (`SoulIconSource.maxStoredChars`); a GIF is stored as a file, so this is
+    /// the only limit on it — big enough for a real avatar animation, small
+    /// enough that holding its base64 form in memory stays bounded.
+    static let maxGIFBytes = 4 * 1024 * 1024
+
+    // MARK: - Animated (GIF) decoding
+    //
+    // SwiftUI cannot animate a GIF, so the frames are pulled out here with
+    // ImageIO and handed to a `UIImageView` (see `SoulIconView`).
+    //
+    // ImageIO is used rather than `UIImage.animatedImage(with:duration:)`
+    // because that API takes ONE duration for every frame — a GIF timed at
+    // 80ms/500ms would play at the wrong rhythm — and it gives no control over
+    // the decoded pixel size, which is the difference between a 192px avatar
+    // and a 1024px source frame per tick. `CGImageSourceCreateImageAtIndex`
+    // also composites GIF frame disposal for us, so each returned image is a
+    // finished frame rather than a delta.
+
+    /// Edge, in pixels, that decoded GIF frames are capped to. The largest
+    /// surface that shows the icon is the 56pt AlwaysOn overlay (168px at
+    /// @3x), so 192 keeps it crisp with a little headroom.
+    static let gifFramePixels: CGFloat = 192
+
+    /// Upper bound on retained frames. Longer GIFs are SAMPLED evenly rather
+    /// than truncated, so the loop still spans the original duration while the
+    /// memory held stays bounded (48 × 192² × 4B ≈ 7 MB worst case).
+    private static let maxGIFFrames = 48
+
+    /// Decode the (sampled) frames plus the summed duration of the frames kept.
+    /// Returns nil when the bytes are not a GIF or nothing decodes.
+    static func animatedGIF(from data: Data) -> (frames: [UIImage], duration: TimeInterval)? {
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else { return nil }
+        let count = CGImageSourceGetCount(source)
+        guard count > 0 else { return nil }
+
+        let step = max(1, Int(ceil(Double(count) / Double(maxGIFFrames))))
+        var indices: [Int] = []
+        var index = 0
+        while index < count, indices.count < maxGIFFrames {
+            indices.append(index)
+            index += step
+        }
+
+        let options: [CFString: Any] = [
+            kCGImageSourceCreateThumbnailFromImageAlways: true,
+            kCGImageSourceCreateThumbnailWithTransform: true,
+            kCGImageSourceThumbnailMaxPixelSize: Int(gifFramePixels),
+        ]
+
+        var frames: [UIImage] = []
+        var duration: TimeInterval = 0
+        for i in indices {
+            guard let cg = CGImageSourceCreateThumbnailAtIndex(source, i, options as CFDictionary)
+            else { continue }
+            frames.append(UIImage(cgImage: cg, scale: 1, orientation: .up))
+            duration += gifFrameDelay(source, index: i)
+        }
+        guard !frames.isEmpty else { return nil }
+        return (frames, duration)
+    }
+
+    /// Just the first frame, at the same cap — the paused / Reduce Motion
+    /// still, decoded without paying for the whole animation.
+    static func firstGIFFrame(from data: Data) -> UIImage? {
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil),
+              CGImageSourceGetCount(source) > 0 else { return nil }
+        let options: [CFString: Any] = [
+            kCGImageSourceCreateThumbnailFromImageAlways: true,
+            kCGImageSourceCreateThumbnailWithTransform: true,
+            kCGImageSourceThumbnailMaxPixelSize: Int(gifFramePixels),
+        ]
+        guard let cg = CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary)
+        else { return nil }
+        return UIImage(cgImage: cg, scale: 1, orientation: .up)
+    }
+
+    /// Per-frame delay in seconds, floored the way browsers do it: a 0–10ms
+    /// delay in a hand-made GIF otherwise strobes and burns CPU.
+    private static func gifFrameDelay(_ source: CGImageSource, index: Int) -> TimeInterval {
+        guard let props = CGImageSourceCopyPropertiesAtIndex(source, index, nil) as? [String: Any],
+              let gif = props[kCGImagePropertyGIFDictionary as String] as? [String: Any]
+        else { return 0.1 }
+        let unclamped = gif[kCGImagePropertyGIFUnclampedDelayTime as String] as? Double
+        let clamped = gif[kCGImagePropertyGIFDelayTime as String] as? Double
+        let seconds = unclamped ?? clamped ?? 0.1
+        return seconds < 0.011 ? 0.1 : seconds
     }
 
     /// Centre-crop to 1:1, keeping the shorter edge.
@@ -459,6 +608,25 @@ struct SoulIconView: View {
     /// rather than drifting whenever `size` is adjusted.
     var cornerRadius: CGFloat? = nil
 
+    /// [T-soul-gif-icon] Reduce Motion, observed reactively so toggling it in
+    /// Settings degrades a running GIF without a relaunch.
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    /// Low Power Mode, refreshed by the system notification in `body`.
+    @State private var lowPowerMode: Bool = ProcessInfo.processInfo.isLowPowerModeEnabled
+
+    /// Explicit init so the property wrappers above can stay `private`: a
+    /// private stored property makes the synthesized memberwise initializer
+    /// private too, and every call site lives in another file.
+    init(icon: String,
+         size: CGFloat,
+         sparkleGradient: LinearGradient? = nil,
+         cornerRadius: CGFloat? = nil) {
+        self.icon = icon
+        self.size = size
+        self.sparkleGradient = sparkleGradient
+        self.cornerRadius = cornerRadius
+    }
+
     /// ~22% of the edge: iOS's own app-icon "squircle" proportion, which
     /// reads as rounded at small sizes without rounding away image content.
     static func cornerRadius(for size: CGFloat) -> CGFloat { size * 0.22 }
@@ -467,25 +635,130 @@ struct SoulIconView: View {
         cornerRadius ?? Self.cornerRadius(for: size)
     }
 
+    /// [T-soul-gif-icon] Animation is a nicety: honour Reduce Motion (the
+    /// SwiftUI environment value AND the UIKit flag the rest of the app reads)
+    /// and Low Power Mode, where a looping GIF is pure battery cost. Paused
+    /// shows the first frame, at the same size and crop.
+    private var pausesAnimation: Bool {
+        reduceMotion || UIAccessibility.isReduceMotionEnabled || lowPowerMode
+    }
+
     var body: some View {
-        if let image = SoulIconImage.decode(icon) {
-            Image(uiImage: image)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: size, height: size)
-                .clipShape(RoundedRectangle(cornerRadius: resolvedCornerRadius,
-                                            style: .continuous))
-        } else if icon.isEmpty, let gradient = sparkleGradient {
-            // Default: keep the SF Symbol so the chat header's existing
-            // gradient treatment is untouched for users who never set one.
-            Image(systemName: "sparkles")
-                .font(.system(size: size, weight: .semibold))
-                .foregroundStyle(gradient)
+        Group {
+            if SoulIconImage.isGIFDataURI(icon) {
+                // [T-soul-gif-icon] Animated branch: SwiftUI has no GIF
+                // support, so a UIImageView loops the frames. The representable
+                // owns `.scaleAspectFill` and the frame, mirroring the static
+                // branch's fill/crop contract at every call-site size.
+                SoulAnimatedIconView(icon: icon,
+                                     isPaused: pausesAnimation,
+                                     cornerRadius: resolvedCornerRadius)
+                    .frame(width: size, height: size)
+                    .clipShape(RoundedRectangle(cornerRadius: resolvedCornerRadius,
+                                                style: .continuous))
+            } else if let image = SoulIconImage.decode(icon) {
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: size, height: size)
+                    .clipShape(RoundedRectangle(cornerRadius: resolvedCornerRadius,
+                                                style: .continuous))
+            } else if icon.isEmpty, let gradient = sparkleGradient {
+                // Default: keep the SF Symbol so the chat header's existing
+                // gradient treatment is untouched for users who never set one.
+                Image(systemName: "sparkles")
+                    .font(.system(size: size, weight: .semibold))
+                    .foregroundStyle(gradient)
+            } else {
+                // A user-chosen emoji, or the default sparkle where no gradient
+                // was requested.
+                Text(icon.isEmpty ? "✨" : icon)
+                    .font(.system(size: size))
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .NSProcessInfoPowerStateDidChange)) { _ in
+            lowPowerMode = ProcessInfo.processInfo.isLowPowerModeEnabled
+        }
+    }
+}
+
+/// [T-soul-gif-icon] The only UIKit view in the Soul icon path: a
+/// `UIImageView` looping pre-decoded GIF frames.
+///
+/// `animationImages` is used rather than `UIImage.animatedImage(with:duration:)`
+/// because the latter flattens every frame to one duration, so a GIF timed at
+/// 80ms/500ms would play at the wrong rhythm. It also makes pause/resume
+/// trivial, which the Reduce Motion / Low Power Mode rules need (a real stop
+/// on a frame, not a rebuilt still image).
+///
+/// Decoding is memoised on the coordinator: `updateUIView` runs on every
+/// enclosing body pass, and decoding a GIF there (the pitfall this codebase
+/// calls out for `UIImage(data:)` in a body) would burn main-thread time for
+/// nothing. Only a changed `icon` string re-decodes.
+private struct SoulAnimatedIconView: UIViewRepresentable {
+    let icon: String
+    let isPaused: Bool
+    let cornerRadius: CGFloat
+
+    func makeCoordinator() -> Coordinator { Coordinator() }
+
+    final class Coordinator {
+        var decodedIcon: String?
+        var frames: [UIImage] = []
+        var duration: TimeInterval = 0
+        var stillFrame: UIImage?
+        /// Last applied play/pause state, so a body pass that did not change
+        /// it does not restart the loop from frame 0.
+        var appliedPaused: Bool?
+    }
+
+    func makeUIView(context: Context) -> UIImageView {
+        let view = UIImageView()
+        // Same fill/crop contract as the static branch: a non-square GIF fills
+        // the square frame and is clipped, never letterboxed.
+        view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
+        view.backgroundColor = .clear
+        view.isUserInteractionEnabled = false
+        return view
+    }
+
+    func updateUIView(_ uiView: UIImageView, context: Context) {
+        uiView.layer.cornerRadius = cornerRadius
+        uiView.layer.cornerCurve = .continuous
+        uiView.layer.masksToBounds = true
+
+        let coordinator = context.coordinator
+        if coordinator.decodedIcon != icon {
+            coordinator.decodedIcon = icon
+            let data = SoulIconImage.gifData(from: icon) ?? Data()
+            let animation = SoulIconImage.animatedGIF(from: data)
+            coordinator.frames = animation?.frames ?? []
+            coordinator.duration = animation?.duration ?? 0
+            coordinator.stillFrame = SoulIconImage.firstGIFFrame(from: data)
+            coordinator.appliedPaused = nil
+        }
+
+        // Fewer than two frames means there is nothing to animate, so the
+        // still presentation is correct regardless of the settings.
+        let showStill = isPaused || coordinator.frames.count < 2
+        guard coordinator.appliedPaused != showStill else { return }
+        coordinator.appliedPaused = showStill
+
+        if showStill {
+            uiView.stopAnimating()
+            uiView.animationImages = nil
+            uiView.image = coordinator.stillFrame ?? coordinator.frames.first
         } else {
-            // A user-chosen emoji, or the default sparkle where no gradient
-            // was requested.
-            Text(icon.isEmpty ? "✨" : icon)
-                .font(.system(size: size))
+            // `image` stays populated as the first frame even while animating:
+            // `animationImages` wins during playback, and the still is what a
+            // one-shot snapshot sees (ChatExportRenderer renders offscreen,
+            // where an animating UIImageView can otherwise come out blank).
+            uiView.image = coordinator.stillFrame ?? coordinator.frames.first
+            uiView.animationImages = coordinator.frames
+            uiView.animationDuration = max(0.1, coordinator.duration)
+            uiView.animationRepeatCount = 0
+            uiView.startAnimating()
         }
     }
 }
@@ -706,10 +979,18 @@ enum SoulStore {
             .appendingPathComponent(SoulIconImage.sidecarName)
     }
 
+    /// [T-soul-gif-icon] URL of the animated sidecar. Only one of the two
+    /// sidecars exists at a time — `persistIconSidecar` is what enforces it.
+    static var gifIconFileURL: URL {
+        AIChatViewModel.minisMemoryPersistentDir
+            .appendingPathComponent(SoulIconImage.gifSidecarName)
+    }
+
     /// Resolve a parsed-from-disk `icon:` value into the in-memory form.
     ///
     /// Handles all three shapes a file can legitimately hold:
-    ///   - the sidecar filename  → read the PNG, return a data URI
+    ///   - a sidecar filename  → read the bytes, return a data URI
+    ///                           (`SOUL.icon.png` still, `SOUL.icon.gif` animated)
     ///   - an inline data URI    → return as-is (a file written by a build
     ///                             predating this change, or synced from one)
     ///   - an emoji / empty      → return as-is
@@ -722,9 +1003,16 @@ enum SoulStore {
     /// chat header.
     private static func resolveIconForRead(_ raw: String) -> String {
         guard SoulIconImage.isSidecarRef(raw) else { return raw }
-        guard let data = try? Data(contentsOf: iconFileURL),
+        // [T-soul-gif-icon] Read the file the reference names, then label the
+        // bytes by their MAGIC rather than by the extension: a renamed or
+        // restored file must not be presented as `image/gif` (asking the
+        // renderer to animate a PNG) or as `image/png` (freezing a GIF).
+        let url = SoulIconImage.isGIFSidecarRef(raw) ? gifIconFileURL : iconFileURL
+        guard let data = try? Data(contentsOf: url),
               !data.isEmpty else { return "" }
-        return SoulIconImage.dataURI(fromPNG: data)
+        return SoulIconImage.isGIFData(data)
+            ? SoulIconImage.dataURI(fromGIF: data)
+            : SoulIconImage.dataURI(fromPNG: data)
     }
 
     /// Write (or clear) the sidecar to match `icon`, and return the value that
@@ -733,22 +1021,48 @@ enum SoulStore {
     /// Failing to write the PNG returns the data URI unchanged, so the icon
     /// falls back to being stored inline rather than being lost. A disk error
     /// here is not a reason to drop the user's avatar.
+    ///
+    /// [T-soul-gif-icon] An animated icon takes the other branch: its ORIGINAL
+    /// bytes are written to `SOUL.icon.gif` untouched. Re-encoding through
+    /// `encode` (the PNG path) is what used to eat the animation down to its
+    /// first frame. A failed GIF write returns "" instead of the data URI —
+    /// inlining a multi-MB animation into SOUL.md would replace one lost
+    /// avatar with a persona file no editor can open.
+    ///
+    /// Either way the OTHER format's sidecar is removed only after the new
+    /// file has landed, so an interrupted write cannot leave the user with no
+    /// icon at all, and the two formats can never coexist on disk.
     private static func persistIconSidecar(_ icon: String) -> String {
         let fm = FileManager.default
+        let directory = iconFileURL.deletingLastPathComponent()
+
+        if let gif = SoulIconImage.gifData(from: icon) {
+            try? fm.createDirectory(at: directory, withIntermediateDirectories: true)
+            do {
+                try gif.write(to: gifIconFileURL, options: .atomic)
+                try? fm.removeItem(at: iconFileURL)
+                return SoulIconImage.gifSidecarName
+            } catch {
+                iconLogger.error("[Soul] failed to write GIF icon sidecar: \(error.localizedDescription)")
+                return ""
+            }
+        }
+
         guard SoulIconImage.isDataURI(icon) else {
             // Emoji, empty, or already a sidecar ref: no image bytes to keep.
-            // Remove a stale sidecar so clearing the icon doesn't leave an
+            // Remove stale sidecars so clearing the icon doesn't leave an
             // orphan file that backup and sync would keep carrying around.
             if !SoulIconImage.isSidecarRef(icon) {
                 try? fm.removeItem(at: iconFileURL)
+                try? fm.removeItem(at: gifIconFileURL)
             }
             return icon
         }
         guard let png = SoulIconImage.pngData(from: icon) else { return icon }
-        try? fm.createDirectory(at: iconFileURL.deletingLastPathComponent(),
-                                withIntermediateDirectories: true)
+        try? fm.createDirectory(at: directory, withIntermediateDirectories: true)
         do {
             try png.write(to: iconFileURL, options: .atomic)
+            try? fm.removeItem(at: gifIconFileURL)
             return SoulIconImage.sidecarName
         } catch {
             iconLogger.error("[Soul] failed to write icon sidecar: \(error.localizedDescription)")
@@ -762,9 +1076,21 @@ enum SoulStore {
     /// (deliberate: no schema change, and a build predating the sidecar still
     /// receives a working icon). This turns the on-disk form into that wire
     /// form. Callers that write files, not records, must NOT use this.
+    ///
+    /// [T-soul-gif-icon] GIF bytes are NOT inlined. Their base64 form is
+    /// megabytes — past CloudKit's per-record budget — so one animation would
+    /// fail the whole SoulV2 upload. The filename travels instead: on this
+    /// device it resolves back to the animation, and a peer without the file
+    /// degrades to the sparkle, exactly as it already does for a missing
+    /// sidecar.
     static func serializedForWire(_ file: SoulFile) -> String {
         var f = file
-        f.metadata.icon = resolveIconForRead(f.metadata.icon)
+        if SoulIconImage.isGIFDataURI(f.metadata.icon)
+            || SoulIconImage.isGIFSidecarRef(f.metadata.icon) {
+            f.metadata.icon = SoulIconImage.gifSidecarName
+        } else {
+            f.metadata.icon = resolveIconForRead(f.metadata.icon)
+        }
         return SoulMDParser.serialize(f)
     }
 
