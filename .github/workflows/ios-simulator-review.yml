@@ -71,6 +71,28 @@ jobs:
           sqlite3 "$DB" < .github/ci/seed-review-session.sql
           sqlite3 "$DB" "SELECT count(*) FROM sessions;"
 
+          # Show the two new features instead of the placeholder symbols: one
+          # session gets a real avatar, and SOUL.md gets an animated GIF icon.
+          # Both are plain files the app already knows how to read.
+          # SOUL.md does not live in the app's own container: it sits in the
+          # app-group container under MinisFileProvider/memory, so the extension
+          # can read it too. Ask the simulator for that container by name.
+          GROUP=$(xcrun simctl get_app_container "$UDID" "$BUNDLE" group.group.com.openminis.app || true)
+          MEM="$GROUP/MinisFileProvider/memory"
+          AVDIR="$DATA/Library/MinisChat/minis/seed-review-session"
+          mkdir -p "$MEM" "$AVDIR"
+          cp .github/ci/assets/session-avatar-demo.png "$AVDIR/session-avatar-demo0001.png"
+          sqlite3 "$DB" "UPDATE sessions SET avatar_ref='session-avatar-demo0001.png' WHERE id='seed-review-session';"
+          if [ -n "$GROUP" ] && [ -d "$MEM" ]; then
+            cp .github/ci/assets/soul-demo.gif "$MEM/SOUL.icon.gif"
+            rm -f "$MEM/SOUL.icon.png"
+            python3 .github/ci/seed_soul_icon.py "$MEM/SOUL.md" "SOUL.icon.gif"
+            ls -la "$MEM"
+          else
+            echo "::warning::app-group container not found at $MEM; the soul GIF was not seeded"
+          fi
+          sqlite3 "$DB" "SELECT id, avatar_ref FROM sessions ORDER BY updated_at DESC;"
+
           # The debug server's auth switch defaults to ON (DebugAuth.swift:58),
           # and a paired envelope cannot be produced from a shell. Flipping the
           # pref through the simulator's own defaults keeps cfprefsd coherent;
