@@ -213,6 +213,15 @@ enum SoulIconImage {
         return (frames, duration)
     }
 
+    /// Fold decoded frames into a single animated `UIImage`. This is the form
+    /// UIKit plays on its own: assigning it to `UIImageView.image` starts the
+    /// loop, and because it is one object rather than an `animationImages`
+    /// array, a re-entrant `updateUIView` cannot stop-and-reset it.
+    static func animatedUIImage(frames: [UIImage], duration: TimeInterval) -> UIImage? {
+        guard frames.count > 1 else { return frames.first }
+        return UIImage.animatedImage(with: frames, duration: max(0.1, duration))
+    }
+
     /// Just the first frame, at the same cap — the paused / Reduce Motion
     /// still, decoded without paying for the whole animation.
     static func firstGIFFrame(from data: Data) -> UIImage? {
@@ -707,6 +716,10 @@ private struct SoulAnimatedIconView: UIViewRepresentable {
         var frames: [UIImage] = []
         var duration: TimeInterval = 0
         var stillFrame: UIImage?
+        /// Frames composed into ONE `UIImage`. UIImageView animates an animated
+        /// image by itself, so nothing has to call `startAnimating()` and no
+        /// body pass can reset the loop by reassigning `animationImages`.
+        var animatedUIImage: UIImage?
         /// Last applied play/pause state, so a body pass that did not change
         /// it does not restart the loop from frame 0.
         var appliedPaused: Bool?
@@ -736,7 +749,18 @@ private struct SoulAnimatedIconView: UIViewRepresentable {
             coordinator.frames = animation?.frames ?? []
             coordinator.duration = animation?.duration ?? 0
             coordinator.stillFrame = SoulIconImage.firstGIFFrame(from: data)
+            coordinator.animatedUIImage = SoulIconImage.animatedUIImage(
+                frames: coordinator.frames,
+                duration: coordinator.duration)
             coordinator.appliedPaused = nil
+            // A decoder that hands back 12 identical frames looks exactly like
+            // a frozen animation, so record whether the frames actually differ.
+            let firstBytes = coordinator.frames.first?.pngData()
+            let lastBytes = coordinator.frames.last?.pngData()
+            AppLogger(category: "Soul").info(
+                "[SoulGIF] decode frames=\(coordinator.frames.count)"
+                    + " firstEqLast=\(firstBytes == lastBytes)"
+                    + " composed=\(coordinator.animatedUIImage?.images != nil)")
         }
 
         // Fewer than two frames means there is nothing to animate, so the
@@ -757,26 +781,15 @@ private struct SoulAnimatedIconView: UIViewRepresentable {
         }
 
         if showStill {
-            guard changed else { return }
-            uiView.stopAnimating()
+            // The still is also what an offscreen export sees
+            // (ChatExportRenderer), so this branch must stay renderable.
+            guard changed || uiView.image !== coordinator.stillFrame else { return }
             uiView.animationImages = nil
             uiView.image = coordinator.stillFrame ?? coordinator.frames.first
-        } else if changed || uiView.animationImages == nil {
-            // Configure exactly once. Assigning `image` on an animating
-            // UIImageView stops its animation, and `updateUIView` runs on every
-            // enclosing body pass — so re-assigning the still frame each pass
-            // restarted the loop from frame 0 and the icon looked frozen. The
-            // still is only needed as a fallback for one-shot snapshots
-            // (ChatExportRenderer renders offscreen), and it keeps its value.
-            uiView.image = coordinator.stillFrame ?? coordinator.frames.first
-            uiView.animationImages = coordinator.frames
-            uiView.animationDuration = max(0.1, coordinator.duration)
-            uiView.animationRepeatCount = 0
-            uiView.startAnimating()
-        } else if !uiView.isAnimating {
-            // Re-attach after a cell reuse: `startAnimating()` before the view
-            // had a window was a no-op UIKit never replayed.
-            uiView.startAnimating()
+        } else {
+            guard changed || uiView.image !== coordinator.animatedUIImage else { return }
+            uiView.animationImages = nil
+            uiView.image = coordinator.animatedUIImage ?? coordinator.stillFrame
         }
     }
 }
@@ -787,8 +800,12 @@ private struct SoulAnimatedIconView: UIViewRepresentable {
 private final class LoopingGIFView: UIImageView {
     override func didMoveToWindow() {
         super.didMoveToWindow()
-        if window != nil, animationImages != nil, !isAnimating {
-            startAnimating()
+        // Re-attaching tears down the layer that carried the loop, so hand the
+        // same animated image to the view once more. Assigning it afresh is what
+        // restarts playback; there is no `startAnimating()` equivalent to call.
+        if window != nil, let animated = image, animated.images != nil {
+            image = nil
+            image = animated
         }
     }
 }
