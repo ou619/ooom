@@ -761,22 +761,22 @@ private struct SoulAnimatedIconView: UIViewRepresentable {
             uiView.stopAnimating()
             uiView.animationImages = nil
             uiView.image = coordinator.stillFrame ?? coordinator.frames.first
-        } else {
-            // `image` stays populated with the first frame even while
-            // animating: `animationImages` wins during playback, and the still
-            // is what a one-shot snapshot sees (ChatExportRenderer renders
-            // offscreen, where an animating UIImageView can come out blank).
+        } else if changed || uiView.animationImages == nil {
+            // Configure exactly once. Assigning `image` on an animating
+            // UIImageView stops its animation, and `updateUIView` runs on every
+            // enclosing body pass — so re-assigning the still frame each pass
+            // restarted the loop from frame 0 and the icon looked frozen. The
+            // still is only needed as a fallback for one-shot snapshots
+            // (ChatExportRenderer renders offscreen), and it keeps its value.
             uiView.image = coordinator.stillFrame ?? coordinator.frames.first
-            if changed || uiView.animationImages == nil {
-                uiView.animationImages = coordinator.frames
-                uiView.animationDuration = max(0.1, coordinator.duration)
-                uiView.animationRepeatCount = 0
-            }
-            // `startAnimating()` on a view that is not in a window yet is a
-            // no-op UIKit never replays, which left the header frozen on frame
-            // 0 inside the collection-view cell. Re-assert on every pass and
-            // let `LoopingGIFView` restart it on attach.
-            if !uiView.isAnimating { uiView.startAnimating() }
+            uiView.animationImages = coordinator.frames
+            uiView.animationDuration = max(0.1, coordinator.duration)
+            uiView.animationRepeatCount = 0
+            uiView.startAnimating()
+        } else if !uiView.isAnimating {
+            // Re-attach after a cell reuse: `startAnimating()` before the view
+            // had a window was a no-op UIKit never replayed.
+            uiView.startAnimating()
         }
     }
 }
