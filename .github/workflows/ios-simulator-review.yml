@@ -124,6 +124,21 @@ jobs:
           sleep 5
           xcrun simctl io "$UDID" screenshot review-assets/02-chat.png || true
 
+          # The assistant turn header (Soul icon + name) sits ABOVE the initial
+          # viewport, and the icon is where the animated GIF lives. Scroll to the
+          # very top and record a few seconds there, otherwise neither the still
+          # nor the clip shows the one thing this round is meant to prove.
+          rpc '{"jsonrpc":"2.0","id":9,"method":"debug.scroll","params":{"x":196,"y":620,"deltaX":0,"deltaY":2000}}' \
+            > review-assets/rpc-scroll-top.json || true
+          sleep 3
+          xcrun simctl io "$UDID" screenshot review-assets/02b-chat-top.png || true
+          xcrun simctl io "$UDID" recordVideo --codec=h264 --force review-assets/soul.mp4 &
+          RECTOP=$!
+          sleep 10
+          kill -INT "$RECTOP" 2>/dev/null || true
+          wait "$RECTOP" 2>/dev/null || true
+          xcrun simctl io "$UDID" screenshot review-assets/02c-chat-top-after.png || true
+
           # Scroll so the tool capsule and the markdown table are on screen too;
           # one screenshot of the top of the transcript shows neither.
           rpc '{"jsonrpc":"2.0","id":2,"method":"debug.scroll","params":{"x":196,"y":620,"deltaX":0,"deltaY":-620}}' \
