@@ -1,0 +1,18 @@
+run_id=45861667851
+run_number=2
+commit=ce25d756e95c65f1dd2e929c44b0b67fa1281a24
+job_status=success
+captured_at=2026-11-26T17:48:15Z
+ipa_bytes=85071248
+ipa_mb=81.1
+ipa_sha256=8a97936fae355c75d7b9ad069809b39c374b1aa7288e0d71e015755d4902377c
+artifact=minis-unsigned-ipa
+retention_days=3
+--- logs present ---
+ 2309834 build.log
+    6077 install.log
+  153411 ish.log
+    1550 package.log
+    7017 rclone.log
+    3728 rootfs.log
+     700 verify.log
