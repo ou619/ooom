@@ -12,12 +12,24 @@ final class FileProviderExtension: NSObject, NSFileProviderReplicatedExtension {
     private static let log = OSLog(subsystem: "com.openminis.app.FileProvider", category: "Extension")
 
     /// Root directory for all FileProvider-visible files in the App Group container.
+    ///
+    /// The extension is only usable when the App Group entitlement is actually
+    /// granted — a free-signing build drops this target entirely. Still, the
+    /// lookup must not trap: a nil container here used to crash the extension
+    /// during init, which the system reports as an endless registration loop and
+    /// the app then has to triage as a boot failure. Fall back to the extension's
+    /// own sandbox so the code path stays observable instead.
     static var providerRoot: URL {
-        let container = FileManager.default.containerURL(
+        let fm = FileManager.default
+        let container = fm.containerURL(
             forSecurityApplicationGroupIdentifier: "group.com.openminis.app"
-        )!
+        ) ?? {
+            let base = fm.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
+                ?? fm.temporaryDirectory
+            return base.appendingPathComponent("MinisLocalGroup", isDirectory: true)
+        }()
         let url = container.appendingPathComponent("MinisFileProvider", isDirectory: true)
-        try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+        try? fm.createDirectory(at: url, withIntermediateDirectories: true)
         return url
     }
 

@@ -1,0 +1,314 @@
+name: iOS Device Unsigned IPA
+
+# Produces an *unsigned* device build (arm64, iOS 16.0+) that can be re-signed
+# with a free personal team through Sideloadly / AltStore, so the app can run on
+# a real iPhone without an Apple Developer Program membership.
+#
+# Signing is disabled on purpose (CODE_SIGNING_ALLOWED=NO): the re-signing tool
+# supplies the certificate. That also means the binary carries no entitlements,
+# so `containerURL(forSecurityApplicationGroupIdentifier:)` returns nil at
+# runtime. The app-side fallback lives in SharedContainerStore.containerURL; see
+# DEVICE_BUILD.md for what still works and what degrades.
+#
+# The dependency build is the *device* variant of the simulator recipe in
+# .github/actions/build-simulator: every deps/ script defaults to iphoneos, so
+# no flag is passed. Caches are keyed `dev-*` so the device artefacts
+# (deps/libs, deps/frameworks) can never overwrite the simulator ones.
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish_branch:
+        description: Branch that receives .device-build/meta.txt (build facts, no binaries)
+        required: false
+        default: device-build
+  # A path-filtered push trigger exists only so a first run can be started
+  # without an interactive "Run workflow" click or a token: editing this file is
+  # the one action that fires it. Nothing else on main re-triggers the IPA build.
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/ios-device.yml'
+
+concurrency:
+  group: ios-device-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  ipa:
+    runs-on: macos-26
+    timeout-minutes: 150
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Confirm Apple Silicon runner
+        run: |
+          uname -m
+          test "$(uname -m)" = arm64 || { echo 'Need an arm64 macOS runner; the iOS deps only ship arm64.' >&2; exit 1; }
+
+      - name: Show toolchain
+        run: |
+          set -x
+          xcodebuild -version
+          xcrun --sdk iphoneos --show-sdk-version
+          python3 --version
+
+      - name: Static guard, no force-unwrapped app group container
+        run: |
+          set -euo pipefail
+          # The free-signing build has no App Group entitlement, so every
+          # containerURL(...) force-unwrap is a launch crash. Keep this empty.
+          if grep -rnE --include='*.swift' 'containerURL\([^)]*\)[[:space:]]*!' src/ios \
+               --exclude-dir=MinisTests --exclude-dir=MinisUITests ; then
+            echo '::error::app group container is force-unwrapped; the unsigned build would crash on launch'
+            exit 1
+          fi
+          echo 'no force-unwrap of the app group container'
+
+      - name: Install build prerequisites
+        run: |
+          exec > >(tee "$RUNNER_TEMP/install.log") 2>&1
+          set -x
+          brew list ninja      >/dev/null 2>&1 || brew install ninja
+          brew list libarchive >/dev/null 2>&1 || brew install libarchive
+          brew list pkg-config >/dev/null 2>&1 || brew install pkg-config
+          brew list llvm       >/dev/null 2>&1 || brew install llvm
+          command -v go        >/dev/null 2>&1 || brew install go
+          python3 -m venv "$RUNNER_TEMP/mesonenv"
+          "$RUNNER_TEMP/mesonenv/bin/pip" install --upgrade pip meson
+          echo "$RUNNER_TEMP/mesonenv/bin" >> "$GITHUB_PATH"
+          brew list lld >/dev/null 2>&1 || brew install lld
+          LLD=/opt/homebrew/opt/lld/bin/ld.lld
+          [ -x "$LLD" ] || LLD=/opt/homebrew/opt/llvm/bin/ld.lld
+          mkdir -p "$RUNNER_TEMP/llvmbin"
+          ln -sf "$LLD" "$RUNNER_TEMP/llvmbin/ld.lld"
+          echo "$RUNNER_TEMP/llvmbin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/llvmbin/ld.lld" --version
+          python3 -m compileall -q .github/ci >/dev/null 2>&1 || true
+
+      - name: Cache media dependencies
+        id: media-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            deps/libs
+            deps/include
+            deps/frameworks
+          key: dev-media-v1-${{ runner.os }}-${{ hashFiles('deps/build_lame.sh', 'deps/build_ffmpeg.sh') }}
+          restore-keys: |
+            dev-media-${{ runner.os }}-
+
+      - name: Deps 1/5 lame (device)
+        if: steps.media-cache.outputs.cache-hit != 'true'
+        run: |
+          set -euxo pipefail
+          bash deps/build_lame.sh 2>&1 | tee "$RUNNER_TEMP/lame.log"
+
+      - name: Deps 2/5 ffmpeg (device)
+        if: steps.media-cache.outputs.cache-hit != 'true'
+        run: |
+          set -euxo pipefail
+          bash deps/build_ffmpeg.sh 2>&1 | tee "$RUNNER_TEMP/ffmpeg.log"
+
+      - name: Save media dependencies
+        if: always() && steps.media-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            deps/libs
+            deps/include
+            deps/frameworks
+          key: dev-media-v1-${{ runner.os }}-${{ hashFiles('deps/build_lame.sh', 'deps/build_ffmpeg.sh') }}
+
+      - name: Deps 3/5 iSH (device)
+        run: |
+          set -euxo pipefail
+          bash deps/build_ish.sh 2>&1 | tee "$RUNNER_TEMP/ish.log"
+          ls -la deps/libs
+
+      - name: Deps 4/5 alpine rootfs
+        run: |
+          set -euxo pipefail
+          bash deps/prepare_alpine_rootfs.sh 2>&1 | tee "$RUNNER_TEMP/rootfs.log"
+          ls -la deps/resources
+
+      - name: Deps 5/5 rclone
+        env:
+          GOEXPERIMENT: jsonv2
+        run: |
+          set -euxo pipefail
+          echo "image go: $(go version)"
+          curl -fsSL "https://go.dev/dl/?mode=json&include=all" -o "$RUNNER_TEMP/go.json"
+          python3 - "$RUNNER_TEMP/go.json" > "$RUNNER_TEMP/go.txt" <<'PY'
+          import json, sys
+          for rel in json.load(open(sys.argv[1])):
+              if not rel["version"].startswith("go1.25."):
+                  continue
+              for f in rel["files"]:
+                  if f["filename"].endswith("darwin-arm64.tar.gz") and f["kind"] == "archive":
+                      print(rel["version"], f["filename"])
+                      raise SystemExit
+          raise SystemExit("no go1.25 darwin-arm64 archive found")
+          PY
+          read -r GO_VER GO_TARBALL < "$RUNNER_TEMP/go.txt"
+          curl -fsSL "https://go.dev/dl/$GO_TARBALL" -o "$RUNNER_TEMP/go.tgz"
+          mkdir -p "$RUNNER_TEMP/goroot"
+          tar -xzf "$RUNNER_TEMP/go.tgz" -C "$RUNNER_TEMP/goroot"
+          export PATH="$RUNNER_TEMP/goroot/go/bin:$PATH"
+          go version
+          bash deps/build_rclone_ios.sh 2>&1 | tee "$RUNNER_TEMP/rclone.log"
+          ls -la deps/frameworks
+          # The device slices must be present; a simulator-only framework would
+          # fail the link much later with a confusing message.
+          ls deps/frameworks/FFmpeg.xcframework/ios-arm64 || true
+          ls deps/frameworks/Rclone.xcframework/ios-arm64 || true
+
+      - name: Write build-time provider config
+        run: |
+          cp src/ios/Configs/ProviderCustomization.xcconfig.example \
+             src/ios/Configs/ProviderCustomization.xcconfig
+
+      - name: Build the app for the device
+        id: build
+        run: |
+          exec > >(tee "$RUNNER_TEMP/build.log") 2>&1
+          set -euo pipefail
+          xcodebuild \
+            -project src/ios/Minis.xcodeproj \
+            -scheme Minis \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            build
+          APP="build/Build/Products/Release-iphoneos/Minis.app"
+          test -d "$APP"
+          echo "app_path=$APP" >> "$GITHUB_OUTPUT"
+
+      - name: Package Payload/Minis-unsigned.ipa
+        id: package
+        run: |
+          exec > >(tee "$RUNNER_TEMP/package.log") 2>&1
+          set -euo pipefail
+          APP="${{ steps.build.outputs.app_path }}"
+          rm -rf out
+          mkdir -p out/Payload
+          # Strip anything the previous signing left behind, and any Finder
+          # droppings, so the re-signing tool sees a clean bundle.
+          rm -rf "$APP/_CodeSignature" "$APP/embedded.mobileprovision"
+          find "$APP" -name '.DS_Store' -delete || true
+          cp -R "$APP" out/Payload/
+          cd out
+          if command -v zip >/dev/null 2>&1; then
+            zip -qry Minis-unsigned.ipa Payload
+          else
+            ditto -c -k --sequesterRsrc --keepParent Payload Minis-unsigned.ipa
+          fi
+          unzip -t Minis-unsigned.ipa > /dev/null
+          IPA="out/Minis-unsigned.ipa"
+          ls -la "$IPA"
+          SIZE=$(wc -c < "$IPA" | tr -d ' ')
+          SHA=$(shasum -a 256 "$IPA" | awk '{print $1}')
+          echo "ipa_path=$IPA" >> "$GITHUB_OUTPUT"
+          echo "ipa_bytes=$SIZE" >> "$GITHUB_OUTPUT"
+          echo "ipa_sha256=$SHA" >> "$GITHUB_OUTPUT"
+          echo "ipa_mb=$(python3 -c "print(round($SIZE/1048576,1))")" >> "$GITHUB_OUTPUT"
+          unzip -l "$IPA" | head -20
+
+      - name: Verify the bundle
+        run: |
+          exec > >(tee "$RUNNER_TEMP/verify.log") 2>&1
+          set -euo pipefail
+          APP="${{ steps.build.outputs.app_path }}"
+          BIN="$APP/Minis"
+          test -x "$BIN"
+          lipo -info "$BIN"
+          lipo -info "$BIN" | grep -q arm64
+          /usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier'   "$APP/Info.plist"
+          /usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$APP/Info.plist"
+          /usr/libexec/PlistBuddy -c 'Print :CFBundleVersion'      "$APP/Info.plist"
+          /usr/libexec/PlistBuddy -c 'Print :MinimumOSVersion'     "$APP/Info.plist"
+          echo "--- expected to be unsigned ---"
+          codesign -dv "$APP" 2>&1 || true
+          test ! -d "$APP/_CodeSignature" && echo "no _CodeSignature: confirmed unsigned"
+          test ! -f "$APP/embedded.mobileprovision" && echo "no profile embedded: confirmed"
+          echo "--- embedded bundles ---"
+          ls "$APP/PlugIns" 2>/dev/null || echo "no PlugIns"
+          ls "$APP/Frameworks" 2>/dev/null || echo "no Frameworks"
+          echo "--- entitlements (should be empty) ---"
+          codesign -d --entitlements - "$APP" 2>&1 || true
+
+      - name: Upload unsigned IPA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: minis-unsigned-ipa
+          path: out/Minis-unsigned.ipa
+          if-no-files-found: warn
+          retention-days: 3
+
+      - name: Publish build facts
+        if: always()
+        run: |
+          set -uo pipefail
+          BRANCH="${{ github.event.inputs.publish_branch }}"
+          BRANCH="${BRANCH:-device-build}"
+          FACTS="$RUNNER_TEMP/meta.txt"
+          {
+            echo "run_id=${GITHUB_RUN_ID}"
+            echo "run_number=${GITHUB_RUN_NUMBER}"
+            echo "commit=${GITHUB_SHA}"
+            echo "job_status=${{ job.status }}"
+            echo "captured_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "ipa_bytes=${{ steps.package.outputs.ipa_bytes }}"
+            echo "ipa_mb=${{ steps.package.outputs.ipa_mb }}"
+            echo "ipa_sha256=${{ steps.package.outputs.ipa_sha256 }}"
+            echo "artifact=minis-unsigned-ipa"
+            echo "retention_days=3"
+            echo "--- logs present ---"
+            for f in "$RUNNER_TEMP"/*.log; do [ -f "$f" ] && echo "$(wc -c < "$f") $(basename "$f")"; done
+            true
+          } > "$FACTS"
+          cat "$FACTS"
+          git config user.name "ci-bot"
+          git config user.email "ci-bot@users.noreply.github.com"
+          git fetch --depth 1 origin main || true
+          git checkout -B "$BRANCH" origin/main
+          mkdir -p .device-build
+          cp "$FACTS" .device-build/meta.txt
+          test -s .device-build/meta.txt
+          git add -f .device-build/meta.txt
+          git commit -m "ci: device build facts for run ${GITHUB_RUN_ID}" || exit 0
+          git push --force origin "$BRANCH"
+
+      - name: Publish failure logs
+        if: failure()
+        run: |
+          set -uo pipefail
+          mkdir -p "$RUNNER_TEMP/collected"
+          for f in "$RUNNER_TEMP"/*.log; do
+            [ -f "$f" ] || continue
+            tail -c 300000 "$f" > "$RUNNER_TEMP/collected/$(basename "$f")"
+          done
+          ls -la "$RUNNER_TEMP/collected" || true
+          git config user.name "ci-bot"
+          git config user.email "ci-bot@users.noreply.github.com"
+          git fetch --depth 1 origin main || true
+          git checkout -B device-logs origin/main
+          rm -rf .device-logs; mkdir -p .device-logs
+          cp "$RUNNER_TEMP"/collected/* .device-logs/ 2>/dev/null || true
+          {
+            echo "run_id=${GITHUB_RUN_ID}"
+            echo "commit=${GITHUB_SHA}"
+            echo "captured_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          } > .device-logs/meta.txt
+          git add -f .device-logs
+          git commit -m "ci: device failure logs for run ${GITHUB_RUN_ID}" || exit 0
+          git push --force origin device-logs
