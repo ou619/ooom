@@ -50,9 +50,22 @@ jobs:
           mkdir -p review-assets
 
           xcrun simctl bootstatus "$UDID" -b
+          # bootstatus reports the device booted before its services are all up;
+          # installing into that window fails and, because the tee pipe loses the
+          # tail of the stream when the shell aborts, the reason never reaches
+          # the published log. Wait for launchd, then retry the install.
+          for i in $(seq 1 30); do
+            xcrun simctl spawn "$UDID" launchctl print system >/dev/null 2>&1 && break
+            sleep 2
+          done
           # Light appearance keeps layout review deterministic.
           xcrun simctl ui "$UDID" appearance light || true
-          xcrun simctl install "$UDID" "$APP"
+          for i in 1 2 3 4 5; do
+            if xcrun simctl install "$UDID" "$APP"; then break; fi
+            echo "simctl install attempt $i failed"
+            [ "$i" -lt 5 ] || { echo "::error::simctl install kept failing"; exit 1; }
+            sleep 10
+          done
 
           # First launch exists only to let the app create its schema and its
           # Library/MinisChat container. A fresh install has no database, so

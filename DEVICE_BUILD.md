@@ -7,6 +7,24 @@ proves layout and animation but cannot produce a file you can install.
 Goal: an **unsigned arm64 IPA** that a free personal Apple ID can re-sign, so the
 app runs on a real iPhone without the 688 CNY/year Apple Developer Program.
 
+## 0. Measured result
+
+| | |
+| --- | --- |
+| Run | [#2 `45861667851`](https://github.com/ou619/ooom/actions/runs/45861667851), status success |
+| Commit | `ce25d75` |
+| Wall clock | 17:20:20Z -> 17:48:28Z, 28 min 8 s (media deps came from cache) |
+| IPA | 85,071,248 bytes = **81.1 MiB** |
+| SHA-256 | `8a97936fae355c75d7b9ad069809b39c374b1aa7288e0d71e015755d4902377c` |
+| Artifact | `minis-unsigned-ipa`, 84,504,969 bytes, expires 2026-11-29 |
+| Every step | success, including the static App Group guard and the bundle verification |
+
+Run #1 (`45861286364`, commit `177db57`) is worth knowing about: the dependency
+build and the Release device build already succeeded there; only the packaging
+step failed, and it failed on my own path bug (`ls: out/Minis-unsigned.ipa: No
+such file or directory` after a `cd out`), not on anything Apple-side. That run
+still left an 84,504,060-byte artifact behind, which is why the two sizes differ.
+
 ## 1. What is produced
 
 | Item | Value |
