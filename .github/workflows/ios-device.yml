@@ -212,7 +212,9 @@ jobs:
             ditto -c -k --sequesterRsrc --keepParent Payload Minis-unsigned.ipa
           fi
           unzip -t Minis-unsigned.ipa > /dev/null
-          IPA="out/Minis-unsigned.ipa"
+          # Still inside out/: the IPA path must be relative to here, otherwise
+          # the next line looks for out/out/... and fails after a good zip.
+          IPA="$PWD/Minis-unsigned.ipa"
           ls -la "$IPA"
           SIZE=$(wc -c < "$IPA" | tr -d ' ')
           SHA=$(shasum -a 256 "$IPA" | awk '{print $1}')
@@ -227,7 +229,8 @@ jobs:
           exec > >(tee "$RUNNER_TEMP/verify.log") 2>&1
           set -euo pipefail
           APP="${{ steps.build.outputs.app_path }}"
-          BIN="$APP/Minis"
+          EXE=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$APP/Info.plist")
+          BIN="$APP/$EXE"
           test -x "$BIN"
           lipo -info "$BIN"
           lipo -info "$BIN" | grep -q arm64
