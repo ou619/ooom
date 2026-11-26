@@ -108,17 +108,18 @@ struct SessionStackRow: View {
             }
         })
         .contextMenu {
-            // [T-ios-crash-contextmenu-uaf] Value-only menu view, no closure captures.
-            SessionContextMenu(
-                key: MenuKey(sid: session.id, pinned: session.isPinned, title: session.title, filed: session.isFiled),
-                actions: menuActions
-            )
-            .equatable()
             // [T-session-avatar] Plain value-only buttons rather than extending
             // SessionContextMenu: that view is shared and Equatable by key, and
             // knows nothing about avatars. These capture only this row's own
             // state and the session id — never ContentView, per
             // [T-ios-crash-contextmenu-uaf].
+            //
+            // They come BEFORE the shared menu on purpose: its last item is
+            // Delete, and a cosmetic entry sitting directly under a destructive
+            // one is a misfire waiting to happen. (`SessionContextMenu` renders
+            // its own sections, so inserting between "edit title" and
+            // "regenerate title" would mean threading a slot through a view
+            // whose whole contract is a tiny Equatable key.)
             Button {
                 // One run loop later: presenting a sheet synchronously from a
                 // context-menu action races the menu's own dismissal.
@@ -134,6 +135,12 @@ struct SessionStackRow: View {
                     Label(AppLocalized("恢复默认头像"), systemImage: "arrow.uturn.backward")
                 }
             }
+            // [T-ios-crash-contextmenu-uaf] Value-only menu view, no closure captures.
+            SessionContextMenu(
+                key: MenuKey(sid: session.id, pinned: session.isPinned, title: session.title, filed: session.isFiled),
+                actions: menuActions
+            )
+            .equatable()
         }
         .modifier(SessionAvatarPicker(
             sessionId: session.id,
@@ -196,12 +203,9 @@ struct SessionSplitRow: View {
         // selection layer, so it fires on the selected row too (GH#30).
         .contextMenu {
             if let menuSid {
-                SessionContextMenu(
-                    key: MenuKey(sid: menuSid, pinned: session.isPinned, title: session.title, filed: session.isFiled),
-                    actions: menuActions
-                )
-                .equatable()
-                // [T-session-avatar] Same two value-only items as the phone row.
+                // [T-session-avatar] Same two value-only items as the phone row,
+                // and in the same position: above the shared menu, never under
+                // its Delete.
                 Button {
                     DispatchQueue.main.async { showAvatarPicker = true }
                 } label: {
@@ -214,6 +218,11 @@ struct SessionSplitRow: View {
                         Label(AppLocalized("恢复默认头像"), systemImage: "arrow.uturn.backward")
                     }
                 }
+                SessionContextMenu(
+                    key: MenuKey(sid: menuSid, pinned: session.isPinned, title: session.title, filed: session.isFiled),
+                    actions: menuActions
+                )
+                .equatable()
             }
         }
         .modifier(SessionAvatarPicker(
@@ -335,7 +344,7 @@ struct SessionAvatarPicker: ViewModifier {
             errorShown = true
             return
         }
-        guard case .success(let dataURI) = SoulIconImage.encode(image),
+        guard case .success(let dataURI) = SoulIconImage.encode(image, maxPixels: SessionAvatarFiles.pixels),
               let png = SoulIconImage.pngData(from: dataURI) else {
             errorShown = true
             return
@@ -344,7 +353,18 @@ struct SessionAvatarPicker: ViewModifier {
             errorShown = true
             return
         }
-        await ChatStore.shared.updateSessionAvatar(sessionId, ref: name)
+        // Commit the reference first, prune second. `write` deliberately leaves
+        // the previous file in place, so a rejected UPDATE cannot orphan the row;
+        // once the row is committed, the older files are dead weight.
+        let committed = await ChatStore.shared.updateSessionAvatar(sessionId, ref: name)
+        guard committed else {
+            if let orphan = SessionAvatarFiles.url(for: sessionId, fileName: name) {
+                try? FileManager.default.removeItem(at: orphan)
+            }
+            errorShown = true
+            return
+        }
+        SessionAvatarFiles.removeAll(for: sessionId, except: name)
         SessionAvatarCache.shared.invalidate(sessionId: sessionId)
         // Row-local value: the sidebar only re-reads this row on its next
         // (throttled) refresh, so without this the old icon stays visible.
@@ -358,8 +378,14 @@ struct SessionAvatarPicker: ViewModifier {
     /// avatar. `updated_at` is untouched, so the row does not jump in the list.
     @MainActor
     private func restoreDefault() async {
+        // Same order as `apply`: clear the reference, THEN drop the bytes. A
+        // failed update must leave a working avatar rather than a broken one.
+        let committed = await ChatStore.shared.updateSessionAvatar(sessionId, ref: "")
+        guard committed else {
+            errorShown = true
+            return
+        }
         SessionAvatarFiles.removeAll(for: sessionId)
-        await ChatStore.shared.updateSessionAvatar(sessionId, ref: "")
         SessionAvatarCache.shared.invalidate(sessionId: sessionId)
         overrideRef = ""
     }

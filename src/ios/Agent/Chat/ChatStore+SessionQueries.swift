@@ -417,7 +417,11 @@ extension ChatStore {
     }
 
     func getSession(_ id: String) -> ChatSession? {
-        let sql = "SELECT id, title, model_id, created_at, updated_at, category, source, pinned_at, folder_id, parent_session_id, parent_tool_use_id FROM sessions WHERE id = ?"
+        // [T-session-avatar] `avatar_ref` is the last column on purpose: the
+        // backup exporter builds its SessionV2 record from this row, so a
+        // column missing here is silently absent from every backup package
+        // (the image file itself is still copied by the per-session tree walk).
+        let sql = "SELECT id, title, model_id, created_at, updated_at, category, source, pinned_at, folder_id, parent_session_id, parent_tool_use_id, avatar_ref FROM sessions WHERE id = ?"
         var stmt: OpaquePointer?
         var session: ChatSession?
 
@@ -443,6 +447,7 @@ extension ChatStore {
                 )
                 session?.parentSessionId = parentSessionId
                 session?.parentToolUseId = parentToolUseId
+                session?.avatarRef = sqlite3_column_text(stmt, 11).map { String(cString: $0) }
             }
         }
         sqlite3_finalize(stmt)

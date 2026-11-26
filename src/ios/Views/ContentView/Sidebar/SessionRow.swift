@@ -677,6 +677,14 @@ enum SessionAvatarFiles {
     static let namePrefix = "session-avatar-"
     static let nameSuffix = ".png"
 
+    /// Stored edge in pixels for a session avatar.
+    ///
+    /// The slot is 44pt square, so @3x needs 132px. `SoulIconImage.storedPixels`
+    /// (96px) is sized for the Soul's 32pt surfaces; reusing it here upscales
+    /// 1.375× and reads soft next to a vector SF Symbol in the same column.
+    /// 192 leaves headroom for a larger slot without re-encoding old files.
+    static let pixels: CGFloat = 192
+
     static func directory(for sessionId: String) -> URL {
         AIChatViewModel.minisPersistentBase.appendingPathComponent(sessionId, isDirectory: true)
     }
@@ -721,9 +729,10 @@ enum SessionAvatarFiles {
             attempt += 1
         }
         try pngData.write(to: dir.appendingPathComponent(name), options: .atomic)
-        // Write-new-then-delete-old: had the write above thrown, the previous
-        // avatar is still on disk and the row keeps rendering it.
-        removeAll(for: sessionId, except: name)
+        // Pruning is the CALLER's job, and only after the DB row points at the
+        // new name. Deleting the old file here would mean a failed
+        // `updateSessionAvatar` leaves the row pointing at bytes that no longer
+        // exist, which renders as "avatar silently disappeared".
         return name
     }
 

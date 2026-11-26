@@ -249,10 +249,16 @@ extension ChatStore {
     /// The bytes never pass through here: `ref` is the file NAME produced by
     /// `SessionAvatarFiles.write`, and `""` is the "restore default" sentinel
     /// (distinct from NULL, which means "never set"). Passing nil writes NULL.
-    func updateSessionAvatar(_ id: String, ref: String?) {
+    /// - Returns: `true` only when the UPDATE actually changed the row. Callers
+    ///   use this to decide whether deleting the previous file is safe; a `false`
+    ///   here means the row still points at the OLD name, so the old bytes must
+    ///   stay on disk.
+    @discardableResult
+    func updateSessionAvatar(_ id: String, ref: String?) -> Bool {
         invalidateSessionListCache(sessionId: id)
         let sql = "UPDATE sessions SET avatar_ref = ? WHERE id = ?"
         var stmt: OpaquePointer?
+        var changed = false
         // SQLITE_TRANSIENT: SQLite copies both strings, so the temporary
         // NSString backing them may go away before the statement steps.
         let transient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
@@ -263,9 +269,10 @@ extension ChatStore {
                 sqlite3_bind_null(stmt, 1)
             }
             sqlite3_bind_text(stmt, 2, (id as NSString).utf8String, -1, transient)
-            sqlite3_step(stmt)
+            changed = sqlite3_step(stmt) == SQLITE_DONE && sqlite3_changes(db) > 0
         }
         sqlite3_finalize(stmt)
+        return changed
     }
 
     /// [T-ios-listsessions-perf] The session-list SELECT, shared by the full

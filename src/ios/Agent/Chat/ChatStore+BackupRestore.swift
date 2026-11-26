@@ -83,7 +83,8 @@ extension ChatStore {
             let sql = """
                 UPDATE sessions SET title = ?, category = ?, model_id = ?, updated_at = ?,
                                     memory_enabled = ?, model_binding = ?, pinned_at = ?, folder_id = ?,
-                                    parent_session_id = ?, parent_tool_use_id = ?
+                                    parent_session_id = ?, parent_tool_use_id = ?,
+                                    avatar_ref = COALESCE(?, avatar_ref)
                 WHERE id = ?
                 """
             var up: OpaquePointer?
@@ -99,7 +100,11 @@ extension ChatStore {
                 bindText(up, 8, session.folderId)
                 bindText(up, 9, session.parentSessionId)
                 bindText(up, 10, session.parentToolUseId)
-                sqlite3_bind_text(up, 11, (session.id as NSString).utf8String, -1, nil)
+                // COALESCE, not a plain assignment: a package written before
+                // `avatar_ref` existed decodes it as nil, and a plain `= ?`
+                // would then blank out an avatar the user already set here.
+                bindText(up, 11, session.avatarRef)
+                sqlite3_bind_text(up, 12, (session.id as NSString).utf8String, -1, nil)
                 sqlite3_step(up)
             }
             sqlite3_finalize(up)
@@ -111,8 +116,8 @@ extension ChatStore {
         let sql = """
             INSERT INTO sessions (id, title, category, model_id, created_at, updated_at,
                                   memory_enabled, model_binding, pinned_at, folder_id,
-                                  parent_session_id, parent_tool_use_id)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                  parent_session_id, parent_tool_use_id, avatar_ref)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """
         var ins: OpaquePointer?
         if sqlite3_prepare_v2(db, sql, -1, &ins, nil) == SQLITE_OK {
@@ -129,6 +134,7 @@ extension ChatStore {
             bindText(ins, 10, session.folderId)
             bindText(ins, 11, session.parentSessionId)
             bindText(ins, 12, session.parentToolUseId)
+            bindText(ins, 13, session.avatarRef)
             sqlite3_step(ins)
         }
         sqlite3_finalize(ins)

@@ -68,14 +68,20 @@ enum SoulIconImage {
     /// decode. Re-encoding to PNG regardless keeps one stored format (so
     /// `isDataURI`'s single prefix stays valid) and preserves alpha when the
     /// source had it.
-    static func encode(_ image: UIImage) -> Result<String, RejectionReason> {
+    /// - Parameter maxPixels: Ceiling on the longest stored edge, in pixels.
+    ///   Defaults to the Soul contract (`storedPixels`) so every existing
+    ///   caller is unchanged. A surface that draws larger than the Soul's 32pt
+    ///   passes its own ceiling instead of inheriting a size chosen for a
+    ///   different slot — the sidebar's 44pt session avatar is 132px at @3x,
+    ///   and reusing 96px there is a visible upscale.
+    static func encode(_ image: UIImage, maxPixels: CGFloat = storedPixels) -> Result<String, RejectionReason> {
         guard image.cgImage != nil else { return .failure(.unreadable) }
 
         let square = squareCropped(image)
         // Square and bounded: the chat header's row height is a hardcoded
         // layout estimate (28pt), so a non-square icon there would fight the
         // measured height. Cropping here means every consumer can assume 1:1.
-        let side = min(storedPixels, max(square.size.width, square.size.height) * square.scale)
+        let side = min(maxPixels, max(square.size.width, square.size.height) * square.scale)
         let target = CGSize(width: side, height: side)
 
         let format = UIGraphicsImageRendererFormat()
