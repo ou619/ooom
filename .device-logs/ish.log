@@ -1,0 +1,1167 @@
+
+============================================================
+  iSH-ARM64 Static Library Builder for iOS
+  Guest arch: arm64 (aarch64 Linux emulation)
+============================================================
+
+[0;34mℹ️  Checking prerequisites...[0m
+[0;34mℹ️  Found LLVM Clang: /opt/homebrew/opt/llvm/bin/clang[0m
+[0;32m✅ Prerequisites check passed[0m
+[0;34mℹ️  Initializing iSH submodules...[0m
+[0;34mℹ️  Submodules already initialized[0m
+[0;34mℹ️  Setting up cross-compilation for iphoneos...[0m
+[0;32m✅ Cross-compilation file created[0m
+[0;34mℹ️  Building iSH libraries for iphoneos (release)...[0m
+[0;34mℹ️  Configuring meson build...[0m
+The Meson build system
+Version: 1.12.1
+Source dir: /Users/runner/work/ooom/ooom/deps/ish
+Build dir: /Users/runner/work/ooom/ooom/deps/ish/build-ios
+Build type: cross build
+Project name: ish
+Project version: undefined
+C compiler for the host machine: clang -arch arm64 -isysroot /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk -miphoneos-version-min=14.0 (clang 21.0.0 "Apple clang version 21.0.0 (clang-2100.1.1.101)")
+C linker for the host machine: clang -arch arm64 -isysroot /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk -miphoneos-version-min=14.0 ld64 1267
+C compiler for the build machine: cc (clang 21.0.0 "Apple clang version 21.0.0 (clang-2100.1.1.101)")
+C linker for the build machine: cc ld64 1267
+Build machine cpu family: aarch64
+Build machine cpu: aarch64
+Host machine cpu family: aarch64
+Host machine cpu: aarch64
+Target machine cpu family: aarch64
+Target machine cpu: aarch64
+Run-time dependency threads found: YES
+Library rt found: NO
+Library m found: YES
+Library dl found: YES
+Library sqlite3 found: YES
+Program /opt/homebrew/opt/llvm/bin/clang found: YES (/opt/homebrew/opt/llvm/bin/clang)
+Program ./check-cc-arm64.sh found: YES (/Users/runner/work/ooom/ooom/deps/ish/vdso/arm64/./check-cc-arm64.sh)
+Program tools/staticdefine.sh found: YES (/Users/runner/work/ooom/ooom/deps/ish/tools/staticdefine.sh)
+Library unicorn found: NO
+WARNING: Found pkg-config '/usr/bin/false' but it failed when ran
+Found pkg-config: NO
+Found CMake: NO
+Run-time dependency libarchive found: NO  (tried pkg-config, framework and cmake)
+Library archive found: NO
+Library archive found: YES
+Program tests/e2e/e2e.bash found: YES (/Users/runner/work/ooom/ooom/deps/ish/tests/e2e/e2e.bash)
+Build targets in project: 8
+
+ish undefined
+
+  User defined options
+    Cross files: /Users/runner/work/ooom/ooom/deps/ish/build-ios/ios-cross.txt
+    b_ndebug   : true
+    buildtype  : release
+    engine     : asbestos
+    guest_arch : arm64
+    jit        : true
+    jit_emit   : false
+    kernel     : ish
+    log        : 
+    log_handler: nslog
+
+Found ninja-1.13.2 at /opt/homebrew/bin/ninja
+[0;34mℹ️  Building with ninja...[0m
+ninja: Entering directory `/Users/runner/work/ooom/ooom/deps/ish/build-ios'
+[1/93] Compiling C object libfakefs.a.p/fs_fake-migrate.c.o
+[2/93] Generating offsets with a custom command
+[3/93] Compiling C object libfakefs.a.p/fs_fake-rebuild.c.o
+[4/93] Compiling C object libish_emu.a.p/emu_arch_arm64_fpu.c.o
+../emu/arch/arm64/fpu.c:46:40: warning: unused function 'arm64_get_rounding_mode' [-Wunused-function]
+   46 | static inline enum arm64_rounding_mode arm64_get_rounding_mode(struct cpu_state *cpu) {
+      |                                        ^~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+[5/93] Compiling C object libfakefs.a.p/fs_fake-db.c.o
+../fs/fake-db.c:280:69: warning: unused parameter 'argc' [-Wunused-parameter]
+  280 | static void sqlite_func_change_prefix(sqlite3_context *context, int argc, sqlite3_value **args) {
+      |                                                                     ^
+1 warning generated.
+[6/93] Generating vdso/arm64/vdso-arm64 with a custom command
+[7/93] Compiling C object libish_emu.a.p/asbestos_helpers.c.o
+[8/93] Compiling C object libish_emu.a.p/kernel_native_offload_sym.c.o
+[9/93] Compiling C object libish_emu.a.p/emu_tlb.c.o
+[10/93] Compiling C object libish_emu.a.p/kernel_native_offload_sym_builtins.c.o
+[11/93] Compiling C object libish_emu.a.p/kernel_native_offload_prebuilt.c.o
+[12/93] Compiling C object libish_emu.a.p/asbestos_guest-arm64_gadgets-aarch64_entry.S.o
+[13/93] Compiling C object libish_emu.a.p/asbestos_asbestos.c.o
+[14/93] Compiling C object libish_emu.a.p/asbestos_guest-arm64_crypto_helpers.c.o
+[15/93] Compiling C object libish_emu.a.p/asbestos_guest-arm64_gadgets-aarch64_memory.S.o
+[16/93] Compiling C object libish_emu.a.p/asbestos_guest-arm64_gadgets-aarch64_control.S.o
+[17/93] Compiling C object libish_emu.a.p/asbestos_guest-arm64_gadgets-aarch64_bits.S.o
+[18/93] Compiling C object libish_emu.a.p/asbestos_guest-arm64_gadgets-aarch64_crypto.S.o
+[19/93] Compiling C object libish.a.p/kernel_init.c.o
+[20/93] Compiling C object libish.a.p/kernel_errno.c.o
+[21/93] Compiling C object libish_emu.a.p/asbestos_guest-arm64_gadgets-aarch64_math.S.o
+[22/93] Compiling C object libish.a.p/kernel_arch_arm64_calls.c.o
+../kernel/arch/arm64/calls.c:24:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   24 |     [0]   = (syscall_t) syscall_stub, // io_setup
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:25:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   25 |     [1]   = (syscall_t) syscall_stub, // io_destroy
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:26:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   26 |     [2]   = (syscall_t) syscall_stub, // io_submit
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:27:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   27 |     [3]   = (syscall_t) syscall_stub, // io_cancel
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:28:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   28 |     [4]   = (syscall_t) syscall_stub, // io_getevents
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:29:18: warning: cast from 'dword_t (*)(addr_t, addr_t, addr_t, dword_t, dword_t)' (aka 'unsigned int (*)(unsigned long long, unsigned long long, unsigned long long, unsigned int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   29 |     [5 ... 16] = (syscall_t) sys_xattr_stub, // xattr syscalls
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:30:13: warning: cast from 'dword_t (*)(addr_t, dword_t)' (aka 'unsigned int (*)(unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   30 |     [17]  = (syscall_t) sys_getcwd,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:31:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   31 |     [18]  = (syscall_t) syscall_stub, // lookup_dcookie
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:32:13: warning: cast from 'int_t (*)(uint_t, int_t)' (aka 'int (*)(unsigned int, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   32 |     [19]  = (syscall_t) sys_eventfd2,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:33:13: warning: cast from 'fd_t (*)(int_t)' (aka 'int (*)(int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   33 |     [20]  = (syscall_t) sys_epoll_create,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:34:13: warning: cast from 'int_t (*)(fd_t, int_t, fd_t, addr_t)' (aka 'int (*)(int, int, int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   34 |     [21]  = (syscall_t) sys_epoll_ctl,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:35:13: warning: cast from 'int_t (*)(fd_t, addr_t, int_t, int_t, addr_t, dword_t)' (aka 'int (*)(int, unsigned long long, int, int, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   35 |     [22]  = (syscall_t) sys_epoll_pwait,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:36:13: warning: cast from 'dword_t (*)(fd_t)' (aka 'unsigned int (*)(int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   36 |     [23]  = (syscall_t) sys_dup,
+      |             ^~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:37:13: warning: cast from 'dword_t (*)(fd_t, fd_t, int_t)' (aka 'unsigned int (*)(int, int, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   37 |     [24]  = (syscall_t) sys_dup3,
+      |             ^~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:38:13: warning: cast from 'dword_t (*)(fd_t, dword_t, addr_t)' (aka 'unsigned int (*)(int, unsigned int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   38 |     [25]  = (syscall_t) sys_fcntl,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:39:13: warning: cast from 'fd_t (*)(int_t)' (aka 'int (*)(int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   39 |     [26]  = (syscall_t) sys_inotify_init1,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:40:13: warning: cast from 'int_t (*)(fd_t, addr_t, uint_t)' (aka 'int (*)(int, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   40 |     [27]  = (syscall_t) sys_inotify_add_watch,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:41:13: warning: cast from 'int_t (*)(fd_t, int_t)' (aka 'int (*)(int, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   41 |     [28]  = (syscall_t) sys_inotify_rm_watch,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:42:13: warning: cast from 'dword_t (*)(fd_t, dword_t, addr_t)' (aka 'unsigned int (*)(int, unsigned int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   42 |     [29]  = (syscall_t) sys_ioctl,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:43:13: warning: cast from 'int_t (*)(int_t, int_t, int_t)' (aka 'int (*)(int, int, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   43 |     [30]  = (syscall_t) sys_ioprio_set,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:44:13: warning: cast from 'int_t (*)(int_t, int_t, int_t)' (aka 'int (*)(int, int, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   44 |     [31]  = (syscall_t) sys_ioprio_get,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:45:13: warning: cast from 'dword_t (*)(fd_t, dword_t)' (aka 'unsigned int (*)(int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   45 |     [32]  = (syscall_t) sys_flock,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:46:13: warning: cast from 'dword_t (*)(fd_t, addr_t, mode_t_, dev_t_)' (aka 'unsigned int (*)(int, unsigned long long, unsigned short, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   46 |     [33]  = (syscall_t) sys_mknodat,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:47:13: warning: cast from 'dword_t (*)(fd_t, addr_t, mode_t_)' (aka 'unsigned int (*)(int, unsigned long long, unsigned short)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   47 |     [34]  = (syscall_t) sys_mkdirat,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:48:13: warning: cast from 'dword_t (*)(fd_t, addr_t, int_t)' (aka 'unsigned int (*)(int, unsigned long long, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   48 |     [35]  = (syscall_t) sys_unlinkat,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:49:13: warning: cast from 'dword_t (*)(addr_t, fd_t, addr_t)' (aka 'unsigned int (*)(unsigned long long, int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   49 |     [36]  = (syscall_t) sys_symlinkat,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:50:13: warning: cast from 'dword_t (*)(fd_t, addr_t, fd_t, addr_t)' (aka 'unsigned int (*)(int, unsigned long long, int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   50 |     [37]  = (syscall_t) sys_linkat,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:51:13: warning: cast from 'dword_t (*)(fd_t, addr_t, fd_t, addr_t)' (aka 'unsigned int (*)(int, unsigned long long, int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   51 |     [38]  = (syscall_t) sys_renameat,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:52:13: warning: cast from 'dword_t (*)(addr_t, dword_t)' (aka 'unsigned int (*)(unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   52 |     [39]  = (syscall_t) sys_umount2,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:53:13: warning: cast from 'dword_t (*)(addr_t, addr_t, addr_t, dword_t, addr_t)' (aka 'unsigned int (*)(unsigned long long, unsigned long long, unsigned long long, unsigned int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   53 |     [40]  = (syscall_t) sys_mount,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:54:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   54 |     [41]  = (syscall_t) syscall_stub, // pivot_root
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:55:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   55 |     [42]  = (syscall_t) syscall_stub, // nfsservctl
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:56:13: warning: cast from 'dword_t (*)(addr_t, addr_t)' (aka 'unsigned int (*)(unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   56 |     [43]  = (syscall_t) sys_statfs_arm64,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:57:13: warning: cast from 'dword_t (*)(fd_t, addr_t)' (aka 'unsigned int (*)(int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   57 |     [44]  = (syscall_t) sys_fstatfs_arm64,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:58:13: warning: cast from 'dword_t (*)(addr_t, off_t_)' (aka 'unsigned int (*)(unsigned long long, long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   58 |     [45]  = (syscall_t) sys_truncate64,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:59:13: warning: cast from 'dword_t (*)(fd_t, off_t_)' (aka 'unsigned int (*)(int, long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   59 |     [46]  = (syscall_t) sys_ftruncate64,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:60:13: warning: cast from 'dword_t (*)(fd_t, dword_t, off_t_, off_t_)' (aka 'unsigned int (*)(int, unsigned int, long long, long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   60 |     [47]  = (syscall_t) sys_fallocate,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:61:13: warning: cast from 'dword_t (*)(fd_t, addr_t, mode_t_, dword_t)' (aka 'unsigned int (*)(int, unsigned long long, unsigned short, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   61 |     [48]  = (syscall_t) sys_faccessat,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:62:13: warning: cast from 'dword_t (*)(addr_t)' (aka 'unsigned int (*)(unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   62 |     [49]  = (syscall_t) sys_chdir,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:63:13: warning: cast from 'dword_t (*)(fd_t)' (aka 'unsigned int (*)(int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   63 |     [50]  = (syscall_t) sys_fchdir,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:64:13: warning: cast from 'dword_t (*)(addr_t)' (aka 'unsigned int (*)(unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   64 |     [51]  = (syscall_t) sys_chroot,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:65:13: warning: cast from 'dword_t (*)(fd_t, dword_t)' (aka 'unsigned int (*)(int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   65 |     [52]  = (syscall_t) sys_fchmod,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:66:13: warning: cast from 'dword_t (*)(fd_t, addr_t, dword_t)' (aka 'unsigned int (*)(int, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   66 |     [53]  = (syscall_t) sys_fchmodat,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:67:13: warning: cast from 'dword_t (*)(fd_t, addr_t, dword_t, dword_t, int)' (aka 'unsigned int (*)(int, unsigned long long, unsigned int, unsigned int, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   67 |     [54]  = (syscall_t) sys_fchownat,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:68:13: warning: cast from 'dword_t (*)(fd_t, dword_t, dword_t)' (aka 'unsigned int (*)(int, unsigned int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   68 |     [55]  = (syscall_t) sys_fchown32,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:69:13: warning: cast from 'fd_t (*)(fd_t, addr_t, dword_t, mode_t_)' (aka 'int (*)(int, unsigned long long, unsigned int, unsigned short)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   69 |     [56]  = (syscall_t) sys_openat,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:70:13: warning: cast from 'dword_t (*)(fd_t)' (aka 'unsigned int (*)(int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   70 |     [57]  = (syscall_t) sys_close,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:71:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   71 |     [58]  = (syscall_t) syscall_stub, // vhangup
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:72:13: warning: cast from 'int_t (*)(addr_t, int_t)' (aka 'int (*)(unsigned long long, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   72 |     [59]  = (syscall_t) sys_pipe2,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:73:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   73 |     [60]  = (syscall_t) syscall_stub, // quotactl
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:74:13: warning: cast from 'int_t (*)(fd_t, addr_t, dword_t)' (aka 'int (*)(int, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   74 |     [61]  = (syscall_t) sys_getdents64,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:75:13: warning: cast from 'qword_t (*)(fd_t, sqword_t, dword_t)' (aka 'unsigned long long (*)(int, long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   75 |     [62]  = (syscall_t) sys_lseek64,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:76:13: warning: cast from 'dword_t (*)(fd_t, addr_t, dword_t)' (aka 'unsigned int (*)(int, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   76 |     [63]  = (syscall_t) sys_read,
+      |             ^~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:77:13: warning: cast from 'dword_t (*)(fd_t, addr_t, dword_t)' (aka 'unsigned int (*)(int, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   77 |     [64]  = (syscall_t) sys_write,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:78:13: warning: cast from 'dword_t (*)(fd_t, addr_t, dword_t)' (aka 'unsigned int (*)(int, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   78 |     [65]  = (syscall_t) sys_readv,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:79:13: warning: cast from 'dword_t (*)(fd_t, addr_t, dword_t)' (aka 'unsigned int (*)(int, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   79 |     [66]  = (syscall_t) sys_writev,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:80:13: warning: cast from 'dword_t (*)(fd_t, addr_t, dword_t, off_t_)' (aka 'unsigned int (*)(int, unsigned long long, unsigned int, long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   80 |     [67]  = (syscall_t) sys_pread,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:81:13: warning: cast from 'dword_t (*)(fd_t, addr_t, dword_t, off_t_)' (aka 'unsigned int (*)(int, unsigned long long, unsigned int, long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   81 |     [68]  = (syscall_t) sys_pwrite,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:82:13: warning: cast from 'dword_t (*)(fd_t, addr_t, dword_t, dword_t, dword_t)' (aka 'unsigned int (*)(int, unsigned long long, unsigned int, unsigned int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   82 |     [69]  = (syscall_t) sys_preadv,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:83:13: warning: cast from 'dword_t (*)(fd_t, addr_t, dword_t, dword_t, dword_t)' (aka 'unsigned int (*)(int, unsigned long long, unsigned int, unsigned int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   83 |     [70]  = (syscall_t) sys_pwritev,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:84:13: warning: cast from 'dword_t (*)(fd_t, fd_t, addr_t, dword_t)' (aka 'unsigned int (*)(int, int, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   84 |     [71]  = (syscall_t) sys_sendfile64,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:85:13: warning: cast from 'dword_t (*)(fd_t, addr_t, addr_t, addr_t, addr_t, addr_t)' (aka 'unsigned int (*)(int, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   85 |     [72]  = (syscall_t) sys_pselect,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:86:13: warning: cast from 'dword_t (*)(addr_t, dword_t, addr_t, addr_t, dword_t)' (aka 'unsigned int (*)(unsigned long long, unsigned int, unsigned long long, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   86 |     [73]  = (syscall_t) sys_ppoll,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:87:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   87 |     [74]  = (syscall_t) syscall_stub, // signalfd4
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:88:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   88 |     [75]  = (syscall_t) syscall_stub, // vmsplice
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:89:13: warning: cast from 'dword_t (*)(fd_t, addr_t, fd_t, addr_t, dword_t, dword_t)' (aka 'unsigned int (*)(int, unsigned long long, int, unsigned long long, unsigned int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   89 |     [76]  = (syscall_t) sys_splice,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:90:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   90 |     [77]  = (syscall_t) syscall_stub, // tee
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:91:13: warning: cast from 'dword_t (*)(fd_t, addr_t, addr_t, dword_t)' (aka 'unsigned int (*)(int, unsigned long long, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   91 |     [78]  = (syscall_t) sys_readlinkat,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:92:13: warning: cast from 'dword_t (*)(fd_t, addr_t, addr_t, dword_t)' (aka 'unsigned int (*)(int, unsigned long long, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   92 |     [79]  = (syscall_t) sys_fstatat64,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:93:13: warning: cast from 'dword_t (*)(fd_t, addr_t)' (aka 'unsigned int (*)(int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   93 |     [80]  = (syscall_t) sys_fstat64,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:94:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   94 |     [81]  = (syscall_t) syscall_success_stub, // sync
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:95:13: warning: cast from 'dword_t (*)(fd_t)' (aka 'unsigned int (*)(int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   95 |     [82]  = (syscall_t) sys_fsync,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:96:13: warning: cast from 'dword_t (*)(fd_t)' (aka 'unsigned int (*)(int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   96 |     [83]  = (syscall_t) sys_fsync, // fdatasync
+      |             ^~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:97:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   97 |     [84]  = (syscall_t) syscall_stub, // sync_file_range
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:98:13: warning: cast from 'fd_t (*)(int_t, int_t)' (aka 'int (*)(int, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   98 |     [85]  = (syscall_t) sys_timerfd_create,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:99:13: warning: cast from 'int_t (*)(fd_t, int_t, addr_t, addr_t)' (aka 'int (*)(int, int, unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+   99 |     [86]  = (syscall_t) sys_timerfd_settime,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:100:13: warning: cast from 'int_t (*)(fd_t, addr_t)' (aka 'int (*)(int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  100 |     [87]  = (syscall_t) sys_timerfd_gettime,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:101:13: warning: cast from 'dword_t (*)(fd_t, addr_t, addr_t, dword_t)' (aka 'unsigned int (*)(int, unsigned long long, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  101 |     [88]  = (syscall_t) sys_utimensat,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:102:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  102 |     [89]  = (syscall_t) syscall_stub, // acct
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:103:13: warning: cast from 'int_t (*)(addr_t, addr_t)' (aka 'int (*)(unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  103 |     [90]  = (syscall_t) sys_capget,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:104:13: warning: cast from 'int_t (*)(addr_t, addr_t)' (aka 'int (*)(unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  104 |     [91]  = (syscall_t) sys_capset,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:105:13: warning: cast from 'int_t (*)(dword_t)' (aka 'int (*)(unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  105 |     [92]  = (syscall_t) sys_personality,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:106:13: warning: cast from 'dword_t (*)(dword_t)' (aka 'unsigned int (*)(unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  106 |     [93]  = (syscall_t) sys_exit,
+      |             ^~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:107:13: warning: cast from 'dword_t (*)(dword_t)' (aka 'unsigned int (*)(unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  107 |     [94]  = (syscall_t) sys_exit_group,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:108:13: warning: cast from 'dword_t (*)(int_t, pid_t_, addr_t, int_t)' (aka 'unsigned int (*)(int, int, unsigned long long, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  108 |     [95]  = (syscall_t) sys_waitid,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:109:13: warning: cast from 'int (*)(addr_t)' (aka 'int (*)(unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  109 |     [96]  = (syscall_t) sys_set_tid_address,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:110:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  110 |     [97]  = (syscall_t) syscall_stub, // unshare
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:111:13: warning: cast from 'dword_t (*)(addr_t, dword_t, dword_t, addr_t, addr_t, dword_t)' (aka 'unsigned int (*)(unsigned long long, unsigned int, unsigned int, unsigned long long, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  111 |     [98]  = (syscall_t) sys_futex,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:112:13: warning: cast from 'int_t (*)(addr_t, dword_t)' (aka 'int (*)(unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  112 |     [99]  = (syscall_t) sys_set_robust_list,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:113:13: warning: cast from 'int_t (*)(pid_t_, addr_t, addr_t)' (aka 'int (*)(int, unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  113 |     [100] = (syscall_t) sys_get_robust_list,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:114:13: warning: cast from 'dword_t (*)(addr_t, addr_t)' (aka 'unsigned int (*)(unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  114 |     [101] = (syscall_t) sys_nanosleep,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:115:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  115 |     [102] = (syscall_t) syscall_stub, // getitimer
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:116:13: warning: cast from 'int_t (*)(int_t, addr_t, addr_t)' (aka 'int (*)(int, unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  116 |     [103] = (syscall_t) sys_setitimer,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:117:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  117 |     [104] = (syscall_t) syscall_stub, // kexec_load
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:118:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  118 |     [105] = (syscall_t) syscall_stub, // init_module
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:119:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  119 |     [106] = (syscall_t) syscall_stub, // delete_module
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:120:13: warning: cast from 'int_t (*)(dword_t, addr_t, addr_t)' (aka 'int (*)(unsigned int, unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  120 |     [107] = (syscall_t) sys_timer_create,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:121:13: warning: cast from 'int_t (*)(dword_t, addr_t)' (aka 'int (*)(unsigned int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  121 |     [108] = (syscall_t) sys_timer_gettime,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:122:13: warning: cast from 'int_t (*)(dword_t)' (aka 'int (*)(unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  122 |     [109] = (syscall_t) sys_timer_getoverrun,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:123:13: warning: cast from 'int_t (*)(dword_t, int_t, addr_t, addr_t)' (aka 'int (*)(unsigned int, int, unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  123 |     [110] = (syscall_t) sys_timer_settime,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:124:13: warning: cast from 'int_t (*)(dword_t)' (aka 'int (*)(unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  124 |     [111] = (syscall_t) sys_timer_delete,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:125:13: warning: cast from 'dword_t (*)(dword_t, addr_t)' (aka 'unsigned int (*)(unsigned int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  125 |     [112] = (syscall_t) sys_clock_settime,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:126:13: warning: cast from 'dword_t (*)(dword_t, addr_t)' (aka 'unsigned int (*)(unsigned int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  126 |     [113] = (syscall_t) sys_clock_gettime,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:127:13: warning: cast from 'dword_t (*)(dword_t, addr_t)' (aka 'unsigned int (*)(unsigned int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  127 |     [114] = (syscall_t) sys_clock_getres,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:128:13: warning: cast from 'dword_t (*)(dword_t, dword_t, addr_t, addr_t)' (aka 'unsigned int (*)(unsigned int, unsigned int, unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  128 |     [115] = (syscall_t) sys_clock_nanosleep,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:129:13: warning: cast from 'int_t (*)(int_t, addr_t, int_t)' (aka 'int (*)(int, unsigned long long, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  129 |     [116] = (syscall_t) sys_syslog,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:130:13: warning: cast from 'dword_t (*)(dword_t, dword_t, addr_t, addr_t)' (aka 'unsigned int (*)(unsigned int, unsigned int, unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  130 |     [117] = (syscall_t) sys_ptrace,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:131:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  131 |     [118] = (syscall_t) syscall_stub, // sched_setparam
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:132:13: warning: cast from 'int_t (*)(pid_t_, int_t, addr_t)' (aka 'int (*)(int, int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  132 |     [119] = (syscall_t) sys_sched_setscheduler,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:133:13: warning: cast from 'int_t (*)(pid_t_)' (aka 'int (*)(int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  133 |     [120] = (syscall_t) sys_sched_getscheduler,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:134:13: warning: cast from 'int_t (*)(pid_t_, addr_t)' (aka 'int (*)(int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  134 |     [121] = (syscall_t) sys_sched_getparam,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:135:13: warning: cast from 'int_t (*)(pid_t_, dword_t, addr_t)' (aka 'int (*)(int, unsigned int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  135 |     [122] = (syscall_t) sys_sched_setaffinity,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:136:13: warning: cast from 'int_t (*)(pid_t_, dword_t, addr_t)' (aka 'int (*)(int, unsigned int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  136 |     [123] = (syscall_t) sys_sched_getaffinity,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:137:13: warning: cast from 'int_t (*)(void)' (aka 'int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  137 |     [124] = (syscall_t) sys_sched_yield,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:138:13: warning: cast from 'int_t (*)(int_t)' (aka 'int (*)(int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  138 |     [125] = (syscall_t) sys_sched_get_priority_max,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:139:13: warning: cast from 'int_t (*)(int_t)' (aka 'int (*)(int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  139 |     [126] = (syscall_t) sys_sched_get_priority_max, // get_priority_min - should use different func
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:140:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  140 |     [127] = (syscall_t) syscall_stub, // sched_rr_get_interval
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:141:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  141 |     [128] = (syscall_t) syscall_stub, // restart_syscall
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:142:13: warning: cast from 'dword_t (*)(pid_t_, dword_t)' (aka 'unsigned int (*)(int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  142 |     [129] = (syscall_t) sys_kill,
+      |             ^~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:143:13: warning: cast from 'dword_t (*)(pid_t_, dword_t)' (aka 'unsigned int (*)(int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  143 |     [130] = (syscall_t) sys_tkill,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:144:13: warning: cast from 'dword_t (*)(pid_t_, pid_t_, dword_t)' (aka 'unsigned int (*)(int, int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  144 |     [131] = (syscall_t) sys_tgkill,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:145:13: warning: cast from 'dword_t (*)(addr_t, addr_t)' (aka 'unsigned int (*)(unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  145 |     [132] = (syscall_t) sys_sigaltstack,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:146:13: warning: cast from 'int_t (*)(addr_t, uint_t)' (aka 'int (*)(unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  146 |     [133] = (syscall_t) sys_rt_sigsuspend,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:147:13: warning: cast from 'dword_t (*)(dword_t, addr_t, addr_t, dword_t)' (aka 'unsigned int (*)(unsigned int, unsigned long long, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  147 |     [134] = (syscall_t) sys_rt_sigaction,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:148:13: warning: cast from 'dword_t (*)(dword_t, addr_t, addr_t, dword_t)' (aka 'unsigned int (*)(unsigned int, unsigned long long, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  148 |     [135] = (syscall_t) sys_rt_sigprocmask,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:149:13: warning: cast from 'int_t (*)(addr_t, dword_t)' (aka 'int (*)(unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  149 |     [136] = (syscall_t) sys_rt_sigpending,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:150:13: warning: cast from 'int_t (*)(addr_t, addr_t, addr_t, uint_t)' (aka 'int (*)(unsigned long long, unsigned long long, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  150 |     [137] = (syscall_t) sys_rt_sigtimedwait,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:151:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  151 |     [138] = (syscall_t) syscall_stub, // rt_sigqueueinfo
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:152:13: warning: cast from 'int64_t (*)(void)' (aka 'long long (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  152 |     [139] = (syscall_t) sys_rt_sigreturn,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:153:13: warning: cast from 'int_t (*)(int_t, pid_t_, int_t)' (aka 'int (*)(int, int, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  153 |     [140] = (syscall_t) sys_setpriority,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:154:13: warning: cast from 'int_t (*)(int_t, pid_t_)' (aka 'int (*)(int, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  154 |     [141] = (syscall_t) sys_getpriority,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:155:13: warning: cast from 'int_t (*)(int_t, int_t, int_t)' (aka 'int (*)(int, int, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  155 |     [142] = (syscall_t) sys_reboot,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:156:13: warning: cast from 'int_t (*)(uid_t_, uid_t_)' (aka 'int (*)(unsigned int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  156 |     [143] = (syscall_t) sys_setregid,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:157:13: warning: cast from 'int_t (*)(uid_t)' (aka 'int (*)(unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  157 |     [144] = (syscall_t) sys_setgid,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:158:13: warning: cast from 'int_t (*)(uid_t_, uid_t_)' (aka 'int (*)(unsigned int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  158 |     [145] = (syscall_t) sys_setreuid,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:159:13: warning: cast from 'int_t (*)(uid_t)' (aka 'int (*)(unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  159 |     [146] = (syscall_t) sys_setuid,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:160:13: warning: cast from 'dword_t (*)(uid_t_, uid_t_, uid_t_)' (aka 'unsigned int (*)(unsigned int, unsigned int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  160 |     [147] = (syscall_t) sys_setresuid,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:161:13: warning: cast from 'int_t (*)(addr_t, addr_t, addr_t)' (aka 'int (*)(unsigned long long, unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  161 |     [148] = (syscall_t) sys_getresuid,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:162:13: warning: cast from 'dword_t (*)(uid_t_, uid_t_, uid_t_)' (aka 'unsigned int (*)(unsigned int, unsigned int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  162 |     [149] = (syscall_t) sys_setresgid,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:163:13: warning: cast from 'int_t (*)(addr_t, addr_t, addr_t)' (aka 'int (*)(unsigned long long, unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  163 |     [150] = (syscall_t) sys_getresgid,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:164:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  164 |     [151] = (syscall_t) syscall_stub, // setfsuid
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:165:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  165 |     [152] = (syscall_t) syscall_stub, // setfsgid
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:166:13: warning: cast from 'dword_t (*)(addr_t)' (aka 'unsigned int (*)(unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  166 |     [153] = (syscall_t) sys_times,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:167:13: warning: cast from 'dword_t (*)(pid_t_, pid_t_)' (aka 'unsigned int (*)(int, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  167 |     [154] = (syscall_t) sys_setpgid,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:168:13: warning: cast from 'pid_t_ (*)(pid_t_)' (aka 'int (*)(int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  168 |     [155] = (syscall_t) sys_getpgid,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:169:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  169 |     [156] = (syscall_t) sys_getsid,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:170:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  170 |     [157] = (syscall_t) sys_setsid,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:171:13: warning: cast from 'int_t (*)(dword_t, addr_t)' (aka 'int (*)(unsigned int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  171 |     [158] = (syscall_t) sys_getgroups,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:172:13: warning: cast from 'int_t (*)(dword_t, addr_t)' (aka 'int (*)(unsigned int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  172 |     [159] = (syscall_t) sys_setgroups,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:173:13: warning: cast from 'dword_t (*)(addr_t)' (aka 'unsigned int (*)(unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  173 |     [160] = (syscall_t) sys_uname,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:174:13: warning: cast from 'dword_t (*)(addr_t, dword_t)' (aka 'unsigned int (*)(unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  174 |     [161] = (syscall_t) sys_sethostname,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:175:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  175 |     [162] = (syscall_t) syscall_stub, // setdomainname
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:176:13: warning: cast from 'dword_t (*)(dword_t, addr_t)' (aka 'unsigned int (*)(unsigned int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  176 |     [163] = (syscall_t) sys_getrlimit64,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:177:13: warning: cast from 'dword_t (*)(dword_t, addr_t)' (aka 'unsigned int (*)(unsigned int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  177 |     [164] = (syscall_t) sys_setrlimit64,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:178:13: warning: cast from 'dword_t (*)(dword_t, addr_t)' (aka 'unsigned int (*)(unsigned int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  178 |     [165] = (syscall_t) sys_getrusage,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:179:13: warning: cast from 'dword_t (*)(dword_t)' (aka 'unsigned int (*)(unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  179 |     [166] = (syscall_t) sys_umask,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:180:13: warning: cast from 'int_t (*)(dword_t, addr_t, addr_t, addr_t, addr_t)' (aka 'int (*)(unsigned int, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  180 |     [167] = (syscall_t) sys_prctl,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:181:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  181 |     [168] = (syscall_t) syscall_stub, // getcpu
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:182:13: warning: cast from 'dword_t (*)(addr_t, addr_t)' (aka 'unsigned int (*)(unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  182 |     [169] = (syscall_t) sys_gettimeofday,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:183:13: warning: cast from 'dword_t (*)(addr_t, addr_t)' (aka 'unsigned int (*)(unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  183 |     [170] = (syscall_t) sys_settimeofday,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:184:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  184 |     [171] = (syscall_t) syscall_stub, // adjtimex
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:185:13: warning: cast from 'pid_t_ (*)(void)' (aka 'int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  185 |     [172] = (syscall_t) sys_getpid,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:186:13: warning: cast from 'pid_t_ (*)(void)' (aka 'int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  186 |     [173] = (syscall_t) sys_getppid,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:187:13: warning: cast from 'uid_t_ (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  187 |     [174] = (syscall_t) sys_getuid32,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:188:13: warning: cast from 'uid_t_ (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  188 |     [175] = (syscall_t) sys_geteuid32,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:189:13: warning: cast from 'uid_t_ (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  189 |     [176] = (syscall_t) sys_getgid32,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:190:13: warning: cast from 'uid_t_ (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  190 |     [177] = (syscall_t) sys_getegid32,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:191:13: warning: cast from 'pid_t_ (*)(void)' (aka 'int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  191 |     [178] = (syscall_t) sys_gettid,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:192:13: warning: cast from 'dword_t (*)(addr_t)' (aka 'unsigned int (*)(unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  192 |     [179] = (syscall_t) sys_sysinfo,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:193:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  193 |     [180] = (syscall_t) syscall_stub, // mq_open
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:194:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  194 |     [181] = (syscall_t) syscall_stub, // mq_unlink
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:195:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  195 |     [182] = (syscall_t) syscall_stub, // mq_timedsend
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:196:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  196 |     [183] = (syscall_t) syscall_stub, // mq_timedreceive
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:197:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  197 |     [184] = (syscall_t) syscall_stub, // mq_notify
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:198:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  198 |     [185] = (syscall_t) syscall_stub, // mq_getsetattr
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:199:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  199 |     [186] = (syscall_t) syscall_stub, // msgget
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:200:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  200 |     [187] = (syscall_t) syscall_stub, // msgctl
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:201:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  201 |     [188] = (syscall_t) syscall_stub, // msgrcv
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:202:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  202 |     [189] = (syscall_t) syscall_stub, // msgsnd
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:203:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  203 |     [190] = (syscall_t) syscall_stub, // semget
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:204:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  204 |     [191] = (syscall_t) syscall_stub, // semctl
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:205:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  205 |     [192] = (syscall_t) syscall_stub, // semtimedop
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:206:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  206 |     [193] = (syscall_t) syscall_stub, // semop
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:207:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  207 |     [194] = (syscall_t) syscall_stub, // shmget
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:208:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  208 |     [195] = (syscall_t) syscall_stub, // shmctl
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:209:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  209 |     [196] = (syscall_t) syscall_stub, // shmat
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:210:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  210 |     [197] = (syscall_t) syscall_stub, // shmdt
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:212:13: warning: cast from 'int_t (*)(dword_t, dword_t, dword_t)' (aka 'int (*)(unsigned int, unsigned int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  212 |     [198] = (syscall_t) sys_socket,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:213:13: warning: cast from 'int_t (*)(dword_t, dword_t, dword_t, addr_t)' (aka 'int (*)(unsigned int, unsigned int, unsigned int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  213 |     [199] = (syscall_t) sys_socketpair,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:214:13: warning: cast from 'int_t (*)(fd_t, addr_t, uint_t)' (aka 'int (*)(int, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  214 |     [200] = (syscall_t) sys_bind,
+      |             ^~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:215:13: warning: cast from 'int_t (*)(fd_t, int_t)' (aka 'int (*)(int, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  215 |     [201] = (syscall_t) sys_listen,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:216:13: warning: cast from 'int_t (*)(fd_t, addr_t, addr_t)' (aka 'int (*)(int, unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  216 |     [202] = (syscall_t) sys_accept,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:217:13: warning: cast from 'int_t (*)(fd_t, addr_t, uint_t)' (aka 'int (*)(int, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  217 |     [203] = (syscall_t) sys_connect,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:218:13: warning: cast from 'int_t (*)(fd_t, addr_t, addr_t)' (aka 'int (*)(int, unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  218 |     [204] = (syscall_t) sys_getsockname,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:219:13: warning: cast from 'int_t (*)(fd_t, addr_t, addr_t)' (aka 'int (*)(int, unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  219 |     [205] = (syscall_t) sys_getpeername,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:220:13: warning: cast from 'int_t (*)(fd_t, addr_t, dword_t, dword_t, addr_t, dword_t)' (aka 'int (*)(int, unsigned long long, unsigned int, unsigned int, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  220 |     [206] = (syscall_t) sys_sendto,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:221:13: warning: cast from 'int_t (*)(fd_t, addr_t, dword_t, dword_t, addr_t, addr_t)' (aka 'int (*)(int, unsigned long long, unsigned int, unsigned int, unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  221 |     [207] = (syscall_t) sys_recvfrom,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:222:13: warning: cast from 'int_t (*)(fd_t, dword_t, dword_t, addr_t, dword_t)' (aka 'int (*)(int, unsigned int, unsigned int, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  222 |     [208] = (syscall_t) sys_setsockopt,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:223:13: warning: cast from 'int_t (*)(fd_t, dword_t, dword_t, addr_t, addr_t)' (aka 'int (*)(int, unsigned int, unsigned int, unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  223 |     [209] = (syscall_t) sys_getsockopt,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:224:13: warning: cast from 'int_t (*)(fd_t, dword_t)' (aka 'int (*)(int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  224 |     [210] = (syscall_t) sys_shutdown,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:225:13: warning: cast from 'int_t (*)(fd_t, addr_t, int_t)' (aka 'int (*)(int, unsigned long long, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  225 |     [211] = (syscall_t) sys_sendmsg,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:226:13: warning: cast from 'int_t (*)(fd_t, addr_t, int_t)' (aka 'int (*)(int, unsigned long long, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  226 |     [212] = (syscall_t) sys_recvmsg,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:227:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  227 |     [213] = (syscall_t) syscall_stub, // readahead
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:228:13: warning: cast from 'addr_t (*)(addr_t)' (aka 'unsigned long long (*)(unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  228 |     [214] = (syscall_t) sys_brk,
+      |             ^~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:229:13: warning: cast from 'int_t (*)(addr_t, addr_t)' (aka 'int (*)(unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  229 |     [215] = (syscall_t) sys_munmap,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:230:13: warning: cast from 'addr_t (*)(addr_t, dword_t, dword_t, dword_t)' (aka 'unsigned long long (*)(unsigned long long, unsigned int, unsigned int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  230 |     [216] = (syscall_t) sys_mremap,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:231:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  231 |     [217] = (syscall_t) syscall_stub, // add_key
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:232:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  232 |     [218] = (syscall_t) syscall_stub, // request_key
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:233:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  233 |     [219] = (syscall_t) syscall_stub, // keyctl
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:234:13: warning: cast from 'dword_t (*)(dword_t, addr_t, addr_t, addr_t, addr_t)' (aka 'unsigned int (*)(unsigned int, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  234 |     [220] = (syscall_t) sys_clone,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:235:13: warning: cast from 'dword_t (*)(addr_t, addr_t, addr_t)' (aka 'unsigned int (*)(unsigned long long, unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  235 |     [221] = (syscall_t) sys_execve,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:236:13: warning: cast from 'addr_t (*)(addr_t, addr_t, dword_t, dword_t, fd_t, qword_t)' (aka 'unsigned long long (*)(unsigned long long, unsigned long long, unsigned int, unsigned int, int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  236 |     [222] = (syscall_t) sys_mmap64,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:237:13: warning: cast from 'dword_t (*)(fd_t, uint64_t, uint64_t, dword_t)' (aka 'unsigned int (*)(int, unsigned long long, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  237 |     [223] = (syscall_t) sys_fadvise64, // fadvise64
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:238:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  238 |     [224] = (syscall_t) syscall_stub, // swapon
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:239:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  239 |     [225] = (syscall_t) syscall_stub, // swapoff
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:240:13: warning: cast from 'int_t (*)(addr_t, addr_t, int_t)' (aka 'int (*)(unsigned long long, unsigned long long, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  240 |     [226] = (syscall_t) sys_mprotect,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:241:13: warning: cast from 'int_t (*)(addr_t, dword_t, int_t)' (aka 'int (*)(unsigned long long, unsigned int, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  241 |     [227] = (syscall_t) sys_msync,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:242:13: warning: cast from 'int_t (*)(addr_t, dword_t)' (aka 'int (*)(unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  242 |     [228] = (syscall_t) sys_mlock,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:243:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  243 |     [229] = (syscall_t) syscall_stub, // munlock
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:244:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  244 |     [230] = (syscall_t) syscall_stub, // mlockall
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:245:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  245 |     [231] = (syscall_t) syscall_stub, // munlockall
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:246:13: warning: cast from 'dword_t (*)(addr_t, dword_t, addr_t)' (aka 'unsigned int (*)(unsigned long long, unsigned int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  246 |     [232] = (syscall_t) sys_mincore, // mincore
+      |             ^~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:247:13: warning: cast from 'dword_t (*)(addr_t, dword_t, dword_t)' (aka 'unsigned int (*)(unsigned long long, unsigned int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  247 |     [233] = (syscall_t) sys_madvise,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:248:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  248 |     [234] = (syscall_t) syscall_stub, // remap_file_pages
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:249:13: warning: cast from 'dword_t (*)(addr_t, dword_t, int_t, addr_t, dword_t, uint_t)' (aka 'unsigned int (*)(unsigned long long, unsigned int, int, unsigned long long, unsigned int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  249 |     [235] = (syscall_t) sys_mbind,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:250:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  250 |     [236] = (syscall_t) syscall_stub, // get_mempolicy
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:251:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  251 |     [237] = (syscall_t) syscall_stub, // set_mempolicy
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:252:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  252 |     [238] = (syscall_t) syscall_stub, // migrate_pages
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:253:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  253 |     [239] = (syscall_t) syscall_stub, // move_pages
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:254:13: warning: cast from 'int64_t (*)(void)' (aka 'long long (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  254 |     [240] = (syscall_t) sys_rt_sigreturn, // rt_tgsigqueueinfo
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:255:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  255 |     [241] = (syscall_t) syscall_stub, // perf_event_open
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:256:13: warning: cast from 'int_t (*)(fd_t, addr_t, addr_t, int_t)' (aka 'int (*)(int, unsigned long long, unsigned long long, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  256 |     [242] = (syscall_t) sys_accept4,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:257:13: warning: cast from 'int_t (*)(fd_t, addr_t, uint_t, int_t, addr_t)' (aka 'int (*)(int, unsigned long long, unsigned int, int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  257 |     [243] = (syscall_t) sys_recvmmsg,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:258:13: warning: cast from 'dword_t (*)(pid_t_, addr_t, dword_t, addr_t)' (aka 'unsigned int (*)(int, unsigned long long, unsigned int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  258 |     [260] = (syscall_t) sys_wait4,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:259:13: warning: cast from 'dword_t (*)(pid_t_, dword_t, addr_t, addr_t)' (aka 'unsigned int (*)(int, unsigned int, unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  259 |     [261] = (syscall_t) sys_prlimit64,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:260:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  260 |     [262] = (syscall_t) syscall_stub, // fanotify_init
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:261:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  261 |     [263] = (syscall_t) syscall_stub, // fanotify_mark
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:262:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  262 |     [264] = (syscall_t) syscall_stub, // name_to_handle_at
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:263:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  263 |     [265] = (syscall_t) syscall_stub, // open_by_handle_at
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:264:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  264 |     [266] = (syscall_t) syscall_stub, // clock_adjtime
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:265:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  265 |     [267] = (syscall_t) syscall_stub, // syncfs
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:266:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  266 |     [268] = (syscall_t) syscall_stub, // setns
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:267:13: warning: cast from 'int_t (*)(fd_t, addr_t, uint_t, int_t)' (aka 'int (*)(int, unsigned long long, unsigned int, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  267 |     [269] = (syscall_t) sys_sendmmsg,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:268:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  268 |     [270] = (syscall_t) syscall_stub, // process_vm_readv
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:269:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  269 |     [271] = (syscall_t) syscall_stub, // process_vm_writev
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:270:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  270 |     [272] = (syscall_t) syscall_stub, // kcmp
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:271:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  271 |     [273] = (syscall_t) syscall_stub, // finit_module
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:272:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  272 |     [274] = (syscall_t) syscall_stub, // sched_setattr
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:273:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  273 |     [275] = (syscall_t) syscall_stub, // sched_getattr
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:274:13: warning: cast from 'dword_t (*)(fd_t, addr_t, fd_t, addr_t, int_t)' (aka 'unsigned int (*)(int, unsigned long long, int, unsigned long long, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  274 |     [276] = (syscall_t) sys_renameat2,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:275:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  275 |     [277] = (syscall_t) syscall_stub, // seccomp
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:276:13: warning: cast from 'dword_t (*)(addr_t, dword_t, dword_t)' (aka 'unsigned int (*)(unsigned long long, unsigned int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  276 |     [278] = (syscall_t) sys_getrandom,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:277:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  277 |     [279] = (syscall_t) syscall_silent_stub, // memfd_create
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:278:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  278 |     [280] = (syscall_t) syscall_stub, // bpf
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:279:13: warning: cast from 'dword_t (*)(addr_t, addr_t, addr_t)' (aka 'unsigned int (*)(unsigned long long, unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  279 |     [281] = (syscall_t) sys_execve, // execveat
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:280:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  280 |     [282] = (syscall_t) syscall_stub, // userfaultfd
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:281:13: warning: cast from 'int_t (*)(int_t, uint_t, int_t)' (aka 'int (*)(int, unsigned int, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  281 |     [283] = (syscall_t) sys_membarrier, // membarrier
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:282:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  282 |     [284] = (syscall_t) syscall_stub, // mlock2
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:283:13: warning: cast from 'dword_t (*)(fd_t, addr_t, fd_t, addr_t, dword_t, uint_t)' (aka 'unsigned int (*)(int, unsigned long long, int, unsigned long long, unsigned int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  283 |     [285] = (syscall_t) sys_copy_file_range,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:284:13: warning: cast from 'dword_t (*)(fd_t, addr_t, dword_t, dword_t, dword_t, dword_t)' (aka 'unsigned int (*)(int, unsigned long long, unsigned int, unsigned int, unsigned int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  284 |     [286] = (syscall_t) sys_preadv2,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:285:13: warning: cast from 'dword_t (*)(fd_t, addr_t, dword_t, dword_t, dword_t, dword_t)' (aka 'unsigned int (*)(int, unsigned long long, unsigned int, unsigned int, unsigned int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  285 |     [287] = (syscall_t) sys_pwritev2,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:286:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  286 |     [288] = (syscall_t) syscall_stub, // pkey_mprotect
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:287:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  287 |     [289] = (syscall_t) syscall_stub, // pkey_alloc
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:288:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  288 |     [290] = (syscall_t) syscall_stub, // pkey_free
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:289:13: warning: cast from 'dword_t (*)(fd_t, addr_t, int_t, uint_t, addr_t)' (aka 'unsigned int (*)(int, unsigned long long, int, unsigned int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  289 |     [291] = (syscall_t) sys_statx,
+      |             ^~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:294:21: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  294 |     [292 ... 423] = (syscall_t) syscall_silent_stub,    // io_pgetevents/rseq/etc.
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:295:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  295 |     [424] = (syscall_t) syscall_stub, // pidfd_send_signal
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:296:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  296 |     [425] = (syscall_t) syscall_silent_stub, // io_uring_setup (Node fallback to epoll)
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:297:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  297 |     [426] = (syscall_t) syscall_silent_stub, // io_uring_enter
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:298:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  298 |     [427] = (syscall_t) syscall_silent_stub, // io_uring_register
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:299:21: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  299 |     [428 ... 433] = (syscall_t) syscall_stub, // open_tree/move_mount/fs* mount API
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:300:13: warning: cast from 'int_t (*)(pid_t_, uint_t)' (aka 'int (*)(int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  300 |     [434] = (syscall_t) sys_pidfd_open, // pidfd_open
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:301:13: warning: cast from 'dword_t (*)(addr_t, dword_t)' (aka 'unsigned int (*)(unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  301 |     [435] = (syscall_t) sys_clone3, // clone3 (bun/JSC uses it directly)
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:302:13: warning: cast from 'dword_t (*)(uint32_t, uint32_t, uint32_t)' (aka 'unsigned int (*)(unsigned int, unsigned int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  302 |     [436] = (syscall_t) sys_close_range,    // *** unblocks Anthropic claude-cli ***
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:303:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  303 |     [437] = (syscall_t) syscall_stub, // openat2 (glibc falls back to openat)
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:304:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  304 |     [438] = (syscall_t) syscall_stub, // pidfd_getfd
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:305:13: warning: cast from 'dword_t (*)(fd_t, addr_t, mode_t_, dword_t)' (aka 'unsigned int (*)(int, unsigned long long, unsigned short, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  305 |     [439] = (syscall_t) sys_faccessat,      // *** unblocks Google gemini-cli (faccessat2 reuses sys_faccessat) ***
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:306:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  306 |     [440] = (syscall_t) syscall_silent_stub, // process_madvise
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:307:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  307 |     [441] = (syscall_t) syscall_silent_stub, // epoll_pwait2 (libuv falls back)
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:308:21: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  308 |     [442 ... 448] = (syscall_t) syscall_stub, // mount_setattr/quotactl_fd/landlock/memfd_secret/process_mrelease
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/arch/arm64/calls.c:309:13: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  309 |     [449] = (syscall_t) syscall_stub, // futex_waitv
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+281 warnings generated.
+[23/93] Compiling C object libish.a.p/kernel_user.c.o
+[24/93] Compiling C object libish.a.p/kernel_vdso.c.o
+[25/93] Compiling C object libish.a.p/kernel_task.c.o
+[26/93] Compiling C object libish.a.p/kernel_calls.c.o
+../kernel/calls.c:145:51: warning: cast from 'dword_t (*)(void)' (aka 'unsigned int (*)(void)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+  145 |                 if (syscall_table[syscall_num] == (syscall_t) syscall_stub) {
+      |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/calls.c:629:26: warning: variable 'fault_insn' set but not used [-Wunused-but-set-variable]
+  629 |                 uint32_t fault_insn = 0;
+      |                          ^
+../kernel/calls.c:630:22: warning: variable 'insn_ok' set but not used [-Wunused-but-set-variable]
+  630 |                 bool insn_ok = true;
+      |                      ^
+../kernel/calls.c:528:47: warning: unused variable 'v8_last_recovery_pc' [-Wunused-variable]
+  528 |                 static _Thread_local uint64_t v8_last_recovery_pc = 0;
+      |                                               ^~~~~~~~~~~~~~~~~~~
+../kernel/calls.c:1072:49: warning: result of comparison of 31-bit unsigned value == 2839543808 is always false [-Wtautological-value-range-compare]
+ 1072 |                         if ((insn & 0x7fc00000) == 0xa9400000 || // LDP x
+      |                             ~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~
+5 warnings generated.
+[27/93] Compiling C object libish.a.p/kernel_group.c.o
+[28/93] Compiling C object libish.a.p/kernel_memory.c.o
+[29/93] Compiling C object libish.a.p/kernel_fork.c.o
+[30/93] Compiling C object libish.a.p/kernel_log.c.o
+[31/93] Compiling C object libish_emu.a.p/asbestos_guest-arm64_gen.c.o
+[32/93] Compiling C object libish.a.p/kernel_time.c.o
+[33/93] Compiling C object libish.a.p/kernel_exit.c.o
+[34/93] Compiling C object libish.a.p/kernel_uname.c.o
+[35/93] Compiling C object libish.a.p/kernel_exec.c.o
+../kernel/exec.c:193:60: warning: comparison of integers of different signs: 'ssize_t' (aka 'long') and 'uint64_t' (aka 'unsigned long long') [-Wsign-compare]
+  193 |         if (fd->ops->read(fd, interp_name, ph[i].filesize) != ph[i].filesize)
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+1 warning generated.
+[36/93] Compiling C object libish.a.p/kernel_tls.c.o
+[37/93] Compiling C object libish.a.p/kernel_mmap.c.o
+[38/93] Compiling C object libish.a.p/kernel_resource.c.o
+[39/93] Compiling C object libish.a.p/kernel_getset.c.o
+[40/93] Compiling C object libish.a.p/kernel_futex.c.o
+[41/93] Compiling C object libish.a.p/kernel_misc.c.o
+[42/93] Compiling C object libish.a.p/kernel_random.c.o
+[43/93] Compiling C object libish.a.p/kernel_pidfd.c.o
+[44/93] Compiling C object libish.a.p/kernel_eventfd.c.o
+[45/93] Compiling C object libish.a.p/kernel_inotify.c.o
+../kernel/inotify.c:51:5: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+   51 |     wait_for(&fd->cond, &fd->lock, NULL);
+      |     ^~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kernel/inotify.c:45:50: warning: unused parameter 'buf' [-Wunused-parameter]
+   45 | static ssize_t inotify_read(struct fd *fd, void *buf, size_t bufsize) {
+      |                                                  ^
+../kernel/inotify.c:45:62: warning: unused parameter 'bufsize' [-Wunused-parameter]
+   45 | static ssize_t inotify_read(struct fd *fd, void *buf, size_t bufsize) {
+      |                                                              ^
+../kernel/inotify.c:56:36: warning: unused parameter 'fd' [-Wunused-parameter]
+   56 | static int inotify_poll(struct fd *fd) {
+      |                                    ^
+4 warnings generated.
+[46/93] Compiling C object libish.a.p/kernel_ipc.c.o
+[47/93] Compiling C object libish.a.p/kernel_ptrace.c.o
+[48/93] Compiling C object libish.a.p/kernel_native_offload_policy.c.o
+[49/93] Compiling C object libish.a.p/kernel_signal.c.o
+[50/93] Compiling C object libish.a.p/kernel_fs_info.c.o
+[51/93] Compiling C object libish.a.p/kernel_native_offload.c.o
+../kernel/native_offload.c:583:18: warning: unused function 'start_pipe_forward' [-Wunused-function]
+  583 | static pthread_t start_pipe_forward(int pipe_rd, int dest_fd) {
+      |                  ^~~~~~~~~~~~~~~~~~
+1 warning generated.
+[52/93] Compiling C object libish.a.p/fs_mount.c.o
+[53/93] Compiling C object libish.a.p/fs_inode.c.o
+[54/93] Compiling C object libish.a.p/fs_fd.c.o
+[55/93] Compiling C object libish.a.p/fs_dir.c.o
+[56/93] Compiling C object libish.a.p/fs_stat.c.o
+[57/93] Compiling C object libish.a.p/fs_path.c.o
+[58/93] Compiling C object libish.a.p/fs_generic.c.o
+[59/93] Compiling C object libish.a.p/fs_proc.c.o
+[60/93] Compiling C object libish.a.p/fs_real.c.o
+[61/93] Compiling C object libish.a.p/kernel_fs.c.o
+../kernel/fs.c:563:16: warning: unused variable 'lseek_res' [-Wunused-variable]
+  563 |         off_t_ lseek_res = fd->ops->lseek(fd, saved_off, LSEEK_SET);
+      |                ^~~~~~~~~
+../kernel/fs.c:600:20: warning: unused variable 'lseek_res' [-Wunused-variable]
+  600 |             off_t_ lseek_res = fd->ops->lseek(fd, saved_off, LSEEK_SET);
+      |                    ^~~~~~~~~
+../kernel/fs.c:638:20: warning: unused variable 'lseek_res' [-Wunused-variable]
+  638 |             off_t_ lseek_res = fd->ops->lseek(fd, saved_off, LSEEK_SET);
+      |                    ^~~~~~~~~
+../kernel/fs.c:700:20: warning: unused variable 'lseek_res' [-Wunused-variable]
+  700 |             off_t_ lseek_res = fd->ops->lseek(fd, saved_off, LSEEK_SET);
+      |                    ^~~~~~~~~
+4 warnings generated.
+[62/93] Compiling C object libish.a.p/fs_proc_entry.c.o
+../fs/proc/entry.c:62:1: warning: non-void function does not return a value in all control paths [-Wreturn-type]
+   62 | }
+      | ^
+1 warning generated.
+[63/93] Compiling C object libish.a.p/fs_proc_net.c.o
+../fs/proc/net.c:30:13: warning: unused function 'proc_net_readdir' [-Wunused-function]
+   30 | static bool proc_net_readdir(struct proc_entry *UNUSED(entry), unsigned long *index, struct proc_entry *next_entry) {
+      |             ^~~~~~~~~~~~~~~~
+1 warning generated.
+[64/93] Compiling C object libish.a.p/fs_proc_ish.c.o
+[65/93] Compiling C object libish_emu.a.p/asbestos_guest-arm64_jit.c.o
+[66/93] Compiling C object libish.a.p/fs_dyndev.c.o
+../fs/dyndev.c:51:25: warning: unused parameter 'type' [-Wunused-parameter]
+   51 | static int dyn_open(int type, int major, int minor, struct fd *fd) {
+      |                         ^
+1 warning generated.
+[67/93] Compiling C object libish.a.p/fs_proc_root.c.o
+[68/93] Compiling C object libish.a.p/fs_proc_pid.c.o
+[69/93] Compiling C object libish.a.p/fs_adhoc.c.o
+[70/93] Compiling C object libish.a.p/fs_pipe.c.o
+[71/93] Compiling C object libish.a.p/fs_fake.c.o
+[72/93] Compiling C object libish.a.p/fs_dev.c.o
+[73/93] Compiling C object libish.a.p/fs_mem.c.o
+[74/93] Compiling C object libish.a.p/fs_sockrestart.c.o
+[75/93] Compiling C object libish.a.p/fs_tty-real.c.o
+[76/93] Compiling C object libish.a.p/fs_lock.c.o
+[77/93] Compiling C object libish.a.p/fs_pty.c.o
+[78/93] Compiling C object libish.a.p/kernel_poll.c.o
+[79/93] Compiling C object libish.a.p/fs_tmp.c.o
+[80/93] Compiling C object libish.a.p/fs_tty.c.o
+[81/93] Compiling C object libish.a.p/util_timer.c.o
+[82/93] Compiling C object libish.a.p/kernel_epoll.c.o
+[83/93] Compiling C object libish.a.p/util_sync.c.o
+[84/93] Compiling C object libish.a.p/util_fifo.c.o
+[85/93] Compiling C object libish.a.p/util_verbosetrace.c.o
+[86/93] Compiling C object libish.a.p/util_fchdir.c.o
+[87/93] Compiling C object libish.a.p/util_signpost.c.o
+[88/93] Compiling C object libish.a.p/fs_poll.c.o
+[89/93] Compiling C object libish.a.p/platform_darwin.c.o
+[90/93] Compiling C object libish.a.p/fs_sock.c.o
+../fs/sock.c:1652:86: warning: unused parameter 'timeout_addr' [-Wunused-parameter]
+ 1652 | int_t sys_recvmmsg(fd_t sock_fd, addr_t msg_vec, uint_t vec_len, int_t flags, addr_t timeout_addr) {
+      |                                                                                      ^
+../fs/sock.c:1846:6: warning: cast from 'int_t (*)(dword_t, dword_t, dword_t)' (aka 'int (*)(unsigned int, unsigned int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+ 1846 |     {(syscall_t) sys_socket, 3},
+      |      ^~~~~~~~~~~~~~~~~~~~~~
+../fs/sock.c:1847:6: warning: cast from 'int_t (*)(fd_t, addr_t, uint_t)' (aka 'int (*)(int, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+ 1847 |     {(syscall_t) sys_bind, 3},
+      |      ^~~~~~~~~~~~~~~~~~~~
+../fs/sock.c:1848:6: warning: cast from 'int_t (*)(fd_t, addr_t, uint_t)' (aka 'int (*)(int, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+ 1848 |     {(syscall_t) sys_connect, 3},
+      |      ^~~~~~~~~~~~~~~~~~~~~~~
+../fs/sock.c:1849:6: warning: cast from 'int_t (*)(fd_t, int_t)' (aka 'int (*)(int, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+ 1849 |     {(syscall_t) sys_listen, 2},
+      |      ^~~~~~~~~~~~~~~~~~~~~~
+../fs/sock.c:1850:6: warning: cast from 'int_t (*)(fd_t, addr_t, addr_t)' (aka 'int (*)(int, unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+ 1850 |     {(syscall_t) sys_accept, 3},
+      |      ^~~~~~~~~~~~~~~~~~~~~~
+../fs/sock.c:1851:6: warning: cast from 'int_t (*)(fd_t, addr_t, addr_t)' (aka 'int (*)(int, unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+ 1851 |     {(syscall_t) sys_getsockname, 3},
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../fs/sock.c:1852:6: warning: cast from 'int_t (*)(fd_t, addr_t, addr_t)' (aka 'int (*)(int, unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+ 1852 |     {(syscall_t) sys_getpeername, 3},
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../fs/sock.c:1853:6: warning: cast from 'int_t (*)(dword_t, dword_t, dword_t, addr_t)' (aka 'int (*)(unsigned int, unsigned int, unsigned int, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+ 1853 |     {(syscall_t) sys_socketpair, 4},
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../fs/sock.c:1854:6: warning: cast from 'int_t (*)(fd_t, addr_t, dword_t, int_t)' (aka 'int (*)(int, unsigned long long, unsigned int, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+ 1854 |     {(syscall_t) sys_send, 4}, // send
+      |      ^~~~~~~~~~~~~~~~~~~~
+../fs/sock.c:1855:6: warning: cast from 'int_t (*)(fd_t, addr_t, dword_t, int_t)' (aka 'int (*)(int, unsigned long long, unsigned int, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+ 1855 |     {(syscall_t) sys_recv, 4}, // recv
+      |      ^~~~~~~~~~~~~~~~~~~~
+../fs/sock.c:1856:6: warning: cast from 'int_t (*)(fd_t, addr_t, dword_t, dword_t, addr_t, dword_t)' (aka 'int (*)(int, unsigned long long, unsigned int, unsigned int, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+ 1856 |     {(syscall_t) sys_sendto, 6},
+      |      ^~~~~~~~~~~~~~~~~~~~~~
+../fs/sock.c:1857:6: warning: cast from 'int_t (*)(fd_t, addr_t, dword_t, dword_t, addr_t, addr_t)' (aka 'int (*)(int, unsigned long long, unsigned int, unsigned int, unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+ 1857 |     {(syscall_t) sys_recvfrom, 6},
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~
+../fs/sock.c:1858:6: warning: cast from 'int_t (*)(fd_t, dword_t)' (aka 'int (*)(int, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+ 1858 |     {(syscall_t) sys_shutdown, 2},
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~
+../fs/sock.c:1859:6: warning: cast from 'int_t (*)(fd_t, dword_t, dword_t, addr_t, dword_t)' (aka 'int (*)(int, unsigned int, unsigned int, unsigned long long, unsigned int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+ 1859 |     {(syscall_t) sys_setsockopt, 5},
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../fs/sock.c:1860:6: warning: cast from 'int_t (*)(fd_t, dword_t, dword_t, addr_t, addr_t)' (aka 'int (*)(int, unsigned int, unsigned int, unsigned long long, unsigned long long)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+ 1860 |     {(syscall_t) sys_getsockopt, 5},
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../fs/sock.c:1861:6: warning: cast from 'int_t (*)(fd_t, addr_t, int_t)' (aka 'int (*)(int, unsigned long long, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+ 1861 |     {(syscall_t) sys_sendmsg, 3},
+      |      ^~~~~~~~~~~~~~~~~~~~~~~
+../fs/sock.c:1862:6: warning: cast from 'int_t (*)(fd_t, addr_t, int_t)' (aka 'int (*)(int, unsigned long long, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+ 1862 |     {(syscall_t) sys_recvmsg, 3},
+      |      ^~~~~~~~~~~~~~~~~~~~~~~
+../fs/sock.c:1865:6: warning: cast from 'int_t (*)(fd_t, addr_t, uint_t, int_t)' (aka 'int (*)(int, unsigned long long, unsigned int, int)') to 'syscall_t' (aka 'long long (*)(unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long, unsigned long long)') converts to incompatible function type [-Wcast-function-type-mismatch]
+ 1865 |     {(syscall_t) sys_sendmmsg, 4},
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~
+19 warnings generated.
+[91/93] Linking static target libfakefs.a
+[92/93] Linking static target libish.a
+[93/93] Linking static target libish_emu.a
+[0;34mℹ️  Building VDSO...[0m
+ninja: Entering directory `/Users/runner/work/ooom/ooom/deps/ish/build-ios'
+ninja: no work to do.
+[0;32m✅ iSH libraries built successfully[0m
+[0;34mℹ️  Copying iphoneos libraries to /Users/runner/work/ooom/ooom/deps/libs...[0m
+[0;34mℹ️  Copying output files...[0m
+[0;32m✅ VDSO copied[0m
+[0;34mℹ️  Copying header files...[0m
+[0;32m✅ RootfsPatch.bundle copied[0m
+[0;32m✅ Output files copied[0m
+[0;34mℹ️  Creating umbrella header...[0m
+[0;32m✅ Umbrella header created[0m
+ℹ️  no AOT images in /Users/runner/work/ooom/ooom/deps/aot, building an empty libish_aot.a
+✅ /Users/runner/work/ooom/ooom/deps/libs/libish_aot.a (4.0K, 0 image(s))
+
+============================================================
+[0;32m🎉 iSH-ARM64 Build Complete![0m
+============================================================
+
+Libraries:
+-rw-r--r--  1 runner  staff    23K Nov 26 16:54 /Users/runner/work/ooom/ooom/deps/libs/libfakefs.a
+-rw-r--r--  1 runner  staff   720B Nov 26 16:54 /Users/runner/work/ooom/ooom/deps/libs/libish_aot.a
+-rw-r--r--  1 runner  staff   511K Nov 26 16:54 /Users/runner/work/ooom/ooom/deps/libs/libish_emu.a
+-rw-r--r--  1 runner  staff   539K Nov 26 16:54 /Users/runner/work/ooom/ooom/deps/libs/libish.a
+
+Headers:   /Users/runner/work/ooom/ooom/deps/include/ish/
+Resources: /Users/runner/work/ooom/ooom/deps/resources/
+
+To integrate with Xcode:
+  1. Add libs/*.a to 'Link Binary With Libraries'
+  2. Add include/ to 'Header Search Paths'
+  3. Add resources/ to 'Copy Bundle Resources'
+  4. Link with: libsqlite3.tbd
+
+============================================================

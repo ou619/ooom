@@ -1,0 +1,402 @@
+[0;34mℹ️  LAME source already present, skipping download[0m
+[0;34mℹ️  Configuring LAME for iphoneos arm64...[0m
+checking build system type... arm-apple-darwin25.6.0
+checking host system type... aarch64-apple-darwin
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for aarch64-apple-darwin-strip... no
+checking for strip... strip
+checking for a thread-safe mkdir -p... ./install-sh -c -d
+checking for gawk... no
+checking for mawk... no
+checking for nawk... no
+checking for awk... awk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking whether to enable maintainer-specific portions of Makefiles... no
+checking for style of include used by make... GNU
+checking for aarch64-apple-darwin-gcc... /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... yes
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang accepts -g... yes
+checking for /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang option to accept ISO C89... none needed
+checking whether /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang understands -c and -o together... yes
+checking dependency style of /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang... gcc3
+checking how to run the C preprocessor... /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -E
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for ANSI C header files... no
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking minix/config.h usability... no
+checking minix/config.h presence... no
+checking for minix/config.h... no
+checking whether it is safe to define __EXTENSIONS__... yes
+checking for library containing strerror... none required
+checking how to print strings... printf
+checking for a sed that does not truncate output... /usr/bin/sed
+checking for fgrep... /usr/bin/grep -F
+checking for ld used by /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang... /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld
+checking if the linker (/Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld) is GNU ld... no
+checking for BSD- or MS-compatible name lister (nm)... no
+checking for aarch64-apple-darwin-dumpbin... no
+checking for aarch64-apple-darwin-link... no
+checking for dumpbin... no
+checking for link... link -dump
+configure: WARNING: using cross tools not prefixed with host triplet
+checking the name lister (nm) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 786432
+checking how to convert arm-apple-darwin25.6.0 file names to aarch64-apple-darwin format... func_convert_file_noop
+checking how to convert arm-apple-darwin25.6.0 file names to toolchain format... func_convert_file_noop
+checking for /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld option to reload object files... -r
+checking for aarch64-apple-darwin-objdump... no
+checking for objdump... objdump
+checking how to recognize dependent libraries... pass_all
+checking for aarch64-apple-darwin-dlltool... no
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for aarch64-apple-darwin-ar... no
+checking for ar... ar
+checking for archiver @FILE support... no
+checking for aarch64-apple-darwin-strip... strip
+checking for aarch64-apple-darwin-ranlib... no
+checking for ranlib... ranlib
+checking command to parse nm output from /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang object... ok
+checking for sysroot... no
+checking for a working dd... /bin/dd
+checking how to truncate binary pipes... /bin/dd bs=4096 count=1
+checking for aarch64-apple-darwin-mt... no
+checking for mt... no
+checking if : is a manifest tool... no
+checking for aarch64-apple-darwin-dsymutil... no
+checking for dsymutil... dsymutil
+checking for aarch64-apple-darwin-nmedit... no
+checking for nmedit... nmedit
+checking for aarch64-apple-darwin-lipo... no
+checking for lipo... lipo
+checking for aarch64-apple-darwin-otool... no
+checking for otool... otool
+checking for aarch64-apple-darwin-otool64... no
+checking for otool64... no
+checking for -single_module linker flag... ld: warning: -single_module is obsolete
+no
+checking for -exported_symbols_list linker flag... yes
+checking for -force_load linker flag... yes
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang supports -fno-rtti -fno-exceptions... yes
+checking for /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang option to produce PIC... -fno-common -DPIC
+checking if /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang PIC flag -fno-common -DPIC works... yes
+checking if /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang static flag -static works... no
+checking if /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang supports -c -o file.o... yes
+checking if /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang supports -c -o file.o... (cached) yes
+checking whether the /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang linker (/Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld) supports shared libraries... yes
+checking dynamic linker characteristics... darwin dyld
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... no
+checking whether to build static libraries... yes
+checking for aarch64-apple-darwin-gcc... (cached) /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
+checking whether we are using the GNU C compiler... (cached) yes
+checking whether /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang accepts -g... (cached) yes
+checking for /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang option to accept ISO C89... (cached) none needed
+checking whether /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang understands -c and -o together... (cached) yes
+checking dependency style of /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang... (cached) gcc3
+checking compiler... clang
+checking version of clang... 21.0.0
+checking dmalloc.h usability... no
+checking dmalloc.h presence... no
+checking for dmalloc.h... no
+checking for ANSI C header files... (cached) no
+checking errno.h usability... yes
+checking errno.h presence... no
+configure: WARNING: errno.h: accepted by the compiler, rejected by the preprocessor!
+configure: WARNING: errno.h: proceeding with the compiler's result
+checking for errno.h... yes
+checking fcntl.h usability... yes
+checking fcntl.h presence... no
+configure: WARNING: fcntl.h: accepted by the compiler, rejected by the preprocessor!
+configure: WARNING: fcntl.h: proceeding with the compiler's result
+checking for fcntl.h... yes
+checking limits.h usability... yes
+checking limits.h presence... yes
+checking for limits.h... yes
+checking for stdint.h... (cached) yes
+checking for string.h... (cached) yes
+checking sys/soundcard.h usability... no
+checking sys/soundcard.h presence... no
+checking for sys/soundcard.h... no
+checking sys/time.h usability... yes
+checking sys/time.h presence... no
+configure: WARNING: sys/time.h: accepted by the compiler, rejected by the preprocessor!
+configure: WARNING: sys/time.h: proceeding with the compiler's result
+checking for sys/time.h... yes
+checking for unistd.h... (cached) yes
+checking linux/soundcard.h usability... no
+checking linux/soundcard.h presence... no
+checking for linux/soundcard.h... no
+checking working SSE intrinsics... no
+checking for an ANSI C-conforming const... yes
+checking for inline... inline
+checking for special C compiler options needed for large files... no
+checking for _FILE_OFFSET_BITS value needed for large files... no
+checking size of short... 2
+checking size of unsigned short... 2
+checking size of int... 4
+checking size of unsigned int... 4
+checking size of long... 8
+checking size of unsigned long... 8
+checking size of long long... 8
+checking size of unsigned long long... 8
+checking size of float... 4
+checking size of double... 8
+checking for long double with more range or precision than double... no
+checking for uint8_t... yes
+checking for int8_t... yes
+checking for uint16_t... yes
+checking for int16_t... yes
+checking for uint32_t... yes
+checking for int32_t... yes
+checking for uint64_t... yes
+checking for int64_t... yes
+checking for IEEE854 compliant 80 bit floats... configure: WARNING: can't check for IEEE854 compliant 80 bit floats
+
+checking for ieee754_float64_t... no
+checking for ieee754_float32_t... no
+configure: WARNING:
+  **************************************************************************
+  *                                                                        *
+  * You are cross compiling:                                               *
+  *   - I did not have a change to determine                               *
+  *     + the size of:                                                     *
+  *       - short                                                          *
+  *       - unsigned short                                                 *
+  *       - int                                                            *
+  *       - unsigned int                                                   *
+  *       - long                                                           *
+  *       - unsigned long                                                  *
+  *       - float                                                          *
+  *       - double                                                         *
+  *       - long double                                                    *
+  *     + the endianess of the system                                      *
+  *   - You have to provide appropriate defines for them in config.h, e.g. *
+  *     + define SIZEOF_SHORT to 2 if the size of a short is 2             *
+  *     + define WORDS_BIGENDIAN if your system is a big endian system     *
+  *                                                                        *
+  **************************************************************************
+checking for size_t... yes
+checking whether time.h and sys/time.h may both be included... yes
+checking for working alloca.h... yes
+checking for alloca... yes
+checking for gettimeofday... yes
+checking for strtol... yes
+checking for socket... yes
+checking termcap.h usability... no
+checking termcap.h presence... no
+checking for termcap.h... no
+checking ncurses/termcap.h usability... no
+checking ncurses/termcap.h presence... no
+checking for ncurses/termcap.h... no
+checking for initscr in -ltermcap... yes
+checking for initscr in -lcurses... yes
+checking for initscr in -lncurses... yes
+checking for ld used by /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang... /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld
+checking if the linker (/Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld) is GNU ld... no
+checking for shared library run path origin... done
+checking for iconv... yes
+checking for working iconv... guessing yes
+checking how to link with libiconv... -liconv
+checking for iconv declaration... 
+         extern size_t iconv (iconv_t cd, char * *inbuf, size_t *inbytesleft, char * *outbuf, size_t *outbytesleft);
+checking for cos in -lm... yes
+checking for cos in -lffm... no
+checking for cos in -lcpml... no
+checking for gtk-config... no
+checking for GTK - version >= 1.2.0... no
+*** The gtk-config script installed by GTK could not be found
+*** If GTK was installed in PREFIX, make sure PREFIX/bin is in
+*** your path, or set the GTK_CONFIG environment variable to the
+*** full path to gtk-config.
+checking use of ElectricFence malloc debugging... no
+checking use of file io... lame
+checking use of analyzer hooks... yes
+checking use of mpg123 decoder... no
+checking if the lame frontend should be build... no
+checking if mp3x is requested... no
+checking if mp3rtp is requested... no
+checking if dynamic linking of the frontends is requested... no
+checking for termcap... yes
+checking if I have to build the internal vector lib... no
+checking for nasm... no
+checking for additional optimizations... no
+checking for debug options... no
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating libmp3lame/Makefile
+config.status: creating libmp3lame/i386/Makefile
+config.status: creating libmp3lame/vector/Makefile
+config.status: creating frontend/Makefile
+config.status: creating mpglib/Makefile
+config.status: creating doc/Makefile
+config.status: creating doc/html/Makefile
+config.status: creating doc/man/Makefile
+config.status: creating include/Makefile
+config.status: creating Dll/Makefile
+config.status: creating misc/Makefile
+config.status: creating dshow/Makefile
+config.status: creating ACM/Makefile
+config.status: creating ACM/ADbg/Makefile
+config.status: creating ACM/ddk/Makefile
+config.status: creating ACM/tinyxml/Makefile
+config.status: creating lame.spec
+config.status: creating mac/Makefile
+config.status: creating macosx/Makefile
+config.status: creating macosx/English.lproj/Makefile
+config.status: creating macosx/LAME.xcodeproj/Makefile
+config.status: creating vc_solution/Makefile
+config.status: creating config.h
+config.status: executing depfiles commands
+config.status: executing libtool commands
+[0;34mℹ️  Building LAME...[0m
+/Applications/Xcode_26.6.app/Contents/Developer/usr/bin/make  all-recursive
+Making all in mpglib
+/bin/sh ../libtool  --tag=CC   --mode=link /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang  -O3 -Wall -arch arm64 -miphoneos-version-min=14.0 -isysroot /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk -fembed-bitcode -Oz -fPIC -Wno-implicit-function-declaration -fno-common  -arch arm64 -miphoneos-version-min=14.0 -isysroot /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk -o libmpgdecoder.la  common.lo dct64_i386.lo decode_i386.lo interface.lo layer1.lo layer2.lo layer3.lo tabinit.lo  
+libtool: link: ar cru .libs/libmpgdecoder.a  common.o dct64_i386.o decode_i386.o interface.o layer1.o layer2.o layer3.o tabinit.o
+libtool: link: ranlib .libs/libmpgdecoder.a
+libtool: link: ( cd ".libs" && rm -f "libmpgdecoder.la" && ln -s "../libmpgdecoder.la" "libmpgdecoder.la" )
+Making all in libmp3lame
+Making all in i386
+make[3]: Nothing to be done for `all'.
+Making all in vector
+make[3]: Nothing to be done for `all'.
+/bin/sh ../libtool  --tag=CC   --mode=link /Applications/Xcode_26.6.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang  -O3 -Wall -arch arm64 -miphoneos-version-min=14.0 -isysroot /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk -fembed-bitcode -Oz -fPIC -Wno-implicit-function-declaration -fno-common -version-info 0:0 -export-symbols ../include/libmp3lame.sym -no-undefined -arch arm64 -miphoneos-version-min=14.0 -isysroot /Applications/Xcode_26.6.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk -o libmp3lame.la -rpath /Users/runner/work/ooom/ooom/deps/lame-build/lib VbrTag.lo bitstream.lo encoder.lo fft.lo gain_analysis.lo id3tag.lo lame.lo newmdct.lo presets.lo psymodel.lo quantize.lo quantize_pvt.lo reservoir.lo set_get.lo tables.lo takehiro.lo util.lo vbrquantize.lo version.lo mpglib_interface.lo    -lm 
+libtool: link: ar cru .libs/libmp3lame.a  VbrTag.o bitstream.o encoder.o fft.o gain_analysis.o id3tag.o lame.o newmdct.o presets.o psymodel.o quantize.o quantize_pvt.o reservoir.o set_get.o tables.o takehiro.o util.o vbrquantize.o version.o mpglib_interface.o
+libtool: link: ranlib .libs/libmp3lame.a
+libtool: link: ( cd ".libs" && rm -f "libmp3lame.la" && ln -s "../libmp3lame.la" "libmp3lame.la" )
+Making all in frontend
+make[2]: Nothing to be done for `all'.
+Making all in Dll
+make[2]: Nothing to be done for `all'.
+Making all in doc
+Making all in html
+make[3]: Nothing to be done for `all'.
+Making all in man
+make[3]: Nothing to be done for `all'.
+make[3]: Nothing to be done for `all-am'.
+Making all in include
+make[2]: Nothing to be done for `all'.
+Making all in misc
+make[2]: Nothing to be done for `all'.
+Making all in dshow
+make[2]: Nothing to be done for `all'.
+Making all in ACM
+Making all in ADbg
+make[3]: Nothing to be done for `all'.
+Making all in ddk
+make[3]: Nothing to be done for `all'.
+Making all in tinyxml
+make[3]: Nothing to be done for `all'.
+make[3]: Nothing to be done for `all-am'.
+Making all in mac
+make[2]: Nothing to be done for `all'.
+Making all in macosx
+Making all in English.lproj
+make[3]: Nothing to be done for `all'.
+Making all in LAME.xcodeproj
+make[3]: Nothing to be done for `all'.
+make[3]: Nothing to be done for `all-am'.
+Making all in vc_solution
+make[2]: Nothing to be done for `all'.
+make[2]: Nothing to be done for `all-am'.
+Making install in mpglib
+make[2]: Nothing to be done for `install-exec-am'.
+make[2]: Nothing to be done for `install-data-am'.
+Making install in libmp3lame
+Making install in i386
+make[3]: Nothing to be done for `install-exec-am'.
+make[3]: Nothing to be done for `install-data-am'.
+Making install in vector
+make[3]: Nothing to be done for `install-exec-am'.
+make[3]: Nothing to be done for `install-data-am'.
+ .././install-sh -c -d '/Users/runner/work/ooom/ooom/deps/lame-build/lib'
+ /bin/sh ../libtool   --mode=install /usr/bin/install -c   libmp3lame.la '/Users/runner/work/ooom/ooom/deps/lame-build/lib'
+libtool: install: /usr/bin/install -c .libs/libmp3lame.lai /Users/runner/work/ooom/ooom/deps/lame-build/lib/libmp3lame.la
+libtool: install: /usr/bin/install -c .libs/libmp3lame.a /Users/runner/work/ooom/ooom/deps/lame-build/lib/libmp3lame.a
+libtool: install: chmod 644 /Users/runner/work/ooom/ooom/deps/lame-build/lib/libmp3lame.a
+libtool: install: ranlib /Users/runner/work/ooom/ooom/deps/lame-build/lib/libmp3lame.a
+make[3]: Nothing to be done for `install-data-am'.
+Making install in frontend
+make[2]: Nothing to be done for `install-data-am'.
+Making install in Dll
+make[2]: Nothing to be done for `install-exec-am'.
+make[2]: Nothing to be done for `install-data-am'.
+Making install in doc
+Making install in html
+make[3]: Nothing to be done for `install-exec-am'.
+ ../.././install-sh -c -d '/Users/runner/work/ooom/ooom/deps/lame-build/share/doc/lame/html'
+ /usr/bin/install -c -m 644 about.html abr.html cbr.html contact.html contributors.html detailed.html history.html index.html introduction.html links.html list.html ms_stereo.html usage.html vbr.html '/Users/runner/work/ooom/ooom/deps/lame-build/share/doc/lame/html'
+Making install in man
+make[3]: Nothing to be done for `install-exec-am'.
+ ../.././install-sh -c -d '/Users/runner/work/ooom/ooom/deps/lame-build/share/man/man1'
+ /usr/bin/install -c -m 644 lame.1 '/Users/runner/work/ooom/ooom/deps/lame-build/share/man/man1'
+make[3]: Nothing to be done for `install-exec-am'.
+make[3]: Nothing to be done for `install-data-am'.
+Making install in include
+make[2]: Nothing to be done for `install-exec-am'.
+ .././install-sh -c -d '/Users/runner/work/ooom/ooom/deps/lame-build/include/lame'
+ /usr/bin/install -c -m 644 lame.h '/Users/runner/work/ooom/ooom/deps/lame-build/include/lame'
+Making install in misc
+make[2]: Nothing to be done for `install-exec-am'.
+make[2]: Nothing to be done for `install-data-am'.
+Making install in dshow
+make[2]: Nothing to be done for `install-exec-am'.
+make[2]: Nothing to be done for `install-data-am'.
+Making install in ACM
+Making install in ADbg
+make[3]: Nothing to be done for `install-exec-am'.
+make[3]: Nothing to be done for `install-data-am'.
+Making install in ddk
+make[3]: Nothing to be done for `install-exec-am'.
+make[3]: Nothing to be done for `install-data-am'.
+Making install in tinyxml
+make[3]: Nothing to be done for `install-exec-am'.
+make[3]: Nothing to be done for `install-data-am'.
+make[3]: Nothing to be done for `install-exec-am'.
+make[3]: Nothing to be done for `install-data-am'.
+Making install in mac
+make[2]: Nothing to be done for `install-exec-am'.
+make[2]: Nothing to be done for `install-data-am'.
+Making install in macosx
+Making install in English.lproj
+make[3]: Nothing to be done for `install-exec-am'.
+make[3]: Nothing to be done for `install-data-am'.
+Making install in LAME.xcodeproj
+make[3]: Nothing to be done for `install-exec-am'.
+make[3]: Nothing to be done for `install-data-am'.
+make[3]: Nothing to be done for `install-exec-am'.
+make[3]: Nothing to be done for `install-data-am'.
+Making install in vc_solution
+make[2]: Nothing to be done for `install-exec-am'.
+make[2]: Nothing to be done for `install-data-am'.
+make[2]: Nothing to be done for `install-exec-am'.
+make[2]: Nothing to be done for `install-data-am'.
+[0;32m✅ LAME 3.100 built successfully[0m
+
+  Static library: /Users/runner/work/ooom/ooom/deps/lame-build/lib/libmp3lame.a
+  Headers:        /Users/runner/work/ooom/ooom/deps/lame-build/include/lame/lame.h
+
+/Users/runner/work/ooom/ooom/deps/lame-build/lib/libmp3lame.a: current ar archive random library

@@ -1,0 +1,135 @@
++ brew list ninja
++ brew list libarchive
++ brew install libarchive
+[32m==>[0m [1mDownloading bottle manifests[0m
+✔︎ Bottle Manifest libarchive (3.8.11)
+[34m==>[0m [1mWould install 1 formula:[0m
+libarchive 3.8.11
+[34m==>[0m [1mWould install 1 dependency for libarchive:[0m
+libb2 0.98.1
+[32m==>[0m [1mFetching downloads for: [32mlibarchive[39m[0m
+✔︎ Bottle Manifest libb2 (0.98.1)
+✔︎ Bottle libb2 (0.98.1)
+✔︎ Bottle libarchive (3.8.11)
+[32m==>[0m [1mInstalling libarchive dependency: [32mlibb2[39m (0.98.1)[0m
+[34m==>[0m [1mPouring libb2--0.98.1.arm64_tahoe.bottle.tar.gz[0m
+🍺  /opt/homebrew/Cellar/libb2/0.98.1: 9 files, 112.7KB
+[32m==>[0m [1mInstalling [32mlibarchive[39m[0m
+[34m==>[0m [1mPouring libarchive--3.8.11.arm64_tahoe.bottle.1.tar.gz[0m
+🍺  /opt/homebrew/Cellar/libarchive/3.8.11: 65 files, 4.1MB
+[32m==>[0m [1mCaveats[0m
+[34m==>[0m [1mlibarchive[0m
+libarchive is keg-only, which means it was not symlinked into /opt/homebrew,
+because macOS already provides this software and installing another version in
+parallel can cause all kinds of trouble.
+
+If you need to have libarchive first in your PATH, run:
+  printf '%s\n' export\ PATH\=/opt/homebrew/opt/libarchive/bin:\$PATH >> /Users/runner/.bash_profile
+
+For compilers to find libarchive you may need to set:
+  export LDFLAGS=-L/opt/homebrew/opt/libarchive/lib
+  export CPPFLAGS=-I/opt/homebrew/opt/libarchive/include
+
+For pkgconf to find libarchive you may need to set:
+  export PKG_CONFIG_PATH=/opt/homebrew/opt/libarchive/lib/pkgconfig
++ brew list pkg-config
++ brew list llvm
++ brew install llvm
+[32m==>[0m [1mDownloading bottle manifests[0m
+✔︎ Bottle Manifest llvm (23.1.5_1)
+[34m==>[0m [1mWould install 1 formula:[0m
+llvm 23.1.5_1
+[34m==>[0m [1mWould install 1 dependency for llvm:[0m
+z3 5.4.1
+[32m==>[0m [1mFetching downloads for: [32mllvm[39m[0m
+✔︎ Bottle Manifest z3 (5.4.1)
+✔︎ Bottle z3 (5.4.1)
+✔︎ Bottle llvm (23.1.5_1)
+[32m==>[0m [1mInstalling llvm dependency: [32mz3[39m (5.4.1)[0m
+[34m==>[0m [1mPouring z3--5.4.1.arm64_tahoe.bottle.tar.gz[0m
+🍺  /opt/homebrew/Cellar/z3/5.4.1: 156 files, 45.5MB
+[32m==>[0m [1mInstalling [32mllvm[39m[0m
+[34m==>[0m [1mPouring llvm--23.1.5_1.arm64_tahoe.bottle.tar.gz[0m
+🍺  /opt/homebrew/Cellar/llvm/23.1.5_1: 9,338 files, 1.9GB
+[32m==>[0m [1mCaveats[0m
+[34m==>[0m [1mllvm[0m
+CLANG_CONFIG_FILE_SYSTEM_DIR: /opt/homebrew/etc/clang
+CLANG_CONFIG_FILE_USER_DIR:   ~/.config/clang
+
+LLD and LLDB are now provided in separate formulae:
+  brew install lld
+  brew install lldb
+
+Z3 solver support will be removed in LLVM 24 as it is unsupported upstream,
+see https://github.com/llvm/llvm-project/pull/205370
+
+Using `clang`, `clang++`, etc., requires a CLT installation at `/Library/Developer/CommandLineTools`.
+If you don't want to install the CLT, you can write appropriate configuration files pointing to your
+SDK at ~/.config/clang.
+
+To use the bundled libunwind please use the following LDFLAGS:
+  LDFLAGS="-L/opt/homebrew/opt/llvm/lib/unwind -lunwind"
+
+To use the bundled libc++ please use the following LDFLAGS:
+  LDFLAGS="-L/opt/homebrew/opt/llvm/lib/c++ -L/opt/homebrew/opt/llvm/lib/unwind -lunwind"
+Features newer than system libc++ will require the following define to enable
+(support for this may be removed in a future major LLVM release):
+  CPPFLAGS="-D_LIBCPP_DISABLE_AVAILABILITY"
+
+NOTE: You probably want to use the libunwind and libc++ provided by macOS unless you know what you're doing.
+
+llvm is keg-only, which means it was not symlinked into /opt/homebrew,
+because macOS already provides this software and installing another version in
+parallel can cause all kinds of trouble.
+
+If you need to have llvm first in your PATH, run:
+  printf '%s\n' export\ PATH\=/opt/homebrew/opt/llvm/bin:\$PATH >> /Users/runner/.bash_profile
+
+For compilers to find llvm you may need to set:
+  export LDFLAGS=-L/opt/homebrew/opt/llvm/lib
+  export CPPFLAGS=-I/opt/homebrew/opt/llvm/include
+
+For cmake to find llvm you may need to set:
+  export CMAKE_PREFIX_PATH=/opt/homebrew/opt/llvm
++ command -v go
++ brew install go
+[32m==>[0m [1mDownloading bottle manifests[0m
+✔︎ Bottle Manifest go (1.27.4)
+[32m==>[0m [1mFetching downloads for: [32mgo[39m[0m
+✔︎ Bottle go (1.27.4)
+[34m==>[0m [1mPouring go--1.27.4.arm64_tahoe.bottle.tar.gz[0m
+🍺  /opt/homebrew/Cellar/go/1.27.4: 15,597 files, 240.2MB
++ python3 -m venv /Users/runner/work/_temp/mesonenv
++ /Users/runner/work/_temp/mesonenv/bin/pip install --upgrade pip meson
+Requirement already satisfied: pip in /Users/runner/work/_temp/mesonenv/lib/python3.15/site-packages (26.2.2)
+Collecting pip
+  Using cached pip-26.3-py3-none-any.whl.metadata (4.6 kB)
+Collecting meson
+  Downloading meson-1.12.1-py3-none-any.whl.metadata (1.7 kB)
+Using cached pip-26.3-py3-none-any.whl (2.0 MB)
+Downloading meson-1.12.1-py3-none-any.whl (1.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.1/1.1 MB 35.1 MB/s  0:00:00
+Installing collected packages: pip, meson
+  Attempting uninstall: pip
+    Found existing installation: pip 26.2.2
+    Uninstalling pip-26.2.2:
+      Successfully uninstalled pip-26.2.2
+
+Successfully installed meson-1.12.1 pip-26.3
++ echo /Users/runner/work/_temp/mesonenv/bin
++ brew list lld
++ brew install lld
+[32m==>[0m [1mDownloading bottle manifests[0m
+✔︎ Bottle Manifest lld (23.1.5)
+[32m==>[0m [1mFetching downloads for: [32mlld[39m[0m
+✔︎ Bottle lld (23.1.5)
+[34m==>[0m [1mPouring lld--23.1.5.arm64_tahoe.bottle.tar.gz[0m
+🍺  /opt/homebrew/Cellar/lld/23.1.5: 44 files, 6MB
++ LLD=/opt/homebrew/opt/lld/bin/ld.lld
++ '[' -x /opt/homebrew/opt/lld/bin/ld.lld ']'
++ mkdir -p /Users/runner/work/_temp/llvmbin
++ ln -sf /opt/homebrew/opt/lld/bin/ld.lld /Users/runner/work/_temp/llvmbin/ld.lld
++ echo /Users/runner/work/_temp/llvmbin
++ /Users/runner/work/_temp/llvmbin/ld.lld --version
+Homebrew LLD 23.1.5 (compatible with GNU linkers)
++ python3 -m compileall -q .github/ci
