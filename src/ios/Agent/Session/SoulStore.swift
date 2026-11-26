@@ -720,9 +720,7 @@ private struct SoulAnimatedIconView: View {
         let count = box?.frames.count ?? 0
         TimelineView(.animation(minimumInterval: 1.0 / 30.0,
                                 paused: isPaused || count < 2)) { context in
-            // A paused timeline stops ticking, so the first frame is correct for
-            // Reduce Motion and Low Power Mode alike.
-            if let image = frame(of: box, at: context.date) {
+            if let image = frame(of: box, at: context.date, paused: isPaused || count < 2) {
                 Image(uiImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
@@ -736,8 +734,14 @@ private struct SoulAnimatedIconView: View {
         .onChange(of: isPaused) { paused in SoulGIFCache.note(frames: count, paused: paused) }
     }
 
-    private func frame(of box: SoulGIFFrames?, at date: Date) -> UIImage? {
-        guard let box, box.frames.count > 1, box.duration > 0 else { return box?.frames.first }
+    private func frame(of box: SoulGIFFrames?, at date: Date, paused: Bool) -> UIImage? {
+        guard let box, !box.frames.isEmpty else { return nil }
+        // A paused timeline stops ticking but keeps rendering at its LAST
+        // `context.date`, so deriving the frame from elapsed time freezes on
+        // whichever frame happened to be showing. Reduce Motion and Low Power
+        // Mode are supposed to look like a still avatar, and "still" has to be
+        // the FIRST frame — the one the animation was authored to read as.
+        if paused || box.frames.count < 2 || box.duration <= 0 { return box.frames.first }
         let elapsed = date.timeIntervalSince(startedAt)
         guard elapsed.isFinite else { return box.frames.first }
         let progress = elapsed.truncatingRemainder(dividingBy: box.duration) / box.duration
@@ -1062,8 +1066,22 @@ enum SoulStore {
     /// Either way the OTHER format's sidecar is removed only after the new
     /// file has landed, so an interrupted write cannot leave the user with no
     /// icon at all, and the two formats can never coexist on disk.
-    private static func persistIconSidecar(_ icon: String) -> String {
+    /// Frontmatter value for whichever sidecar file is currently on disk, or
+    /// nil when neither exists.
+    ///
+    /// Used only on a failed write, to leave the icon line describing what the
+    /// user can actually see. GIF wins because a write of the GIF sidecar is the
+    /// only caller: the pair can never coexist (each successful write removes
+    /// the other), so a PNG found here is a leftover the failed write could not
+    /// clear.
+    private static func existingSidecarRef() -> String? {
         let fm = FileManager.default
+        if fm.fileExists(atPath: gifIconFileURL.path) { return SoulIconImage.gifSidecarName }
+        if fm.fileExists(atPath: iconFileURL.path) { return SoulIconImage.sidecarName }
+        return nil
+    }
+
+    private static func persistIconSidecar(_ icon: String) -> String {        let fm = FileManager.default
         let directory = iconFileURL.deletingLastPathComponent()
 
         if let gif = SoulIconImage.gifData(from: icon) {
@@ -1074,7 +1092,12 @@ enum SoulStore {
                 return SoulIconImage.gifSidecarName
             } catch {
                 iconLogger.error("[Soul] failed to write GIF icon sidecar: \(error.localizedDescription)")
-                return ""
+                // Keep whatever the frontmatter already points at instead of
+                // writing "". Returning "" used to blank the icon line while the
+                // previous file was still on disk, so a disk error looked
+                // exactly like "the user cleared their avatar" — and the failure
+                // was invisible in the UI, which had already reported success.
+                return existingSidecarRef() ?? ""
             }
         }
 
