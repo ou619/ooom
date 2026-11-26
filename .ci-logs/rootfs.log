@@ -1,0 +1,90 @@
+
+============================================================
+  Alpine Linux aarch64 Rootfs Preparation for iSH-ARM64
+  Version: 3.21.0 (aarch64)
+============================================================
+
+[0;34mℹ️  Checking prerequisites...[0m
+[0;32m✅ Prerequisites check passed[0m
+[0;34mℹ️  Downloading Alpine Linux 3.21.0 for aarch64...[0m
+[0;34mℹ️  Downloading from https://dl-cdn.alpinelinux.org/alpine/v3.21/releases/aarch64/alpine-minirootfs-3.21.0-aarch64.tar.gz[0m
+#                                                                          1.7%######################################################################## 100.0%
+[0;32m✅ Alpine rootfs ready: 3.7M[0m
+[0;34mℹ️  Building fakefsify tool...[0m
+[0;34mℹ️  Configuring native meson build...[0m
+The Meson build system
+Version: 1.12.1
+Source dir: /Users/runner/work/ooom/ooom/deps/ish
+Build dir: /Users/runner/work/ooom/ooom/deps/ish/build-native
+Build type: native build
+Project name: ish
+Project version: undefined
+C compiler for the host machine: cc (clang 21.0.0 "Apple clang version 21.0.0 (clang-2100.1.1.101)")
+C linker for the host machine: cc ld64 1267
+Host machine cpu family: aarch64
+Host machine cpu: aarch64
+Run-time dependency threads found: YES
+Library rt found: NO
+Library m found: YES
+Library dl found: YES
+Library sqlite3 found: YES
+Program /opt/homebrew/opt/llvm/bin/clang found: YES (/opt/homebrew/opt/llvm/bin/clang)
+Program ./check-cc-arm64.sh found: YES (/Users/runner/work/ooom/ooom/deps/ish/vdso/arm64/./check-cc-arm64.sh)
+Program tools/staticdefine.sh found: YES (/Users/runner/work/ooom/ooom/deps/ish/tools/staticdefine.sh)
+Library unicorn found: NO
+Found pkg-config: YES (/opt/homebrew/bin/pkg-config) 3.0.11
+Found CMake: /opt/homebrew/bin/cmake (4.5.0)
+Run-time dependency libarchive found: NO  (tried pkg-config and framework)
+Library archive found: NO
+Library archive found: YES
+Program tests/e2e/e2e.bash found: YES (/Users/runner/work/ooom/ooom/deps/ish/tests/e2e/e2e.bash)
+Build targets in project: 9
+
+ish undefined
+
+  User defined options
+    buildtype : release
+    engine    : asbestos
+    guest_arch: arm64
+    kernel    : ish
+    log       : 
+
+Found ninja-1.13.2 at /opt/homebrew/bin/ninja
+[0;34mℹ️  Building fakefsify...[0m
+ninja: Entering directory `/Users/runner/work/ooom/ooom/deps/ish/build-native'
+[1/8] Compiling C object tools/fakefsify.p/fakefsify.c.o
+[2/8] Compiling C object libfakefs.a.p/fs_fake-migrate.c.o
+[3/8] Compiling C object libfakefs.a.p/fs_fake-rebuild.c.o
+[4/8] Compiling C object libfakefs.a.p/fs_fake-db.c.o
+[5/8] Compiling C object tools/fakefsify.p/fakefs.c.o
+[6/8] Compiling C object tools/fakefsify.p/.._util_fchdir.c.o
+[7/8] Linking static target libfakefs.a
+[8/8] Linking target tools/fakefsify
+[0;32m✅ fakefsify built successfully[0m
+[0;34mℹ️  Creating fakefs rootfs...[0m
+[0;34mℹ️  Converting rootfs to fakefs format...[0m
+[0;32m✅ Fakefs rootfs created[0m
+[0;34mℹ️  Configuring rootfs for iSH...[0m
+[0;32m✅ Rootfs configured[0m
+[0;34mℹ️  Creating ZIP archive...[0m
+[0;32m✅ ZIP archive created: 3.8M[0m
+
+============================================================
+[0;32m🎉 Alpine Rootfs Preparation Complete![0m
+============================================================
+
+Output files:
+  📁 /Users/runner/work/ooom/ooom/deps/resources/alpine-rootfs
+  📦 /Users/runner/work/ooom/ooom/deps/resources/alpine-rootfs.zip
+
+Sizes:
+  Data:     9.4M
+  Database:  92K
+  ZIP:      3.8M
+
+To use in MinisApp:
+  1. Add alpine-rootfs.zip to Xcode project resources
+  2. Extract to Documents on first launch
+  3. Use mount_root(&fakefs, path_to_data)
+
+============================================================

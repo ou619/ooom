@@ -1,0 +1,13 @@
+run_id=45850792275
+run_number=35
+commit=3094d717c91ee0d876285ff197a8158e09397558
+job_status=failure
+captured_at=2026-11-26T16:00:38Z
+--- logs ---
+  300000 build.log
+  105846 capture.log
+    6173 install.log
+  153612 ish.log
+     224 meta.txt
+    7017 rclone.log
+    3728 rootfs.log
