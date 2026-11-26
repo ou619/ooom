@@ -1,0 +1,604 @@
+[DebugServer] Listening on http://0.0.0.0:8321
+2026-11-26 18:18:13.902 Minis[38128:106202] [TextContainerGuard] [INFO] installed (threshold=2)
+2026-11-26 18:18:13.953 Minis[38128:106202] [LiveActivity] [INFO] [LiveActivity][cleanup src=MinisApp.init] enabled=true currentActivity.id=nil systemActivities.count=0 systemIds=[]
+2026-11-26 18:18:13.959 Minis[38128:106202] [LiveActivity] [INFO] [LiveActivity][cleanup src=MinisApp.init] nothing to clean: systemActivities is empty
+2026-11-26 18:18:14.042 Minis[38128:106202] [AppDelegate] [INFO] [Env] mode=device idiom=0 os=26.5.0 built=ios model=iPhone
+2026-11-26 18:18:14.042 Minis[38128:106202] [AppDelegate] [INFO] didFinishLaunching (scene-based; shortcut routing happens in SceneDelegate)
+2026-11-26 18:18:14.281 Minis[38128:106202] [AppDelegate] [INFO] scene willConnectTo (no shortcut)
+2026-11-26 18:18:14.557 Minis[38128:106222] [ProviderConfigDB] [INFO] [v3] schema repair: added missing column removed_members_json
+2026-11-26 18:18:14.559 Minis[38128:106222] [ProviderConfigDB] [INFO] [v3] schema repair: added missing column added_members_json
+2026-11-26 18:18:14.559 Minis[38128:106222] [ProviderConfigDB] [INFO] [v3] schema up-to-date at version 2
+2026-11-26 18:18:14.560 Minis[38128:106222] [ProviderConfigDB] [INFO] [v3] ProviderConfigDB opened at /Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Library/MinisChat/provider-config.db
+2026-11-26 18:18:14.561 Minis[38128:106222] [ProviderConfigDB] [INFO] [v3] migrateFromLegacyJSON: ingesting 0 instances / 0 entries / 0 groups
+2026-11-26 18:18:14.568 Minis[38128:106222] [ProviderConfigDB] [INFO] [v3] bulkReplace row-level: changed inst=0 entry=0 group=0 of 0/0/0
+2026-11-26 18:18:14.572 Minis[38128:106222] [ProviderConfigDB] [INFO] [v3] bulkReplace done: instances=0 entries=0 groups=0
+2026-11-26 18:18:14.705 Minis[38128:106202] [SidebarIdentity] [DEBUG] [sidebar] first pass — sections=0 rows=0
+2026-11-26 18:18:14.927 Minis[38128:106202] [ConfigReadable] [INFO] [ConfigReadable] validated 71 writable fields; generic=0
+2026-11-26 18:18:14.935 Minis[38128:106202] [ProviderConfigStore] [INFO] [ModelList] refreshAllModelsIfNeeded: Codex client version changed → 0.159.0, refreshing now
+2026-11-26 18:18:14.936 Minis[38128:106202] [ProviderConfigStore] [INFO] [ModelList] refreshAllModelsIfNeeded: SKIP — no enabled instances
+2026-11-26 18:18:14.936 Minis[38128:106202] [Share] [INFO] [Share] onAppear — checking for pending share
+2026-11-26 18:18:14.936 Minis[38128:106202] [Share] [INFO] [Share] checkForPendingShare called
+2026-11-26 18:18:14.945 Minis[38128:106202] [Share] [INFO] [Share] No pending share found
+2026-11-26 18:18:14.951 Minis[38128:106202] [BackgroundKeepAlive] [INFO] [BackgroundKeepAlive] Setup: enabled=false, locationTracking=false
+2026-11-26 18:18:14.952 Minis[38128:106202] [BackgroundKeepAlive] [INFO] [BKA] unconditional orphan-session retract on setup
+2026-11-26 18:18:14.952 Minis[38128:106202] [BackgroundKeepAlive] [INFO] [BKA][LocationLA] retracted orphaned CLBackgroundActivitySession (caller=setup)
+2026-11-26 18:18:14.953 Minis[38128:106202] [LiveActivity] [INFO] [LiveActivity][cleanup src=BKA.setup] enabled=true currentActivity.id=nil systemActivities.count=0 systemIds=[]
+2026-11-26 18:18:14.953 Minis[38128:106202] [LiveActivity] [INFO] [LiveActivity][cleanup src=BKA.setup] nothing to clean: systemActivities is empty
+2026-11-26 18:18:14.954 Minis[38128:106202] NetworkMonitor: start() called, isStarted=0
+2026-11-26 18:18:14.954 Minis[38128:106202] [Network] [INFO] [Network] Monitor started — writing initial DNS config
+2026-11-26 18:18:14.954 Minis[38128:106202] NetworkMonitor: about to refreshDns + dump proxy
+2026-11-26 18:18:14.956 Minis[38128:106202] ISHKernel: [DNS] Cannot refresh DNS — dnsHostPath not set yet
+2026-11-26 18:18:14.957 Minis[38128:106202] [Network] [INFO] [Proxy] dump (monitor-start) http=0:-:- https=0:-:- socks=0:-:- pac=0:- exceptions=["*.local", "169.254/16"]
+2026-11-26 18:18:14.957 Minis[38128:106202] [Network] [INFO] [Proxy] dump (monitor-start) extra keys: ["FTPPassive": 1, "__SCOPED__": {
+    en0 =     {
+        ExceptionsList =         (
+            "*.local",
+            "169.254/16"
+        );
+        FTPPassive = 1;
+    };
+}]
+2026-11-26 18:18:14.957 Minis[38128:106202] [Network] [INFO] [Proxy] dump (monitor-start) CFNetworkCopyProxiesForURL(api.anthropic.com)=[["kCFProxyTypeKey": kCFProxyTypeNone]]
+2026-11-26 18:18:14.960 Minis[38128:106202] [Quota] [INFO] [Quota] started — subjects=0 pools=0
+2026-11-26 18:18:14.969 Minis[38128:106202] [Lifecycle] [WARN] [FileProvider] appex has not reported a successful boot since 2 registration(s) on this build
+2026-11-26 18:18:14.970 Minis[38128:106230] [Network] [INFO] [Network] Path update — status: satisfied, interfaces: ["wiredEthernet"]
+2026-11-26 18:18:14.978 Minis[38128:106230] [Network] [INFO] [Network] Interface change detected — refreshing DNS
+2026-11-26 18:18:14.978 Minis[38128:106230] ISHKernel: [DNS] Cannot refresh DNS — dnsHostPath not set yet
+2026-11-26 18:18:14.978 Minis[38128:106230] [Network] [INFO] [Proxy] dump (interface-change) http=0:-:- https=0:-:- socks=0:-:- pac=0:- exceptions=["*.local", "169.254/16"]
+2026-11-26 18:18:14.978 Minis[38128:106230] [Network] [INFO] [Proxy] dump (interface-change) extra keys: ["FTPPassive": 1, "__SCOPED__": {
+    en0 =     {
+        ExceptionsList =         (
+            "*.local",
+            "169.254/16"
+        );
+        FTPPassive = 1;
+    };
+}]
+2026-11-26 18:18:14.978 Minis[38128:106230] [Network] [INFO] [Proxy] dump (interface-change) CFNetworkCopyProxiesForURL(api.anthropic.com)=[["kCFProxyTypeKey": kCFProxyTypeNone]]
+2026-11-26 18:18:14.983 Minis[38128:106202] [Lifecycle] [INFO] [FPSyncTrace] appGroup=group.com.openminis.app container=/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F resolved=/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F
+2026-11-26 18:18:14.984 Minis[38128:106202] [Lifecycle] [INFO] [FPSyncTrace] providerRoot=/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider resolved=/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider
+2026-11-26 18:18:14.985 Minis[38128:106202] [Lifecycle] [INFO] [FPSyncTrace] root=shared path=/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/shared exists=true childCount=0
+2026-11-26 18:18:14.986 Minis[38128:106223] [Lifecycle] [INFO] [FileProvider] domain already registered, signaling refresh
+2026-11-26 18:18:14.988 Minis[38128:106202] [Lifecycle] [INFO] [FPSyncTrace] root=skills path=/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/skills exists=true childCount=1
+2026-11-26 18:18:14.988 Minis[38128:106202] [Lifecycle] [INFO] [FPSyncTrace] root=memory path=/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/memory exists=true childCount=2
+2026-11-26 18:18:14.989 Minis[38128:106202] [FPWatcher] [INFO] [FPSyncTrace] root=shared path=/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/shared watchesAttached=1 topLevelChildren=0
+2026-11-26 18:18:14.993 Minis[38128:106202] [FPWatcher] [INFO] [FPSyncTrace] root=skills path=/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/skills watchesAttached=2 topLevelChildren=1
+2026-11-26 18:18:14.993 Minis[38128:106202] [FPWatcher] [INFO] [FPSyncTrace] root=memory path=/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/memory watchesAttached=1 topLevelChildren=2
+2026-11-26 18:18:14.993 Minis[38128:106202] [FPWatcher] [INFO] started — watching 4 directories
+2026-11-26 18:18:14.994 Minis[38128:106202] [MountedFolders] [INFO] activateAll: 0 entries to resolve
+2026-11-26 18:18:14.994 Minis[38128:106202] [MountedFolders] [INFO] pushExternalMountSnapshot: 0 active / 0 total
+2026-11-26 18:18:14.998 Minis[38128:106202] [RowHeight] [INFO] [SCROLL] idle -> idle
+2026-11-26 18:18:15.010 Minis[38128:106229] [iCloud] [INFO] [ChatStore.listSessions] ENTER queue='com.apple.root.user-initiated-qos.cooperative' isMain=false thread=<NSThread: 0x10afca2c0>{number = 9, name = (null)}
+2026-11-26 18:18:15.011 Minis[38128:106229] [iCloud] [INFO] [ChatStore.listSessions] EXIT queue='com.apple.root.user-initiated-qos.cooperative'
+2026-11-26 18:18:15.261 Minis[38128:106202] [KaTeXRenderer] [INFO] WKWebView attached to window
+2026-11-26 18:18:15.263 Minis[38128:106202] [AIChatVM] [DEBUG] [KeepScreen] noop reason=start sessions=0 enabled=false bg=false held=false
+2026-11-26 18:18:15.275 Minis[38128:106202] [QuickAction] [INFO] registerShortcutItems installed=3
+2026-11-26 18:18:15.285 Minis[38128:106202] [BackgroundKeepAlive] [DEBUG] [BackgroundKeepAlive] Reevaluate: sessions=0 enabled=false isActive=false shouldBeActive=false ids=[]
+2026-11-26 18:18:15.286 Minis[38128:106202] [BackgroundKeepAlive] [INFO] [BKA][Evaluate] caller=bgSpeakToggle isActive=false bgSpeak=false bg=false sessions=0 suspended=0 playing=false stopDebounce=nil → decision=NOOP(already stopped) reason=isActive=false
+2026-11-26 18:18:15.286 Minis[38128:106202] [SyncCore] [DEBUG] [SyncCore] v2 disabled (flag off) — staying on v1
+2026-11-26 18:18:15.286 Minis[38128:106220] [HangDetector] started thresholdMs=2000
+2026-11-26 18:18:15.290 Minis[38128:106202] [BackgroundKeepAlive] [INFO] [BackgroundKeepAlive] Authorization changed: 0
+2026-11-26 18:18:15.290 Minis[38128:106267] [ISHCoordinator] [INFO] MOUNT-DIAG apply-entry snapshotCount=0 booted=false staticInit=0 currentLinuxPaths=[]
+2026-11-26 18:18:15.290 Minis[38128:106267] [ISHCoordinator] [INFO] MOUNT external: kernel not booted, will apply snapshot on next performMount
+2026-11-26 18:18:15.292 Minis[38128:106202] [Lifecycle] [INFO] [Lifecycle] → Active (remaining: unlimited)
+2026-11-26 18:18:15.295 Minis[38128:106222] [ProviderConfigStore] [INFO] [v3] ProviderConfig migration to SQLite complete
+2026-11-26 18:18:15.316 Minis[38128:106202] [BrowserResourceMonitor] [INFO] [BrowserToolDiag] lifecycle=didBecomeActive inflight_browser_actions=0 app_state=active app_mem=58MB app_avail_mem=0MB app_cpu=104.8% thermal=nominal low_power=false
+2026-11-26 18:18:15.321 Minis[38128:106202] [AIChatVM] [DEBUG] [KeepScreen] noop reason=tracker sessions=0 enabled=false bg=false held=false
+2026-11-26 18:18:15.323 Minis[38128:106202] [Share] [INFO] [Share] .task: hasPendingShare=false launchScreen=0 sessions=3 bufferVersion=0 shareAlreadyHandled=false quickActionPending=false workflowActive=false
+2026-11-26 18:18:15.331 Minis[38128:106202] [AIChatVM] [DEBUG] [KeepScreen] noop reason=defaults sessions=0 enabled=false bg=false held=false
+2026-11-26 18:18:15.331 Minis[38128:106202] [CrashReporter] [INFO] [CrashLoop] foreground crash recorded (gap=first)
+2026-11-26 18:18:15.341 Minis[38128:106202] [AIChatVM] [DEBUG] [KeepScreen] noop reason=defaults sessions=0 enabled=false bg=false held=false
+2026-11-26 18:18:15.341 Minis[38128:106202] [CrashReporter] [WARN] Stale launch marker found — previous exit was abnormal: phase=active
+2026-11-26 18:18:15.449 Minis[38128:106202] [CrashReporter] [INFO] Crash report written: crash-20261126-181756.log
+2026-11-26 18:18:15.451 Minis[38128:106202] [ProviderConfigStore] [INFO] [ThinkingRules] cache primed: 0 instance(s) with custom rules
+2026-11-26 18:18:15.452 Minis[38128:106202] [BackgroundKeepAlive] [INFO] [BKA][Lifecycle] → Active | isActive=false bg=false sessions=0 shellRunning=false bgTask=false bgTaskRemaining=unlimited silentAudioPlaying=false suspendCount=0 bgSpeak=false stopDebounceTimer=nil
+2026-11-26 18:18:15.455 Minis[38128:106202] [BackgroundKeepAlive] [INFO] [BKA][LocationLA] retracted orphaned CLBackgroundActivitySession (caller=didBecomeActive)
+2026-11-26 18:18:15.459 Minis[38128:106202] [SidebarIdentity] [DEBUG] [sidebar] sections 0->1 (-- +b:Today) rows 0->3 (-- +seed-not,seed-ci-,seed-rev) sectionOrder=[b:Today]
+2026-11-26 18:18:15.528 Minis[38128:106225] [iCloud] [INFO] [iCloud] listSyncDevices: returning 0 devices
+2026-11-26 18:18:15.529 Minis[38128:106225] [iCloud] [INFO] [iCloud] listSyncDevices=0 diag: zone=EMPTY(syncNotInitialized) uploadPolicy=[chatSessions=true sessionFiles=true skills=true providers=true envVars=true memory=true] dirtyQueue=0{empty}
+2026-11-26 18:18:15.787 Minis[38128:106202] [AIChatVM] [DEBUG] [KeepScreen] noop reason=defaults sessions=0 enabled=false bg=false held=false
+2026-11-26 18:18:16.350 Minis[38128:106202] [AIChatVM] [DEBUG] [KeepScreen] noop reason=defaults sessions=0 enabled=false bg=false held=false
+2026-11-26 18:18:16.371 Minis[38128:106202] [AIChatVM] [DEBUG] [KeepScreen] noop reason=defaults sessions=0 enabled=false bg=false held=false
+2026-11-26 18:18:16.372 Minis[38128:106202] [RemoteSync] [INFO] [RemoteSync] refreshRemoteDeviceSessions: 0 total devices, 0 remote (self=8FA88BE9-7D9D-4722-B0D3-4824BE18A061)
+2026-11-26 18:18:16.372 Minis[38128:106202] [RemoteSync] [INFO] [RemoteSync] Final result: 0 devices with sessions
+2026-11-26 18:18:16.376 Minis[38128:106202] [Voice] [INFO] [Voice] [capsule-calc] capsule[y784…828 x342…386] rects=0 passes=1 → lift=0 by=none
+    (no protected rects)
+2026-11-26 18:18:16.384 Minis[38128:106202] [CrashReporter] [INFO] CrashReporter initialized, signal handlers + MetricKit subscriber registered
+2026-11-26 18:18:16.385 Minis[38128:106202] [ResourceDiag] [INFO] [ResourceDiag] sampling every 60s (port warn threshold 91868)
+2026-11-26 18:18:16.406 Minis[38128:106213] [ChatStore] [INFO] [ChatStore.interruptedSessionIds] scanned 3 sessions → 0 interrupted
+2026-11-26 18:18:16.452 Minis[38128:106202] [SessionBadgeStore] [INFO] [BadgeRepair] summary examined=0 repaired=0 maxShift=0.0h tailDatesAvailable=0
+2026-11-26 18:18:16.453 Minis[38128:106202] [SessionBadgeStore] [INFO] [BadgeReconcile] trigger=launch-or-foreground interrupted=0 tailDatesAvailable=0 firstStamp=0 keptStamp=0 fromTailDate=0 fallbackNow=0 clearedNoLongerInterrupted=0 changed=false
+2026-11-26 18:18:16.453 Minis[38128:106202] ISHKernel: [DNS] Cannot refresh DNS — dnsHostPath not set yet
+[DebugServer] foreground transition — rebuilding listener on :8321
+[DebugServer] Listening on http://0.0.0.0:8321
+2026-11-26 18:18:16.474 Minis[38128:106202] [AIChatVM] [DEBUG] [KeepScreen] noop reason=defaults sessions=0 enabled=false bg=false held=false
+2026-11-26 18:18:16.487 Minis[38128:106202] [LiveActivity] [INFO] [LiveActivity][cleanup src=scenePhase.active] enabled=true currentActivity.id=nil systemActivities.count=0 systemIds=[]
+2026-11-26 18:18:16.492 Minis[38128:106202] [LiveActivity] [INFO] [LiveActivity][cleanup src=scenePhase.active] nothing to clean: systemActivities is empty
+2026-11-26 18:18:16.530 Minis[38128:106202] [ProviderConfigStore] [INFO] [CompositeKeyMigrate] init: entries=0 localUuid→ckPairs=0 danglingGroupRefs(before)=0 lmapSize(persisted)=0
+2026-11-26 18:18:16.531 Minis[38128:106202] [ProviderConfigStore] [INFO] [CompositeKeyMigrate] init: normalizeReferences no-op (no uuid refs matched lmap; 0 dangling refs need a cloud entry record to normalize)
+2026-11-26 18:18:16.531 Minis[38128:106202] [ProviderConfigStore] [INFO] [GroupLoad] init: loaded authoritative config from V3 DB — groups=0 entries=0 groupMembers(json=0→db=0) prunedDuplicates=0
+2026-11-26 18:18:16.541 Minis[38128:106269] [MemMonitor] 📈 footprint=55.2MB (Δ+0.0MB) | sys free=1508/7168MB (21%) | pressure=normal
+2026-11-26 18:18:16.864 Minis[38128:106202] [AIChatVM] [DEBUG] [KeepScreen] noop reason=defaults sessions=0 enabled=false bg=false held=false
+2026-11-26 18:18:19.940 Minis[38128:106202] [HomeListPerf] [INFO] [HomeListPerf] 5.2s sidebar passes=7 sessions=3 rows=3 sections=1 | group max 3.5ms avg 0.8ms | resolved 16 in 0.1ms (cache 14, memo 2), per pass max 3, while scrolling 4 | memo rebuilds 1 max 0.0ms | id cache rebuilds 1 max 0.1ms | row bodies 13, per pass max 3 | changed: other 5, first 1, sessions 1
+2026-11-26 18:18:25.548 Minis[38128:106269] [MainStall] last 10s: busy spans >=25ms=3 >=50ms=0 >=100ms=0, longest 45ms ended 18:18:16.932
+2026-11-26 18:18:34.745 Minis[38128:106202] [AIChatVM] [DEBUG] [KeepScreen] noop reason=defaults sessions=0 enabled=false bg=false held=false
+2026-11-26 18:18:34.783 Minis[38128:106267] [iCloud] [INFO] [part_flags] backfill done: updated 0 row(s)
+2026-11-26 18:18:34.801 Minis[38128:106213] ISHKernel: [BssCanary] watching 100 once tokens over 15.5 MB of static data (10 ~0 initialisers skipped, 2 regions, scan 6.6 ms)
+2026-11-26 18:18:34.838 Minis[38128:106202] [AIChatVM] [DEBUG] [KeepScreen] noop reason=defaults sessions=0 enabled=false bg=false held=false
+2026-11-26 18:18:34.840 Minis[38128:106267] [iCloud] [INFO] [iCloudTrace] v1 dirty-row zombie cleanup: deleted=0 types=Session,Message,CompactMarker,SessionFile,Skill,ProviderConfig,EnvVar,SyncDevice,Soul
+2026-11-26 18:18:34.844 Minis[38128:106220] [iCloud] [INFO] [ChatStore.listSessions] ENTER queue='com.apple.root.default-qos.cooperative' isMain=false thread=<NSThread: 0x1058dd480>{number = 4, name = (null)}
+2026-11-26 18:18:34.845 Minis[38128:106220] [iCloud] [INFO] [ChatStore.listSessions] EXIT queue='com.apple.root.default-qos.cooperative'
+2026-11-26 18:18:34.885 Minis[38128:106202] [NavDiag] [INFO] [NavDiag] write event=commit caller=ContentView.swift:770 target=seed-rev animated=false outcome=committed before=[] after=[seed-review-session] running=[]
+2026-11-26 18:18:34.895 Minis[38128:106202] [HomeListPerf] [INFO] [HomeListPerf] nav depth=1
+2026-11-26 18:18:34.896 Minis[38128:106202] [NavDiag] [INFO] [NavDiag] path-changed depth=1 path=[seed-review-session] target=seed-rev running=[] lastWrite=ContentView.swift:770@0.01s
+2026-11-26 18:18:35.209 Minis[38128:106202] [AIChatVM] [INFO] 🔄SESSION [vm=79D54E] init — new AIChatViewModel created
+2026-11-26 18:18:35.210 Minis[38128:106202] [AIChatVM] [INFO] 🔄SESSION ViewModelCache MISS session=seed-review-session vm=79D54E — created new, trackerActive=false
+2026-11-26 18:18:35.211 Minis[38128:106202] [MinisURL] [INFO] 🔑DRAFT CachedViewModel.init sessionId=seed-review-session vm=79D54E isNew=true
+2026-11-26 18:18:35.573 Minis[38128:106202] [AIChatVM] [INFO] 🔀RESOLVE no binding for session=seed-review-session
+2026-11-26 18:18:35.574 Minis[38128:106202] [AIChatVM] [WARN] 🔀RESOLVE no config store data, returning nil
+2026-11-26 18:18:35.658 Minis[38128:106269] [MainStall] last 10s: busy spans >=25ms=1 >=50ms=0 >=100ms=0, longest 33ms ended 18:18:34.783
+2026-11-26 18:18:35.917 Minis[38128:106202] [NavbarEval] [INFO] [NavbarEval] toolbarHostEval=1 (toolbarPass=1)
+2026-11-26 18:18:36.140 Minis[38128:106202] [TextContainerGuard] [WARN] short-circuited setSize: REJECT-NAN-INF-NEG size=0.0x-16.0 total=1 container=0x1059f3e40
+2026-11-26 18:18:36.230 Minis[38128:106202] [PastableTV] [DEBUG] [makeUIView] created
+2026-11-26 18:18:36.233 Minis[38128:106202] [ContextUsageHint] [INFO] [sync] parentHint=nil handled=gen0 unconsumed=false
+2026-11-26 18:18:36.389 Minis[38128:106202] [InputBarLayout] [INFO] inputBarHeight discarded=116.35709635416663 offscreen x=-201…201 win=0…402
+2026-11-26 18:18:36.390 Minis[38128:106202] [MinisURL] [INFO] [SessionLoad] onAppear T+1391ms isNew=true msgs=0
+2026-11-26 18:18:36.390 Minis[38128:106202] [InputBarLayout] [INFO] inputBarHeight re-arm seed on appear (was 0.0)
+2026-11-26 18:18:36.391 Minis[38128:106202] [MinisURL] [INFO] 🔄SESSION AIChatView.onAppear loading session seed-review-session isNew=true msgs=0
+2026-11-26 18:18:36.391 Minis[38128:106202] [MinisURL] [INFO] [Share] AIChatView.onAppear: sessionId=seed-review-session bufferVersion=0 hasBuffer=false
+2026-11-26 18:18:36.391 Minis[38128:106202] [Share] [INFO] [Share] consumeBuffer: buffer is nil — nothing to consume
+2026-11-26 18:18:36.392 Minis[38128:106202] [MinisURL] [INFO] [Share] injectPendingShareIfNeeded — no buffer or expired
+2026-11-26 18:18:36.394 Minis[38128:106202] [Share] [INFO] 🔄SESSION stackNav APPEAR id=seed-review-session
+2026-11-26 18:18:36.421 Minis[38128:106202] [NavbarEval] [INFO] [NavbarEval] toolbarHostEval=2 (toolbarPass=2)
+2026-11-26 18:18:36.446 Minis[38128:106202] [NavMenu] [INFO] [NavMenu] attach host=NavigationStackHostingController<AnyView>
+2026-11-26 18:18:36.474 Minis[38128:106202] [NavMenu] [INFO] [NavMenu] reinstall reason=attach others=0 total=0
+2026-11-26 18:18:36.701 Minis[38128:106202] [InputBarLayout] [INFO] inputBarHeight seeded=116.35709635416663 x=0
+2026-11-26 18:18:36.708 Minis[38128:106202] [NavbarEval] [INFO] [NavbarEval] toolbarHostEval=3 (toolbarPass=3)
+2026-11-26 18:18:36.731 Minis[38128:106202] [ScrollStall] [DEBUG] [SCR] last1s samples=1 offset=-116 Δdist=116 cs=0 mode=auto tracking=0 decel=0 deferred=0
+2026-11-26 18:18:36.739 Minis[38128:106269] [MemMonitor] 📈 footprint=66.3MB (Δ+11.1MB) | sys free=1550/7168MB (22%) | pressure=normal
+2026-11-26 18:18:36.754 Minis[38128:106202] [WatchdogProbe] [INFO] [WatchdogProbe][cv-bounds] WH old=0x0 new=402x840 visibleCells=0 tracking=0 decel=0
+2026-11-26 18:18:36.759 Minis[38128:106202] [WatchdogProbe] [INFO] [WatchdogProbe][cv-bounds] WH old=402x840 new=402x840 visibleCells=0 tracking=0 decel=0
+2026-11-26 18:18:36.777 Minis[38128:106202] [NavbarEval] [INFO] [NavbarEval] toolbarHostEval=4 (toolbarPass=4)
+2026-11-26 18:18:36.833 Minis[38128:106202] [SnapshotDiag] [INFO] [SnapshotDiag] SKIP caller=bind1-messages items unchanged (count=0) — no re-apply
+2026-11-26 18:18:36.854 Minis[38128:106202] [RootfsManager] [WARN] [Rootfs] arch tag missing or mismatched — will delete and reinstall aarch64. archTag=arch-file-missing path=/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Documents/alpine-rootfs
+2026-11-26 18:18:36.860 Minis[38128:106202] [RootfsManager] [INFO] [Rootfs] installing from /Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Bundle/Application/BF58078A-11DC-46B4-BEE1-B12747A54BD7/Minis.app/alpine-rootfs.zip
+2026-11-26 18:18:37.179 Minis[38128:106202] [AIChatVM] [DEBUG] [KeepScreen] noop reason=defaults sessions=0 enabled=false bg=false held=false
+2026-11-26 18:18:37.180 Minis[38128:106202] [RootfsManager] [INFO] [Rootfs] installation complete (aarch64) at /Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Documents/alpine-rootfs
+2026-11-26 18:18:37.180 Minis[38128:106202] [AIChatVM] [INFO] [KernelBoot] installIfNeeded: 328.1ms
+2026-11-26 18:18:37.180 Minis[38128:106202] ISHKernel: JIT crash recovery handler installed
+2026-11-26 18:18:37.181 Minis[38128:106202] ISHKernel: os_proc_available_memory unavailable — keeping default anon cap
+2026-11-26 18:18:37.181 Minis[38128:106202] ISHKernel: [CPUTop] started interval=10s topN=6 minProc=25%
+2026-11-26 18:18:37.182 Minis[38128:106202] [iSH][ForkRate] limit=400/s burst=800
+2026-11-26 18:18:37.182 Minis[38128:106202] ISHKernel: [ForkRate] thermal=0 -> limit 400/s burst 800 (start)
+2026-11-26 18:18:37.212 Minis[38128:106202] ISHKernel: Root filesystem mounted at /Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Documents/alpine-rootfs/data
+2026-11-26 18:18:37.213 Minis[38128:106202] ISHKernel: rootfs canonical data path = /Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Documents/alpine-rootfs/data
+fakefs: rootfs_data_path registered "/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Documents/alpine-rootfs/data" (len=189)
+2026-11-26 18:18:37.213 Minis[38128:106202] ISHKernel: [AOJIT] on (rc=0)
+2026-11-26 18:18:37.215 Minis[38128:106202] ISHKernel: Init process created (PID 1)
+2026-11-26 18:18:37.221 Minis[38128:106202] ISHKernel: Device nodes created
+2026-11-26 18:18:37.223 Minis[38128:106202] [RootfsPatch] applying v6 (installed v0)
+2026-11-26 18:18:37.225 Minis[38128:106202] [RootfsPatch] OK files/lib/wasm-polyfill.js -> /lib/wasm-polyfill.js (11421 bytes)
+2026-11-26 18:18:37.226 Minis[38128:106202] [RootfsPatch] OK files/lib/fetch-polyfill.js -> /lib/fetch-polyfill.js (7713 bytes)
+2026-11-26 18:18:37.227 Minis[38128:106202] [RootfsPatch] done: 2 applied, 0 failed, now at v6
+2026-11-26 18:18:37.228 Minis[38128:106202] ISHKernel: /proc and /dev/pts mounted
+2026-11-26 18:18:37.228 Minis[38128:106202] ISHKernel: [DNS] seeded host resolv.conf at /Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Library/MinisChat/dns/resolv.conf
+fakefs_bind_mount: ENTER linux_path="/etc/resolv.conf" (len=16) host_path="/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Library/MinisChat/dns/resolv.conf" (len=194) read_only=0
+fakefs_bind_mount: fix_path("/etc/resolv.conf") => "etc/resolv.conf" (len=15)
+fakefs_bind_mount: root_fd=23 path="/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Documents/alpine-rootfs/data"
+fakefs_bind_mount: using free slot[0]
+fakefs_bind_mount: slot[0] NEW symlink: host_link="etc/resolv.conf" -> host_path="/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Library/MinisChat/dns/resolv.conf" (root_fd=23)
+create_relative_symlink: "etc/resolv.conf" -> "/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Library/MinisChat/dns/resolv.conf" (relative: "../../../../Library/MinisChat/dns/resolv.conf")
+fakefs_bind_mount: slot[0] symlinkat returned 0 (errno=0)
+fakefs_bind_mount: slot[0] VERIFY readlinkat("etc/resolv.conf") => "../../../../Library/MinisChat/dns/resolv.conf"
+fakefs_bind_mount: slot[0] created meta.db entry for "/etc/resolv.conf" mode=0644
+2026-11-26 18:18:37.234 Minis[38128:106202] ISHKernel: [DNS] bind mount OK: /etc/resolv.conf -> /Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Library/MinisChat/dns/resolv.conf
+2026-11-26 18:18:37.238 Minis[38128:106202] ISHKernel: [DNS] configured: search=0 servers=1/1 fallback=no
+2026-11-26 18:18:37.239 Minis[38128:106202] ISHKernel: [DNS] write OK — 24 bytes at /Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Library/MinisChat/dns/resolv.conf
+2026-11-26 18:18:37.239 Minis[38128:106202] ISHKernel: [Netlink] AF_NETLINK stub enabled (ISH_NETLINK_STUB=1)
+2026-11-26 18:18:37.239 Minis[38128:106202] ISHKernel: [UnixSock] simulator — keeping default prefix '/tmp/ishsock'
+2026-11-26 18:18:37.239 Minis[38128:106202] ISHKernel: [ForkGuard] installed — max footprint 1792MB (device RAM 7168MB), waits only under system memory pressure, cap 2000ms
+2026-11-26 18:18:37.239 Minis[38128:106202] ISHKernel: TTY driver registered, console device set
+2026-11-26 18:18:37.240 Minis[38128:106202] ISHKernel: stdio created for init process
+native_offload: ffmpeg → [builtin]
+2026-11-26 18:18:37.240 Minis[38128:106202] NativeOffloads: ffmpeg handler registered
+native_offload: ffmpeg abort handler registered
+2026-11-26 18:18:37.240 Minis[38128:106202] NativeOffloads: ffmpeg abort handler registered
+native_offload: apple-calendar → [builtin]
+2026-11-26 18:18:37.241 Minis[38128:106202] NativeOffloads: apple-calendar handler registered
+native_offload: apple-location → [builtin]
+2026-11-26 18:18:37.242 Minis[38128:106202] NativeOffloads: apple-location handler registered
+native_offload: apple-weather → [builtin]
+2026-11-26 18:18:37.243 Minis[38128:106202] NativeOffloads: apple-weather handler registered
+native_offload: apple-vision → [builtin]
+2026-11-26 18:18:37.244 Minis[38128:106202] NativeOffloads: apple-vision handler registered
+native_offload: apple-open → [builtin]
+2026-11-26 18:18:37.245 Minis[38128:106202] NativeOffloads: apple-open handler registered
+native_offload: apple-clipboard → [builtin]
+2026-11-26 18:18:37.247 Minis[38128:106202] NativeOffloads: apple-clipboard handler registered
+native_offload: apple-healthkit → [builtin]
+2026-11-26 18:18:37.248 Minis[38128:106202] NativeOffloads: apple-healthkit handler registered
+native_offload: apple-photos → [builtin]
+2026-11-26 18:18:37.249 Minis[38128:106202] NativeOffloads: apple-photos handler registered
+native_offload: apple-maps → [builtin]
+2026-11-26 18:18:37.251 Minis[38128:106202] NativeOffloads: apple-maps handler registered
+native_offload: apple-nlp → [builtin]
+2026-11-26 18:18:37.252 Minis[38128:106202] NativeOffloads: apple-nlp handler registered
+native_offload: apple-alarm → [builtin]
+2026-11-26 18:18:37.253 Minis[38128:106202] NativeOffloads: apple-alarm handler registered
+native_offload: apple-media → [builtin]
+2026-11-26 18:18:37.255 Minis[38128:106202] NativeOffloads: apple-media handler registered
+native_offload: apple-speak → [builtin]
+2026-11-26 18:18:37.256 Minis[38128:106202] NativeOffloads: apple-speak handler registered
+native_offload: apple-speech → [builtin]
+2026-11-26 18:18:37.257 Minis[38128:106202] NativeOffloads: apple-speech handler registered
+native_offload: apple-device → [builtin]
+2026-11-26 18:18:37.259 Minis[38128:106202] NativeOffloads: apple-device handler registered
+native_offload: apple-homekit → [builtin]
+2026-11-26 18:18:37.259 Minis[38128:106202] NativeOffloads: apple-homekit handler registered
+native_offload: apple-notification → [builtin]
+2026-11-26 18:18:37.260 Minis[38128:106202] NativeOffloads: apple-notification handler registered
+native_offload: apple-player → [builtin]
+2026-11-26 18:18:37.261 Minis[38128:106202] NativeOffloads: apple-player handler registered
+native_offload: minis-model-use → [builtin]
+2026-11-26 18:18:37.262 Minis[38128:106202] NativeOffloads: minis-model-use handler registered
+native_offload: apple-reminders → [builtin]
+2026-11-26 18:18:37.263 Minis[38128:106202] NativeOffloads: apple-reminders handler registered
+native_offload: apple-bluetooth → [builtin]
+2026-11-26 18:18:37.264 Minis[38128:106202] NativeOffloads: apple-bluetooth handler registered
+native_offload: apple-nfc → [builtin]
+2026-11-26 18:18:37.266 Minis[38128:106202] NativeOffloads: apple-nfc handler registered
+native_offload: minis-sessions-cli → [builtin]
+2026-11-26 18:18:37.267 Minis[38128:106202] NativeOffloads: minis-sessions-cli handler registered
+native_offload: minis-scheduled → [builtin]
+2026-11-26 18:18:37.267 Minis[38128:106202] NativeOffloads: minis-scheduled handler registered
+native_offload: minis-browser-use → [builtin]
+2026-11-26 18:18:37.268 Minis[38128:106202] NativeOffloads: minis-browser-use handler registered
+native_offload: minis-config → [builtin]
+2026-11-26 18:18:37.269 Minis[38128:106202] NativeOffloads: minis-config handler registered
+native_offload: minis-debug → [builtin]
+2026-11-26 18:18:37.270 Minis[38128:106202] NativeOffloads: minis-debug handler registered (logs available in all builds; RPC subcommands DEBUG-only)
+native_offload: minis-hangtest → [builtin]
+native_offload: minis-hangtest abort handler registered
+2026-11-26 18:18:37.270 Minis[38128:106202] NativeOffloads: minis-hangtest handler registered (DEBUG only)
+2026-11-26 18:18:37.270 Minis[38128:106202] ISHKernel: Kernel initialized successfully
+2026-11-26 18:18:37.270 Minis[38128:106202] [AIChatVM] [INFO] [KernelBoot] kernel boot call: 89.7ms
+2026-11-26 18:18:37.271 Minis[38128:106202] [SessionFileTracker] [INFO] [SessionFileTracker] installing fakefs change handler — iSH realfs writes/unlinks/renames under /var/minis/{workspace,attachments,browser,offloads} (or the equivalent host APFS path) will be queued for iCloud SessionFile sync
+2026-11-26 18:18:37.272 Minis[38128:106202] [RootfsManager] [INFO] [DefaultMount] applyDefaultMountOverlay() called
+2026-11-26 18:18:37.361 Minis[38128:106202] [RootfsManager] [INFO] [DefaultMount] Done. 19 file(s) overlaid in 89.2ms — copy: 7.7ms (avg 0.41ms/file), metaDB: 63.9ms (avg 3.36ms/file), marker: 0.3ms
+2026-11-26 18:18:37.361 Minis[38128:106202] [AIChatVM] [INFO] [KernelBoot] TOTAL: 509.4ms
+2026-11-26 18:18:37.383 Minis[38128:106202] [AIChatVM] [DEBUG] [KeepScreen] noop reason=defaults sessions=0 enabled=false bg=false held=false
+2026-11-26 18:18:37.383 Minis[38128:106202] [MirrorSpeedTest] [INFO] Fresh rootfs detected — running auto mirror detection
+2026-11-26 18:18:37.385 Minis[38128:106202] [AIChatVM] [INFO] [SessionLoad] loadSession START T+2386ms session=seed-review-session msgs=0
+2026-11-26 18:18:37.386 Minis[38128:106202] [AIChatVM] [INFO] [SessionLoad] ViewModelCache MISS/empty sid=seed-rev suspended=false
+2026-11-26 18:18:37.409 Minis[38128:106202] [AIChatVM] [INFO] [ReloadTrace] loadSession() → spinner ON sid=seed-rev callerStack=0   Minis.debug.dylib                   0x000000010fe4c7a8 $s5Minis15AIChatViewModelC11loadSessionyyYaFTY0_ + 3040 | 1   Minis.debug.dylib                   0x0000000111f7ba09 $s5Minis10AIChatViewV4bodyQrvgyycfU72_yyYacfU0_TQ3_ + 1 | 2   Minis.debug.dylib                   0x0000000111fb54f1 $s5Minis10AIChatViewV4bodyQrvgyycfU72_yyYacfU0_TATQ0_ + 1 | 3   Minis.debug.dylib                   0x000000010f1817c5 $sxIeAgHr_xs5Error_pIegHrzo_s8SendableRzs5NeverORs_r0_lTRTQ0_ + 1 | 4   Minis.debug.dylib                   0x000000010f1db4c1 $sxIeAgHr_xs5Error_pIegHrzo_s8SendableRzs5NeverORs_r0_lTRTA.75TQ0_ + 1 | 5   libswift_Concurrency.dylib          0x00000002378c9555 _ZL23completeTaskWithClosurePN5swift12AsyncContextEPNS_10SwiftErrorE + 1
+2026-11-26 18:18:37.411 Minis[38128:106223] [MemDiag] [INFO] [MemDiag] getMemoryEnabled sid=seed-rev rowFound=true storedRow=true (returning storedRow) globalRaw=nil
+2026-11-26 18:18:37.417 Minis[38128:106202] [NavbarEval] [INFO] [NavbarEval] toolbarHostEval=5 (toolbarPass=5)
+2026-11-26 18:18:37.428 Minis[38128:106202] [MinisURL] [WARN] [SpinnerTrace] isLoadingSession → true sid=seed-rev msgs=0
+2026-11-26 18:18:37.472 Minis[38128:106202] [NavbarEval] [INFO] [NavbarEval] toolbarHostEval=6 (toolbarPass=6)
+2026-11-26 18:18:37.513 Minis[38128:106202] [MemDiag] [INFO] [MemDiag] loadSession sid=seed-rev → vm.memoryEnabled=true
+2026-11-26 18:18:37.521 Minis[38128:106202] [NavbarEval] [INFO] [NavbarEval] toolbarHostEval=7 (toolbarPass=7)
+2026-11-26 18:18:37.522 Minis[38128:106269] [MainStall] 🐢 main thread busy 2586ms with no frame committed (ended 18:18:37.434) | during: (after list pass sidebar -91ms), list pass sidebar +5ms, list pass sidebar +42ms, nav depth=1 +49ms, chat appear +1554ms
+2026-11-26 18:18:37.569 Minis[38128:106202] [AIChatVM] [INFO] [SessionLoad] seed-review-session — Phase 1 DB load: 35.0ms (4 messages)
+2026-11-26 18:18:37.608 Minis[38128:106202] [AIChatVM] [DEBUG] [BlocksLost] RAW-MERGE so=2 id=seed-msg partsCount=1 textParts=1 rawTextLens=[375] blocks=1 textBlocks=[len=375]
+2026-11-26 18:18:37.609 Minis[38128:106202] [AIChatVM] [INFO] [BlocksLost] MERGE-CHAIN-BREAK at so=3 userParts=1 isToolResultOnly=false prevAssistantBlocks=3 prevLastTextLen=375 sid=seed-rev
+2026-11-26 18:18:37.609 Minis[38128:106202] [AIChatVM] [INFO] [BlocksLost] MERGE totalUIMessages=3 assistantMessages=1 sid=seed-rev
+2026-11-26 18:18:37.609 Minis[38128:106202] [AIChatVM] [DEBUG] [BlocksLost] MERGE assistant[1] totalBlocks=3 textBlocks=2 toolBlocks=1 isLast=true srcSO=1...2 blocks=[[0] len=94 [2] len=375]
+2026-11-26 18:18:37.612 Minis[38128:106202] [Voice] [INFO] [Voice] [capsule-placement] setRect inputBar y=723…840 x=0…402
+2026-11-26 18:18:37.612 Minis[38128:106202] [Voice] [INFO] [Voice] [capsule-placement] setRect downloadButton y=619…840 x=0…402
+2026-11-26 18:18:37.647 Minis[38128:106202] [MarkdownRenderer] [INFO] [RND] table#0 CACHE MISS rows=4 cols=3 newHash=4436385084597383683 cacheSize=1
+2026-11-26 18:18:37.648 Minis[38128:106202] [MarkdownRenderer] [INFO] [RND] mid=? rnd=5b59f6 blocks=6 tables=1 codeBlocks=1 attrLen=136 8.3ms tableCache=0→1
+2026-11-26 18:18:37.656 Minis[38128:106202] [AIChatVM] [INFO] [Compact] effectiveAgentHistory: returning 4 msg(s) from agentHistory.count=4 markerId=nil
+2026-11-26 18:18:37.667 Minis[38128:106202] [AIChatVM] [INFO] [SessionLoad] seed-review-session — Phase 2 build messages: 78.8ms (3 UI messages, 4 history entries, estimated ~230 context tokens)
+2026-11-26 18:18:37.668 Minis[38128:106202] [AIChatVM] [INFO] [SessionLoad] seed-review-session — Phase 2 breakdown: [2a iterate: 40.5 | 2.5 compact: 2.8 | 2sig thoughts: 0.0 | 2b attrStr: 35.5]ms
+2026-11-26 18:18:37.674 Minis[38128:106202] [AIChatVM] [INFO] [SessionLoad] DB raw=4 → VM messages=3 suspended=false lastTextLen=0
+2026-11-26 18:18:37.674 Minis[38128:106202] [AIChatVM] [INFO] [BlocksLost] POST-ASSIGN lastAssistant totalBlocks=3 lastTextLen=375 lastRawSO=2 lastRawTextLen=375 sid=seed-rev
+2026-11-26 18:18:37.675 Minis[38128:106202] [AIChatVM] [INFO] [SessionLoad] seed-review-session — Phase 3 tool snapshots: 7.0ms (0 snapshots)
+2026-11-26 18:18:37.676 Minis[38128:106202] [AIChatVM] [INFO] 🔍MOUNT loadSession Phase4 calling mountMinis for seed-review-session (msgs=4)
+2026-11-26 18:18:37.678 Minis[38128:106202] [AIChatVM] [DEBUG] [KeepScreen] noop reason=defaults sessions=0 enabled=false bg=false held=false
+2026-11-26 18:18:37.679 Minis[38128:106202] [AIChatVM] [INFO] [MinisSymlink] /var/minis/offloads: real dir -> persistDir migration, moved=0 skipped(existing)=0
+2026-11-26 18:18:37.680 Minis[38128:106202] [AIChatVM] [INFO] [MinisSymlink] /var/minis/offloads: symlink created -> /Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Library/MinisChat/minis/seed-review-session/offloads
+2026-11-26 18:18:37.680 Minis[38128:106202] [AIChatVM] [INFO] [MinisSymlink] /var/minis/attachments: real dir -> persistDir migration, moved=0 skipped(existing)=0
+2026-11-26 18:18:37.681 Minis[38128:106202] [AIChatVM] [INFO] [MinisSymlink] /var/minis/attachments: symlink created -> /Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Library/MinisChat/minis/seed-review-session/attachments
+2026-11-26 18:18:37.682 Minis[38128:106202] [AIChatVM] [INFO] [MinisSymlink] /var/minis/workspace: real dir -> persistDir migration, moved=0 skipped(existing)=0
+2026-11-26 18:18:37.682 Minis[38128:106202] [AIChatVM] [INFO] [MinisSymlink] /var/minis/workspace: symlink created -> /Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Library/MinisChat/minis/seed-review-session/workspace
+2026-11-26 18:18:37.683 Minis[38128:106202] [AIChatVM] [INFO] [MinisSymlink] /var/minis/browser: symlink created -> /Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Library/MinisChat/minis/seed-review-session/browser
+2026-11-26 18:18:37.683 Minis[38128:106202] [AIChatVM] [INFO] [MinisSymlink] /var/minis/memory: symlink created -> /Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/memory
+2026-11-26 18:18:37.683 Minis[38128:106202] [AIChatVM] [INFO] [MinisSymlink] /var/minis/skills: real dir -> persistDir migration, moved=0 skipped(existing)=0
+2026-11-26 18:18:37.684 Minis[38128:106202] [AIChatVM] [INFO] [MinisSymlink] /var/minis/skills: symlink created -> /Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/skills
+2026-11-26 18:18:37.687 Minis[38128:106202] [AIChatVM] [INFO] [MinisSymlink] /var/minis/shared: real dir -> persistDir migration, moved=0 skipped(existing)=0
+2026-11-26 18:18:37.688 Minis[38128:106202] [AIChatVM] [INFO] [MinisSymlink] /var/minis/shared: symlink created -> /Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/shared
+2026-11-26 18:18:37.688 Minis[38128:106202] [AIChatVM] [INFO] [MinisSymlink] /var/minis/mcp-servers: symlink created -> /Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisConfig/mcp-servers
+2026-11-26 18:18:37.688 Minis[38128:106202] [AIChatVM] [INFO] 🔍MOUNT loadSession Phase4 done in 13.0ms
+2026-11-26 18:18:37.762 Minis[38128:106202] [NavbarEval] [INFO] [NavbarEval] toolbarHostEval=8 (toolbarPass=8)
+2026-11-26 18:18:37.814 Minis[38128:106202] [NavMenu] [INFO] [NavMenu] menu rebuilt (displayed state changed)
+2026-11-26 18:18:37.821 Minis[38128:106202] [NavbarEval] [INFO] [NavbarEval] toolbarHostEval=9 (toolbarPass=9)
+2026-11-26 18:18:37.877 Minis[38128:106202] [AIChatVM] [INFO] 🔀ENSURE binding skip: no default primary group for session=seed-review-session
+2026-11-26 18:18:37.877 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT-DIAG mountForSession-entry sid=seed-review-session booted=true externalSnapshotCount=0 staticInit=0
+2026-11-26 18:18:37.879 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT START for session seed-review-session
+2026-11-26 18:18:37.881 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT-DIAG performMount-entry sid=seed-review-session booted=true snapshotCount=0 staticInit=0
+2026-11-26 18:18:37.882 Minis[38128:106202] [SessionBadgeStore] [INFO] [BadgeStamp] write sid=seed-rev state=paused source=redetect restamp=false old=none new=1795717118 overwroteAge=n/a
+2026-11-26 18:18:37.886 Minis[38128:106202] [AIChatVM] [DEBUG] [KeepScreen] noop reason=defaults sessions=0 enabled=false bg=false held=false
+2026-11-26 18:18:37.890 Minis[38128:106202] [AIChatVM] [DEBUG] [KeepScreen] noop reason=defaults sessions=0 enabled=false bg=false held=false
+2026-11-26 18:18:37.893 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [0] === Mounting subdir ===
+2026-11-26 18:18:37.949 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [0] linuxDir        = "/var/minis/memory"
+2026-11-26 18:18:37.949 Minis[38128:106202] [AIChatVM] [INFO] [SessionLoad] seed-rev — detected interrupted agent loop, canResume=true, committedBlocks=0
+2026-11-26 18:18:37.950 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [0] linuxDir.count  = 17
+2026-11-26 18:18:37.950 Minis[38128:106202] [AIChatVM] [INFO] 🔀RESOLVE no binding for session=seed-review-session
+2026-11-26 18:18:37.950 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [0] linuxDir bytes  = 2f 76 61 72 2f 6d 69 6e 69 73 2f 6d 65 6d 6f 72 79
+2026-11-26 18:18:37.950 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [0] persistDir      = "/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/memory"
+2026-11-26 18:18:37.950 Minis[38128:106202] [AIChatVM] [WARN] 🔀RESOLVE no config store data, returning nil
+2026-11-26 18:18:37.951 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [0] persistDir.count= 184
+2026-11-26 18:18:37.951 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [0] resolved hostDir = "/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Documents/alpine-rootfs/data/var/minis/memory"
+2026-11-26 18:18:37.951 Minis[38128:106202] [AIChatVM] [INFO] [CtxMeter] seed session=seed-rev samples=0 keptInMemory=0 ratios=
+2026-11-26 18:18:37.952 Minis[38128:106202] [AIChatVM] [INFO] [SessionLoad] seed-review-session — TOTAL: 437.9ms T+483ms [DB: 35.0 | Build: 78.8 | Snapshots: 7.0 | Mount: 13.0]
+2026-11-26 18:18:37.952 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [0] symlink already correct, skipping removal
+2026-11-26 18:18:37.952 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [0] persistDir has 2 items: SOUL.icon.gif, SOUL.md
+2026-11-26 18:18:37.957 Minis[38128:106202] [PendingSnap] [INFO] [PendingSnap] FLUSH caller=updateUIVC-backstop blockCount=3 isProcessing=false — applying deferred snapshot
+2026-11-26 18:18:37.973 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [0] calling bindMountPath("/var/minis/memory", toHostPath: "/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/memory")
+fakefs_bind_mount: ENTER linux_path="/var/minis/memory" (len=17) host_path="/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/memory" (len=184) read_only=0
+fakefs_bind_mount: fix_path("/var/minis/memory") => "var/minis/memory" (len=16)
+fakefs_bind_mount: root_fd=23 path="/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Documents/alpine-rootfs/data"
+fakefs_bind_mount: using free slot[1]
+fakefs_bind_mount: slot[1] NEW symlink: host_link="var/minis/memory" -> host_path="/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/memory" (root_fd=23)
+create_relative_symlink: "var/minis/memory" -> "/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/memory" (relative: "../../../../../../../../Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/memory")
+fakefs_bind_mount: slot[1] symlinkat returned 0 (errno=0)
+fakefs_bind_mount: slot[1] VERIFY readlinkat("var/minis/memory") => "../../../../../../../../Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/memory"
+fakefs_bind_mount: slot[1] created meta.db entry for "/var/minis/memory" mode=0755
+2026-11-26 18:18:37.974 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [0] bind mount OK: /var/minis/memory -> /Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/memory
+2026-11-26 18:18:37.974 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [0] symlink at /Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Documents/alpine-rootfs/data/var/minis/memory -> ../../../../../../../../Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/memory
+2026-11-26 18:18:37.974 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [0] hostDir after mount has 2 items: SOUL.icon.gif, SOUL.md
+2026-11-26 18:18:37.975 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT batchEnsureFakefsMetadata: 3 checked, 2 inserted
+2026-11-26 18:18:37.976 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [0] registered 3 meta.db entries (batch) in 2.0ms
+2026-11-26 18:18:37.976 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [1] === Mounting subdir ===
+2026-11-26 18:18:37.976 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [1] linuxDir        = "/var/minis/skills"
+2026-11-26 18:18:37.976 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [1] linuxDir.count  = 17
+2026-11-26 18:18:37.977 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [1] linuxDir bytes  = 2f 76 61 72 2f 6d 69 6e 69 73 2f 73 6b 69 6c 6c 73
+2026-11-26 18:18:37.977 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [1] persistDir      = "/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/skills"
+2026-11-26 18:18:37.977 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [1] persistDir.count= 184
+2026-11-26 18:18:37.977 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [1] resolved hostDir = "/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Documents/alpine-rootfs/data/var/minis/skills"
+2026-11-26 18:18:37.977 Minis[38128:106202] [BottomGapDiag] [INFO] [BottomGapDiag][user-bubble-estimate] chars=38 textH=60.0 attachH=0.0 total=88.0 w=282
+2026-11-26 18:18:37.977 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [1] symlink already correct, skipping removal
+2026-11-26 18:18:37.977 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [1] persistDir has 1 items: skill-creator
+2026-11-26 18:18:37.977 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [1] calling bindMountPath("/var/minis/skills", toHostPath: "/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/skills")
+fakefs_bind_mount: ENTER linux_path="/var/minis/skills" (len=17) host_path="/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/skills" (len=184) read_only=0
+fakefs_bind_mount: fix_path("/var/minis/skills") => "var/minis/skills" (len=16)
+fakefs_bind_mount: root_fd=23 path="/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Documents/alpine-rootfs/data"
+fakefs_bind_mount: using free slot[2]
+fakefs_bind_mount: slot[2] NEW symlink: host_link="var/minis/skills" -> host_path="/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/skills" (root_fd=23)
+create_relative_symlink: "var/minis/skills" -> "/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/skills" (relative: "../../../../../../../../Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/skills")
+fakefs_bind_mount: slot[2] symlinkat returned 0 (errno=0)
+fakefs_bind_mount: slot[2] VERIFY readlinkat("var/minis/skills") => "../../../../../../../../Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/skills"
+fakefs_bind_mount: slot[2] created meta.db entry for "/var/minis/skills" mode=0755
+2026-11-26 18:18:37.978 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [1] bind mount OK: /var/minis/skills -> /Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/skills
+2026-11-26 18:18:37.978 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [1] symlink at /Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Documents/alpine-rootfs/data/var/minis/skills -> ../../../../../../../../Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/skills
+2026-11-26 18:18:37.979 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [1] hostDir after mount has 1 items: skill-creator
+2026-11-26 18:18:37.980 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT batchEnsureFakefsMetadata: 3 checked, 2 inserted
+2026-11-26 18:18:37.980 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [1] registered 3 meta.db entries (batch) in 1.3ms
+2026-11-26 18:18:37.980 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [2] === Mounting subdir ===
+2026-11-26 18:18:37.980 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [2] linuxDir        = "/var/minis/shared"
+2026-11-26 18:18:37.980 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [2] linuxDir.count  = 17
+2026-11-26 18:18:37.980 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [2] linuxDir bytes  = 2f 76 61 72 2f 6d 69 6e 69 73 2f 73 68 61 72 65 64
+2026-11-26 18:18:37.980 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [2] persistDir      = "/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/shared"
+2026-11-26 18:18:37.980 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [2] persistDir.count= 184
+2026-11-26 18:18:37.981 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [2] resolved hostDir = "/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Documents/alpine-rootfs/data/var/minis/shared"
+2026-11-26 18:18:37.983 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [2] symlink already correct, skipping removal
+2026-11-26 18:18:37.983 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [2] persistDir has 0 items: 
+2026-11-26 18:18:37.984 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [2] calling bindMountPath("/var/minis/shared", toHostPath: "/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/shared")
+fakefs_bind_mount: ENTER linux_path="/var/minis/shared" (len=17) host_path="/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/shared" (len=184) read_only=0
+fakefs_bind_mount: fix_path("/var/minis/shared") => "var/minis/shared" (len=16)
+fakefs_bind_mount: root_fd=23 path="/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Documents/alpine-rootfs/data"
+fakefs_bind_mount: using free slot[3]
+fakefs_bind_mount: slot[3] NEW symlink: host_link="var/minis/shared" -> host_path="/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/shared" (root_fd=23)
+create_relative_symlink: "var/minis/shared" -> "/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/shared" (relative: "../../../../../../../../Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/shared")
+fakefs_bind_mount: slot[3] symlinkat returned 0 (errno=0)
+fakefs_bind_mount: slot[3] VERIFY readlinkat("var/minis/shared") => "../../../../../../../../Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/shared"
+fakefs_bind_mount: slot[3] created meta.db entry for "/var/minis/shared" mode=0755
+2026-11-26 18:18:37.985 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [2] bind mount OK: /var/minis/shared -> /Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/shared
+2026-11-26 18:18:37.985 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [2] symlink at /Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Documents/alpine-rootfs/data/var/minis/shared -> ../../../../../../../../Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisFileProvider/shared
+2026-11-26 18:18:37.986 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [2] hostDir after mount has 0 items: 
+2026-11-26 18:18:37.988 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT batchEnsureFakefsMetadata: 1 checked, 0 inserted
+2026-11-26 18:18:37.988 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [2] registered 1 meta.db entries (batch) in 1.1ms
+2026-11-26 18:18:37.988 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [3] === Mounting subdir ===
+2026-11-26 18:18:37.988 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [3] linuxDir        = "/var/minis/mcp-servers"
+2026-11-26 18:18:37.988 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [3] linuxDir.count  = 22
+2026-11-26 18:18:37.988 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [3] linuxDir bytes  = 2f 76 61 72 2f 6d 69 6e 69 73 2f 6d 63 70 2d 73 65 72 76 65 72 73
+2026-11-26 18:18:37.988 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [3] persistDir      = "/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisConfig/mcp-servers"
+2026-11-26 18:18:37.991 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [3] persistDir.count= 183
+2026-11-26 18:18:37.991 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [3] resolved hostDir = "/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Documents/alpine-rootfs/data/var/minis/mcp-servers"
+2026-11-26 18:18:37.991 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [3] symlink already correct, skipping removal
+2026-11-26 18:18:37.992 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [3] persistDir has 0 items: 
+2026-11-26 18:18:37.992 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [3] calling bindMountPath("/var/minis/mcp-servers", toHostPath: "/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisConfig/mcp-servers")
+fakefs_bind_mount: ENTER linux_path="/var/minis/mcp-servers" (len=22) host_path="/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisConfig/mcp-servers" (len=183) read_only=0
+fakefs_bind_mount: fix_path("/var/minis/mcp-servers") => "var/minis/mcp-servers" (len=21)
+fakefs_bind_mount: root_fd=23 path="/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Documents/alpine-rootfs/data"
+fakefs_bind_mount: using free slot[4]
+fakefs_bind_mount: slot[4] NEW symlink: host_link="var/minis/mcp-servers" -> host_path="/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisConfig/mcp-servers" (root_fd=23)
+create_relative_symlink: "var/minis/mcp-servers" -> "/Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisConfig/mcp-servers" (relative: "../../../../../../../../Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisConfig/mcp-servers")
+fakefs_bind_mount: slot[4] symlinkat returned 0 (errno=0)
+fakefs_bind_mount: slot[4] VERIFY readlinkat("var/minis/mcp-servers") => "../../../../../../../../Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisConfig/mcp-servers"
+fakefs_bind_mount: slot[4] created meta.db entry for "/var/minis/mcp-servers" mode=0755
+2026-11-26 18:18:37.996 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [3] bind mount OK: /var/minis/mcp-servers -> /Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisConfig/mcp-servers
+2026-11-26 18:18:37.996 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [3] symlink at /Users/runner/Library/Developer/CoreSimulator/Devices/7F81FA48-EEA2-44A5-AC62-55FB6DDF82EA/data/Containers/Data/Application/A0DA18FA-5D3D-4935-B96B-97226AED1460/Documents/alpine-rootfs/data/var/minis/mcp-servers -> ../../../../../../../../Shared/AppGroup/1C7D8967-773F-42B4-AADE-9268586EEA6F/MinisConfig/mcp-servers
+2026-11-26 18:18:38.011 Minis[38128:106202] [TableLayout] [INFO] [TableLayout] inst=28e5f0 src=fresh persist=false req=380.0 tableW=380 cols=130/82/168 mode=natural rows=4 h=146.0 streamed=false nonRenderDepth=0
+2026-11-26 18:18:38.018 Minis[38128:106202] [AttachBoundsHot] [INFO] [SharedLayoutCache] last1s hits=0 misses=1 size=0/256
+2026-11-26 18:18:38.018 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [3] hostDir after mount has 0 items: 
+2026-11-26 18:18:38.019 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT batchEnsureFakefsMetadata: 1 checked, 0 inserted
+2026-11-26 18:18:38.019 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT [3] registered 1 meta.db entries (batch) in 0.9ms
+2026-11-26 18:18:38.019 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT external: applying snapshot with 0 entries
+2026-11-26 18:18:38.020 Minis[38128:106223] [ISHCoordinator] [INFO] MOUNT bind-mounted 4 dirs for session seed-review-session in 141.7ms
+2026-11-26 18:18:38.036 Minis[38128:106202] [AIChatVM] [DEBUG] [KeepScreen] noop reason=defaults sessions=0 enabled=false bg=false held=false
+2026-11-26 18:18:38.041 Minis[38128:106202] [TableLayout] [INFO] [TableLayout] inst=28e5f0 src=fresh persist=true req=369.0 tableW=369 cols=127/80/162 mode=wrapped rows=4 h=146.0 streamed=false nonRenderDepth=0
+2026-11-26 18:18:38.048 Minis[38128:106202] [BottomGapDiag] [INFO] [BottomGapDiag][footer] idx=5 seeded=4 prominent=false isProcessing=false cached=- precalc=-
+2026-11-26 18:18:38.049 Minis[38128:106202] [BottomGapDiag] [INFO] [BottomGapDiag][user-bubble-estimate] chars=26 textH=40.0 attachH=0.0 total=68.0 w=282
+2026-11-26 18:18:38.049 Minis[38128:106202] [BottomGapDiag] [INFO] [BottomGapDiag][footer] idx=7 seeded=48 prominent=true isProcessing=false cached=- precalc=-
+2026-11-26 18:18:38.049 Minis[38128:106202] [HeightCache] [DEBUG] caller=flushPending(updateUIVC-backstop) items=2 hits=0 misses=2 hitRate=0% measured=69.7ms cacheSize=1
+2026-11-26 18:18:38.050 Minis[38128:106202] [SnapshotDiag] [DEBUG] [SnapshotDiag] caller=flushPending(updateUIVC-backstop) totalItems=8 blockItems=3 lastAssistantBlocks=3 msgCount=3
+2026-11-26 18:18:38.059 Minis[38128:106202] [SnapshotDiag] [DEBUG] [SnapshotDiag]   block[0] kind=text id=97A224EB contentLen=94 tail="，滚动时就会跳。我先把两份值取出来对比。"
+2026-11-26 18:18:38.079 Minis[38128:106202] [SnapshotDiag] [DEBUG] [SnapshotDiag]   block[1] kind=shellTool(command: "grep -rn itemSpacing src/ios/Agent/MessageList | head -20") id=02399628 contentLen=200 tail="yout.itemSpacing = 8"
+2026-11-26 18:18:38.079 Minis[38128:106202] [SnapshotDiag] [DEBUG] [SnapshotDiag]   block[2] kind=text id=1E3CDF9D contentLen=375 tail="之后滚动应该稳了，工具卡片也不会再显脏。"
+2026-11-26 18:18:38.096 Minis[38128:106202] [ScrollStall] [DEBUG] [LAFE] last1s fires=1 slowest=0.02ms items=8 returned=8
+2026-11-26 18:18:38.215 Minis[38128:106202] [MemoWrite] [INFO] [MemoWrite] key=w:1E48ACFB-A41E-406A-9496-A0E30DC05CFD:38:0 h=87.3 w=402
+2026-11-26 18:18:38.216 Minis[38128:106202] [ScrollStall] [DEBUG] [INV] last1s=1 cells top: idx0×1
+2026-11-26 18:18:38.216 Minis[38128:106202] [ScrollStall] [INFO] [ReflowGap] last1s coalesced re-flows=1 firstSettle=true
+2026-11-26 18:18:38.242 Minis[38128:106202] [Soul] [INFO] [SoulGIF] decode frames=12 dur=0.84
+2026-11-26 18:18:38.243 Minis[38128:106202] [MemoWrite] [INFO] [MemoWrite] key=h:54824102-67D3-4743-9B64-6589503784C1 h=26.0 w=402
+2026-11-26 18:18:38.288 Minis[38128:106202] [MarkdownRenderer] [INFO] [MK-VIEW] new textView rnd=e58fd2
+2026-11-26 18:18:38.292 Minis[38128:106202] [MarkdownRenderer] [INFO] [RND-MISS] hash=5874375854317299934 prev=nil src=blocks hasPlainSuffix=false fontChanged=false mdLen=94
+2026-11-26 18:18:38.302 Minis[38128:106202] [MemoWrite] [INFO] [MemoWrite] key=b:54824102-67D3-4743-9B64-6589503784C1:97A224EB-8118-4D72-93ED-4F8ECC727767:94 h=104.0 w=402
+2026-11-26 18:18:38.350 Minis[38128:106202] [MemoWrite] [INFO] [MemoWrite] key=b:54824102-67D3-4743-9B64-6589503784C1:02399628-43FF-417A-B82A-DD642E7ABD04:200 h=36.0 w=402
+2026-11-26 18:18:38.352 Minis[38128:106202] [MarkdownRenderer] [INFO] [RND] table#0 CACHE MISS rows=4 cols=3 newHash=4436385084597383683 cacheSize=1
+2026-11-26 18:18:38.353 Minis[38128:106202] [MarkdownRenderer] [INFO] [RND] mid=54824102 rnd=e58fd2 blocks=6 tables=1 codeBlocks=1 attrLen=136 0.9ms tableCache=0→1
+2026-11-26 18:18:38.356 Minis[38128:106202] [MarkdownRenderer] [INFO] [MK-VIEW] new textView rnd=e58fd2
+2026-11-26 18:18:38.358 Minis[38128:106202] [MarkdownRenderer] [INFO] [RND-MISS] hash=-8447735221834023184 prev=nil src=blocks hasPlainSuffix=false fontChanged=false mdLen=375
+2026-11-26 18:18:38.358 Minis[38128:106202] [MarkdownRenderer] [INFO] [RND] table#0 CACHE HIT rows=4 cols=3 hash=4436385084597383683
+2026-11-26 18:18:38.358 Minis[38128:106202] [MarkdownRenderer] [INFO] [RND] mid=54824102 rnd=e58fd2 blocks=6 tables=1 codeBlocks=1 attrLen=136 0.4ms tableCache=1→1
+2026-11-26 18:18:38.360 Minis[38128:106202] [TableLayout] [INFO] [TableLayout] inst=85de9a src=shared persist=false req=369.0 tableW=369 cols=127/80/162 mode=- rows=4 h=146.0 streamed=false nonRenderDepth=0
+2026-11-26 18:18:38.367 Minis[38128:106202] [MarkdownRenderer] [INFO] [RND] table#0 CACHE HIT rows=4 cols=3 hash=4436385084597383683
+2026-11-26 18:18:38.367 Minis[38128:106202] [MarkdownRenderer] [INFO] [RND] mid=54824102 rnd=e58fd2 blocks=6 tables=1 codeBlocks=1 attrLen=136 0.8ms tableCache=1→1
+2026-11-26 18:18:38.370 Minis[38128:106202] [TableLayout] [INFO] [TableLayout] inst=85de9a src=fresh persist=false req=401.0 tableW=401 cols=137/86/177 mode=natural rows=4 h=146.0 streamed=false nonRenderDepth=1
+2026-11-26 18:18:38.371 Minis[38128:106202] [MarkdownRenderer] [INFO] [RND] table#0 CACHE HIT rows=4 cols=3 hash=4436385084597383683
+2026-11-26 18:18:38.372 Minis[38128:106202] [MarkdownRenderer] [INFO] [RND] mid=54824102 rnd=e58fd2 blocks=6 tables=1 codeBlocks=1 attrLen=136 0.4ms tableCache=1→1
+2026-11-26 18:18:38.373 Minis[38128:106202] [TableLayout] [INFO] [TableLayout] inst=85de9a src=fresh persist=true req=401.0 tableW=401 cols=137/86/177 mode=natural rows=4 h=146.0 streamed=false nonRenderDepth=0
+2026-11-26 18:18:38.379 Minis[38128:106202] [CellSizing] [INFO] [SessionLoad] sizing idx=-1 8.3ms T+911ms est=534→534
+2026-11-26 18:18:38.379 Minis[38128:106202] [MemoWrite] [INFO] [MemoWrite] key=b:54824102-67D3-4743-9B64-6589503784C1:1E3CDF9D-9667-4622-852D-60FAA0952CE2:375 h=533.7 w=402
+2026-11-26 18:18:38.381 Minis[38128:106202] [WatchdogProbe] [WARN] [WatchdogProbe][cv-layout] slow layoutSubviews elapsed=284.9ms visibleCells=5 bounds=402x840 widthChanged=0
+2026-11-26 18:18:38.382 Minis[38128:106202] [TextContainerGuard] [WARN] short-circuited setSize: size=370.0x521.3 tick=2406 repeatThisTick=2 totalShortCircuits=33 container=0x12fb06e80
+2026-11-26 18:18:38.398 Minis[38128:106202] [TableLayout] [INFO] [TableLayout] inst=85de9a src=shared persist=true req=369.0 tableW=369 cols=127/80/162 mode=- rows=4 h=146.0 streamed=false nonRenderDepth=0
+2026-11-26 18:18:38.589 Minis[38128:106269] [MainStall] 🐢 main thread busy 114ms with no frame committed (ended 18:18:37.549) | during: (after chat appear -1033ms), list pass sidebar +4ms
+2026-11-26 18:18:38.655 Minis[38128:106202] [ScrollStall] [DEBUG] [SCR] last1s samples=1 offset=305 Δdist=421 cs=955 mode=auto tracking=0 decel=0 deferred=0
+2026-11-26 18:18:38.655 Minis[38128:106202] [NavbarEval] [INFO] [NavbarEval] toolbarHostEval=10 (toolbarPass=10)
+2026-11-26 18:18:38.663 Minis[38128:106202] [MinisURL] [WARN] [SpinnerTrace] isLoadingSession → false sid=seed-rev msgs=3
+2026-11-26 18:18:38.663 Minis[38128:106202] [Soul] [INFO] [SoulGIF] play frames=12 paused=false reduceMotion=false lowPower=false
+2026-11-26 18:18:38.673 Minis[38128:106202] [NavbarEval] [INFO] [NavbarEval] toolbarHostEval=11 (toolbarPass=11)
+2026-11-26 18:18:38.701 Minis[38128:106202] [MarkdownRenderer] [INFO] [RND] table#0 CACHE HIT rows=4 cols=3 hash=4436385084597383683
+2026-11-26 18:18:38.701 Minis[38128:106202] [MarkdownRenderer] [INFO] [RND] mid=54824102 rnd=e58fd2 blocks=6 tables=1 codeBlocks=1 attrLen=136 0.9ms tableCache=1→1
+2026-11-26 18:18:38.707 Minis[38128:106202] [NavbarEval] [INFO] [NavbarEval] toolbarHostEval=12 (toolbarPass=12)
+2026-11-26 18:18:38.745 Minis[38128:106202] [MemoWrite] [INFO] [MemoWrite] key=w:6E4443B0-1248-4919-BC1A-368044B6694D:26:0 h=67.7 w=402
+2026-11-26 18:18:38.760 Minis[38128:106202] [MemoWrite] [INFO] [MemoWrite] key=f:6E4443B0-1248-4919-BC1A-368044B6694D h=50.3 w=402
+2026-11-26 18:18:39.191 Minis[38128:106202] [BottomGapDiag] [INFO] [BottomGapDiag][footer] idx=5 seeded=4 prominent=false isProcessing=false cached=- precalc=-
+2026-11-26 18:18:39.191 Minis[38128:106202] [BottomGapDiag] [INFO] [BottomGapDiag][footer] idx=7 seeded=48 prominent=true isProcessing=false cached=- precalc=-
+2026-11-26 18:18:39.192 Minis[38128:106202] [SnapshotDiag] [INFO] [SnapshotDiag] SKIP caller=bind3-sessionLoad items unchanged (count=8) — no re-apply
+2026-11-26 18:18:39.193 Minis[38128:106202] [ScrollStall] [DEBUG] [LAFE] last1s fires=4 slowest=0.02ms items=8 returned=8
+2026-11-26 18:18:39.195 Minis[38128:106202] [MemoWrite] [INFO] [MemoWrite] key=w:6E4443B0-1248-4919-BC1A-368044B6694D:26:0 h=67.7 w=402
+2026-11-26 18:18:39.196 Minis[38128:106202] [MemoWrite] [INFO] [MemoWrite] key=f:6E4443B0-1248-4919-BC1A-368044B6694D h=50.3 w=402
+2026-11-26 18:18:39.199 Minis[38128:106202] [MarkdownRenderer] [INFO] [RND] table#0 CACHE HIT rows=4 cols=3 hash=4436385084597383683
+2026-11-26 18:18:39.201 Minis[38128:106202] [MarkdownRenderer] [INFO] [RND] mid=54824102 rnd=e58fd2 blocks=6 tables=1 codeBlocks=1 attrLen=136 1.8ms tableCache=1→1
+2026-11-26 18:18:39.239 Minis[38128:106202] [MemoWrite] [INFO] [MemoWrite] key=b:54824102-67D3-4743-9B64-6589503784C1:1E3CDF9D-9667-4622-852D-60FAA0952CE2:375:r146 h=533.7 w=402
+2026-11-26 18:18:39.240 Minis[38128:106202] [ScrollStall] [DEBUG] [INV] last1s=4 cells top: idx7×2 idx5×2
+2026-11-26 18:18:39.242 Minis[38128:106202] [CellSizing] [INFO] [MemoSeed] key=w:6E4443B0-1248-4919-BC1A-368044B6694D:26:0 h=67.7 w=402 — skipped systemLayoutSizeFitting
+2026-11-26 18:18:39.246 Minis[38128:106202] [MemoWrite] [INFO] [MemoWrite] key=f:6E4443B0-1248-4919-BC1A-368044B6694D h=50.3 w=402
+2026-11-26 18:18:39.247 Minis[38128:106202] [CellSizing] [INFO] [MemoSeed] key=b:54824102-67D3-4743-9B64-6589503784C1:1E3CDF9D-9667-4622-852D-60FAA0952CE2:375:r146 h=533.7 w=402 — skipped systemLayoutSizeFitting
+2026-11-26 18:18:39.247 Minis[38128:106202] [FGLayout] [INFO] [FGLayout] remeasure reason=skip-after-defer(bind3-sessionLoad) visibleCells=4
+2026-11-26 18:18:39.250 Minis[38128:106202] [Voice] [INFO] [Voice] [capsule-calc] capsule[y784…828 x342…386] rects=2 passes=2 → lift=216 by=downloadButton
+    p0 inputBar[y723…840 x0…402] xOv=true yOv=44 overlap=true needLift=112
+    p0 downloadButton[y619…840 x0…402] xOv=true yOv=44 overlap=true needLift=216
+2026-11-26 18:18:39.250 Minis[38128:106202] [Voice] [INFO] [Voice] [capsule] APPLY lift 0 → 216 (rise); restingBottom=828 → displayBottom=611
+2026-11-26 18:18:39.251 Minis[38128:106202] [Voice] [INFO] [Voice] [capsule-placement] setRect downloadButton y=551…840 x=0…402
+2026-11-26 18:18:39.251 Minis[38128:106202] [Voice] [INFO] [Voice] [capsule-placement] setRect inputBar y=658…840 x=0…402
+2026-11-26 18:18:39.251 Minis[38128:106202] [CellSize] [INFO] [invalidateCell][SKIP-DEDUPE] storageLen=94 measureW=370 tcW=370 lastH=100.0 tableGen=0 — fingerprint match, skipping sizeThatFits
+2026-11-26 18:18:39.252 Minis[38128:106202] [InputBarLayout] [INFO] inputBarHeight settled=116.35709635416663 x=0
+2026-11-26 18:18:39.255 Minis[38128:106202] [AttachHotPath] [INFO] [UAV][SKIP-DEDUPE] storageLen=136 tcW=370 views=2 tableGen=1 — fingerprint match, nothing to do
+2026-11-26 18:18:39.256 Minis[38128:106202] [CellSize] [INFO] [invalidateCell][SKIP-DEDUPE] storageLen=136 measureW=370 tcW=370 lastH=529.7 tableGen=1526594390131244028 — fingerprint match, skipping sizeThatFits
+2026-11-26 18:18:39.268 Minis[38128:106202] [MemoWrite] [INFO] [MemoWrite] key=w:6E4443B0-1248-4919-BC1A-368044B6694D:26:0 h=67.7 w=402
+2026-11-26 18:18:39.269 Minis[38128:106202] [MemoWrite] [INFO] [MemoWrite] key=f:6E4443B0-1248-4919-BC1A-368044B6694D h=50.3 w=402
+2026-11-26 18:18:39.269 Minis[38128:106202] [MemoWrite] [INFO] [MemoWrite] key=b:54824102-67D3-4743-9B64-6589503784C1:1E3CDF9D-9667-4622-852D-60FAA0952CE2:375:r146 h=533.7 w=402
+2026-11-26 18:18:39.354 Minis[38128:106202] [NavbarEval] [INFO] [NavbarEval] toolbarHostEval=13 (toolbarPass=13)
+2026-11-26 18:18:39.561 Minis[38128:106202] [Voice] [INFO] [Voice] [capsule-calc] capsule[y784…828 x342…386] rects=2 passes=2 → lift=284 by=downloadButton
+    p0 inputBar[y658…840 x0…402] xOv=true yOv=44 overlap=true needLift=177
+    p0 downloadButton[y551…840 x0…402] xOv=true yOv=44 overlap=true needLift=284
+2026-11-26 18:18:39.561 Minis[38128:106202] [Voice] [INFO] [Voice] [capsule] APPLY lift 216 → 284 (rise); restingBottom=828 → displayBottom=543
+2026-11-26 18:18:39.653 Minis[38128:106269] [MainStall] 🐢 main thread busy 1684ms with no frame committed (ended 18:18:39.296) | during: (after list pass sidebar -173ms), list pass sidebar +1079ms
+2026-11-26 18:18:39.976 Minis[38128:106269] [MemMonitor] 📈 footprint=83.0MB (Δ+16.7MB) | sys free=1507/7168MB (21%) | pressure=normal
+2026-11-26 18:18:39.982 Minis[38128:106202] [HomeListPerf] [INFO] [HomeListPerf] 2.5s sidebar passes=3 sessions=3 rows=3 sections=1 | group max 0.2ms avg 0.1ms | resolved 9 in 0.0ms (cache 9), per pass max 3, while scrolling 0 | changed: other 3 | first pass 2540.8ms after nav | 1 quiet windows before
+2026-11-26 18:18:40.939 Minis[38128:106202] [AIChatVM] [DEBUG] [KeepScreen] noop reason=defaults sessions=0 enabled=false bg=false held=false
+2026-11-26 18:18:40.941 Minis[38128:106202] [AIChatVM] [DEBUG] [KeepScreen] noop reason=defaults sessions=0 enabled=false bg=false held=false
+2026-11-26 18:18:40.943 Minis[38128:106202] [AIChatVM] [DEBUG] [KeepScreen] noop reason=defaults sessions=0 enabled=false bg=false held=false
+2026-11-26 18:18:40.946 Minis[38128:106202] [AIChatVM] [DEBUG] [KeepScreen] noop reason=defaults sessions=0 enabled=false bg=false held=false
+2026-11-26 18:18:40.947 Minis[38128:106202] [AIChatVM] [DEBUG] [KeepScreen] noop reason=defaults sessions=0 enabled=false bg=false held=false
+2026-11-26 18:18:40.949 Minis[38128:106202] [AIChatVM] [DEBUG] [KeepScreen] noop reason=defaults sessions=0 enabled=false bg=false held=false
+2026-11-26 18:18:40.962 Minis[38128:106202] [MirrorSpeedTest] [INFO] Mirror speed test complete: [Minis.MirrorCategory.pip: 6, Minis.MirrorCategory.alpine: 10, Minis.MirrorCategory.npm: 4]
+2026-11-26 18:18:40.980 Minis[38128:106202] [NavbarEval] [INFO] [NavbarEval] toolbarHostEval=14 (toolbarPass=14)
+2026-11-26 18:18:41.021 Minis[38128:106202] [AIChatVM] [DEBUG] [KeepScreen] noop reason=defaults sessions=0 enabled=false bg=false held=false
+2026-11-26 18:18:41.024 Minis[38128:106202] [AIChatVM] [DEBUG] [KeepScreen] noop reason=defaults sessions=0 enabled=false bg=false held=false
+2026-11-26 18:18:41.026 Minis[38128:106202] [MirrorSpeedTest] [INFO] Backed up etc/apk/repositories → .bak
+2026-11-26 18:18:41.028 Minis[38128:106202] [MirrorSpeedTest] [INFO] Applied mirror LEASEWEB UK to etc/apk/repositories
+2026-11-26 18:18:41.028 Minis[38128:106202] [MirrorSpeedTest] [INFO] Auto mirror detection applied
+2026-11-26 18:18:41.037 Minis[38128:106202] [NavbarEval] [INFO] [NavbarEval] toolbarHostEval=15 (toolbarPass=15)
+2026-11-26 18:18:41.120 Minis[38128:106202] [NavbarEval] [INFO] [NavbarEval] toolbarHostEval=16 (toolbarPass=16)
+2026-11-26 18:18:41.162 Minis[38128:106269] [MainStall] 🐢 main thread busy 116ms with no frame committed (ended 18:18:41.137) | during: (after list pass sidebar -1722ms), list pass sidebar +39ms, list pass sidebar +64ms
+2026-11-26 18:18:44.752 Minis[38128:106202] [ScrollDiag] [INFO] [ScrollDiag][willBeginDragging] offset=302 contentSize=953 visibleCells=4
+2026-11-26 18:18:44.753 Minis[38128:106202] [AIChatVM] [INFO] [SuspendState] SUSPEND sid=seed-rev caller=scrollViewWillBeginDragging(_:) (MessageListV3Coordinator+ScrollViewDelegate.swift)
+2026-11-26 18:18:44.758 Minis[38128:106202] [ScrollStall] [DEBUG] [SCR] last1s samples=3 offset=112 Δdist=192 cs=953 mode=browse tracking=1 decel=0 deferred=1
+2026-11-26 18:18:44.790 Minis[38128:106202] [NavbarEval] [INFO] [NavbarEval] toolbarHostEval=17 (toolbarPass=17)
+2026-11-26 18:18:44.856 Minis[38128:106202] [NavbarEval] [INFO] [NavbarEval] toolbarHostEval=18 (toolbarPass=18)
+2026-11-26 18:18:44.886 Minis[38128:106202] [ScrollStall] [DEBUG] [LAFE] last1s fires=4 slowest=0.01ms items=8 returned=8
+2026-11-26 18:18:44.889 Minis[38128:106269] [MainStall] 🐢 main thread busy 122ms with no frame committed (ended 18:18:44.867) | during: (after list pass sidebar -3659ms)
+2026-11-26 18:18:44.890 Minis[38128:106202] [MemoWrite] [INFO] [MemoWrite] key=w:1E48ACFB-A41E-406A-9496-A0E30DC05CFD:38:0 h=87.3 w=402
+2026-11-26 18:18:44.896 Minis[38128:106202] [MemoWrite] [INFO] [MemoWrite] key=h:54824102-67D3-4743-9B64-6589503784C1 h=26.0 w=402
+2026-11-26 18:18:44.908 Minis[38128:106202] [MarkdownRenderer] [INFO] [MK-VIEW] new textView rnd=e58fd2
+2026-11-26 18:18:44.910 Minis[38128:106202] [MarkdownRenderer] [INFO] [RND-MISS] hash=5874375854317299934 prev=nil src=blocks hasPlainSuffix=false fontChanged=false mdLen=94
+2026-11-26 18:18:44.914 Minis[38128:106202] [MemoWrite] [INFO] [MemoWrite] key=b:54824102-67D3-4743-9B64-6589503784C1:97A224EB-8118-4D72-93ED-4F8ECC727767:94 h=104.0 w=402
+2026-11-26 18:18:44.917 Minis[38128:106202] [TextContainerGuard] [WARN] short-circuited setSize: REJECT-NAN-INF-NEG size=0.0x-8.0 total=65 container=0x15ef14180
+2026-11-26 18:18:44.918 Minis[38128:106202] [MarkdownRenderer] [INFO] [MK-VIEW] new textView rnd=e58fd2
+2026-11-26 18:18:44.920 Minis[38128:106202] [MarkdownRenderer] [INFO] [RND-MISS] hash=5874375854317299934 prev=nil src=blocks hasPlainSuffix=false fontChanged=false mdLen=94
+2026-11-26 18:18:44.934 Minis[38128:106202] [MemoWrite] [INFO] [MemoWrite] key=b:54824102-67D3-4743-9B64-6589503784C1:02399628-43FF-417A-B82A-DD642E7ABD04:200:r0 h=36.0 w=402
+2026-11-26 18:18:45.034 Minis[38128:106202] [ScrollDecel] [INFO] [ScrollDecel][willEndDragging] vy=0pt/s offset=-542 → target=-116 projDist=426 cs=953
+2026-11-26 18:18:45.036 Minis[38128:106202] [ScrollDecel] [INFO] [ScrollDecel][BEGIN] offset=-542 target=-116 decelDist=426 visibleCells=5 deferSelfSizing=1
+2026-11-26 18:18:45.038 Minis[38128:106202] [CellSize] [INFO] [invalidateCell][SKIP-DEDUPE] storageLen=94 measureW=370 tcW=370 lastH=100.0 tableGen=0 — fingerprint match, skipping sizeThatFits
+2026-11-26 18:18:45.101 Minis[38128:106202] [Voice] [INFO] [Voice] [capsule-placement] setRect scrollButtons y=607…840 x=0…402
+2026-11-26 18:18:45.120 Minis[38128:106202] [ScrollDecel] [WARN] [ScrollDecel][SLOW-FRAME] +85ms into decel gap=49ms offset=-303↓ remainToTarget=187 visibleCells=5 frame#3
+2026-11-26 18:18:45.121 Minis[38128:106202] [ScrollDecel] [WARN] [DecelDisplayLink][DROP] +86ms into decel gap=36.0ms (expected 16.7ms, ~1 frame(s) dropped) offset=-303 remainToTarget=187 frame#2
+2026-11-26 18:18:45.203 Minis[38128:106202] [ScrollDecel] [WARN] [ScrollDecel][SLOW-FRAME] +167ms into decel gap=37ms offset=-197↓ remainToTarget=81 visibleCells=5 frame#6
+2026-11-26 18:18:45.395 Minis[38128:106202] [ScrollDecel] [WARN] [DecelDisplayLink][DROP] +359ms into decel gap=51.8ms (expected 16.7ms, ~2 frame(s) dropped) offset=-197 remainToTarget=81 frame#5
+2026-11-26 18:18:45.400 Minis[38128:106202] [Voice] [INFO] [Voice] [capsule-calc] capsule[y784…828 x342…386] rects=3 passes=2 → lift=284 by=downloadButton
+    p0 inputBar[y658…840 x0…402] xOv=true yOv=44 overlap=true needLift=177
+    p0 scrollButtons[y607…840 x0…402] xOv=true yOv=44 overlap=true needLift=228
+    p0 downloadButton[y551…840 x0…402] xOv=true yOv=44 overlap=true needLift=284
+2026-11-26 18:18:45.421 Minis[38128:106202] [ScrollDecel] [WARN] [ScrollDecel][SLOW-FRAME] +386ms into decel gap=218ms offset=-125↓ remainToTarget=9 visibleCells=5 frame#7
+2026-11-26 18:18:45.422 Minis[38128:106202] [ScrollDecel] [WARN] [DecelDisplayLink][DROP] +386ms into decel gap=229.8ms (expected 16.7ms, ~13 frame(s) dropped) offset=-125 remainToTarget=9 frame#6
+2026-11-26 18:18:45.672 Minis[38128:106202] [ScrollDecel] [WARN] [ScrollDecel][SLOW-FRAME] +636ms into decel gap=34ms offset=-117↓ remainToTarget=1 visibleCells=5 frame#19
+2026-11-26 18:18:45.677 Minis[38128:106269] [MainStall] last 10s: busy spans >=25ms=12 >=50ms=9 >=100ms=7, longest 2586ms ended 18:18:37.434
+2026-11-26 18:18:45.719 Minis[38128:106202] [ScrollDecel] [WARN] [ScrollDecel][SLOW-FRAME] +683ms into decel gap=47ms offset=-116↓ remainToTarget=0 visibleCells=5 frame#20
+2026-11-26 18:18:45.720 Minis[38128:106202] [ScrollDecel] [INFO] [ScrollDecel][END] dur=684ms frames=21 slowFrames=5 offset -542→-116 (target was -116)
+2026-11-26 18:18:45.721 Minis[38128:106202] [ScrollDecel] [INFO] [DecelDisplayLink][SUMMARY] dur=685ms frames=22 drops=3 actualFps=32.1 gapRange=[14.0..229.8]ms expected=16.7ms
+2026-11-26 18:18:45.723 Minis[38128:106202] [Settle] [DEBUG] [Settle] BEGIN mode=browse nearBottom=false offset=-116.0 contentSize=953.0 deferredHeights=0 hasPendingSnapshot=false
+2026-11-26 18:18:45.725 Minis[38128:106202] [ScrollStall] [DEBUG] [CACHE-DEDUP] last1s hits=1
+2026-11-26 18:18:45.726 Minis[38128:106202] [AIChatVM] [INFO] [SuspendState] RESUME sid=seed-rev caller=settleAfterInteraction(_:) (MessageListV3Coordinator+ScrollViewDelegate.swift)
+2026-11-26 18:18:45.728 Minis[38128:106202] [Settle] [DEBUG] [Settle] END offset=-116.0 contentSize=953.0
+2026-11-26 18:18:45.746 Minis[38128:106202] [NavbarEval] [INFO] [NavbarEval] toolbarHostEval=19 (toolbarPass=19)
+2026-11-26 18:18:45.894 Minis[38128:106269] [MainStall] 🐢 main thread busy 214ms with no frame committed (ended 18:18:45.416) | during: (after list pass sidebar -4115ms)
+2026-11-26 18:18:55.740 Minis[38128:106269] [MainStall] last 10s: busy spans >=25ms=2 >=50ms=1 >=100ms=0, longest 84ms ended 18:18:45.807
+2026-11-26 18:18:57.241 Minis[38128:106229] ISHKernel: [CPUTop] proc=31% live=32% churn=0% threads=20 ival=10.0s forks=+0 (0/s) forkrate thr=+0 byp=+0 slept=0ms pathcache hit=+0 miss=+0[slot=0 gen=0 ttl=0 flags=0] inval=+0 | #1 - 25.6% | #2 main 5.2% R guest pid=1 comm= last=sys(0) sys=0 blk=0 | #3 - 0.4% | #4 com.apple.UIKit.inProcessAnimationManager 0.3% | #5 - 0.2% | #6 - 0.1% R
+2026-11-26 18:19:04.969 Minis[38128:106202] [ScrollDiag] [INFO] [ScrollDiag][willBeginDragging] offset=-116 contentSize=953 visibleCells=5
+2026-11-26 18:19:04.971 Minis[38128:106202] [AIChatVM] [INFO] [SuspendState] SUSPEND sid=seed-rev caller=scrollViewWillBeginDragging(_:) (MessageListV3Coordinator+ScrollViewDelegate.swift)
+2026-11-26 18:19:04.988 Minis[38128:106202] [ScrollStall] [DEBUG] [SCR] last1s samples=31 offset=-64 Δdist=176 cs=953 mode=browse tracking=1 decel=0 deferred=1
+2026-11-26 18:19:05.003 Minis[38128:106269] [MainStall] 🐢 main thread busy 215ms with no frame committed (ended 18:19:04.942) | during: (after list pass sidebar -23631ms)
+2026-11-26 18:19:05.139 Minis[38128:106202] [ScrollDecel] [INFO] [ScrollDecel][willEndDragging] vy=0pt/s offset=396 → target=302 projDist=-94 cs=953
+2026-11-26 18:19:05.139 Minis[38128:106202] [ScrollDecel] [INFO] [ScrollDecel][BEGIN] offset=396 target=302 decelDist=-94 visibleCells=5 deferSelfSizing=1
+2026-11-26 18:19:05.196 Minis[38128:106202] [ScrollStall] [DEBUG] [LAFE] last1s fires=2 slowest=0.02ms items=8 returned=8
+2026-11-26 18:19:05.212 Minis[38128:106202] [CellSizing] [INFO] [MemoSeed] key=w:6E4443B0-1248-4919-BC1A-368044B6694D:26:0 h=67.7 w=402 — skipped systemLayoutSizeFitting
+2026-11-26 18:19:05.238 Minis[38128:106202] [MemoWrite] [INFO] [MemoWrite] key=f:6E4443B0-1248-4919-BC1A-368044B6694D h=50.3 w=402
+2026-11-26 18:19:05.271 Minis[38128:106202] [ScrollStall] [DEBUG] [CACHE-DEDUP] last1s hits=5
+2026-11-26 18:19:05.297 Minis[38128:106202] [ScrollDecel] [WARN] [ScrollDecel][SLOW-FRAME] +157ms into decel gap=157ms offset=320↑ remainToTarget=-18 visibleCells=4 frame#1
+2026-11-26 18:19:05.300 Minis[38128:106202] [ScrollDecel] [WARN] [DecelDisplayLink][DROP] +159ms into decel gap=150.1ms (expected 16.7ms, ~8 frame(s) dropped) offset=320 remainToTarget=-18 frame#1
+2026-11-26 18:19:05.430 Minis[38128:106202] [ScrollDecel] [WARN] [ScrollDecel][SLOW-FRAME] +290ms into decel gap=133ms offset=307↑ remainToTarget=-5 visibleCells=4 frame#2
+2026-11-26 18:19:05.431 Minis[38128:106202] [ScrollDecel] [WARN] [DecelDisplayLink][DROP] +291ms into decel gap=143.6ms (expected 16.7ms, ~8 frame(s) dropped) offset=307 remainToTarget=-5 frame#2
+2026-11-26 18:19:05.480 Minis[38128:106202] [ScrollDecel] [WARN] [ScrollDecel][SLOW-FRAME] +340ms into decel gap=33ms offset=305↑ remainToTarget=-3 visibleCells=4 frame#4
+2026-11-26 18:19:05.494 Minis[38128:106202] [Voice] [INFO] [Voice] [capsule-placement] clearRect scrollButtons
+2026-11-26 18:19:05.580 Minis[38128:106202] [ScrollDecel] [WARN] [ScrollDecel][SLOW-FRAME] +440ms into decel gap=34ms offset=303↑ remainToTarget=-1 visibleCells=4 frame#9
+2026-11-26 18:19:05.613 Minis[38128:106202] [ScrollDecel] [WARN] [ScrollDecel][SLOW-FRAME] +473ms into decel gap=33ms offset=303↑ remainToTarget=-1 visibleCells=4 frame#10
+2026-11-26 18:19:05.714 Minis[38128:106202] [ScrollDecel] [WARN] [ScrollDecel][SLOW-FRAME] +574ms into decel gap=101ms offset=303↑ remainToTarget=-0 visibleCells=4 frame#11
+2026-11-26 18:19:05.714 Minis[38128:106202] [ScrollDecel] [INFO] [ScrollDecel][END] dur=575ms frames=12 slowFrames=6 offset 396→302 (target was 302)
+2026-11-26 18:19:05.714 Minis[38128:106202] [ScrollDecel] [INFO] [DecelDisplayLink][SUMMARY] dur=575ms frames=12 drops=2 actualFps=20.9 gapRange=[16.7..150.1]ms expected=16.7ms
+2026-11-26 18:19:05.717 Minis[38128:106202] [Settle] [DEBUG] [Settle] BEGIN mode=auto nearBottom=true offset=302.3 contentSize=953.0 deferredHeights=0 hasPendingSnapshot=false
+2026-11-26 18:19:05.718 Minis[38128:106202] [AIChatVM] [INFO] [SuspendState] RESUME sid=seed-rev caller=settleAfterInteraction(_:) (MessageListV3Coordinator+ScrollViewDelegate.swift)
+2026-11-26 18:19:05.809 Minis[38128:106269] [MainStall] last 10s: busy spans >=25ms=4 >=50ms=4 >=100ms=4, longest 322ms ended 18:19:05.279
+2026-11-26 18:19:05.859 Minis[38128:106202] [Settle] [DEBUG] [Settle] END offset=302.3 contentSize=953.0
+2026-11-26 18:19:05.877 Minis[38128:106202] [Voice] [INFO] [Voice] [capsule-calc] capsule[y784…828 x342…386] rects=2 passes=2 → lift=284 by=downloadButton
+    p0 inputBar[y658…840 x0…402] xOv=true yOv=44 overlap=true needLift=177
+    p0 downloadButton[y551…840 x0…402] xOv=true yOv=44 overlap=true needLift=284
+2026-11-26 18:19:06.062 Minis[38128:106269] [MainStall] 🐢 main thread busy 165ms with no frame committed (ended 18:19:05.879) | during: (after list pass sidebar -24616ms)
+2026-11-26 18:19:15.866 Minis[38128:106269] [MainStall] last 10s: busy spans >=25ms=3 >=50ms=2 >=100ms=1, longest 165ms ended 18:19:05.879
+2026-11-26 18:19:16.419 Minis[38128:112042] [ResourceDiag] [INFO] [PortMonitor] port_count=294 threads=17 threads_new_60s=0 t=+0s
+2026-11-26 18:19:16.420 Minis[38128:112042] [ResourceDiag] [INFO] [ResourceTrack] guestForks=0 taskInfoCalls=0 threadsCreated=0 threadPorts=0/0 threadPortsOutstanding=0 xpcConnActive=0 webviewActive=0
+2026-11-26 18:19:19.732 Minis[38128:106202] [HomeListPerf] [INFO] [HomeListPerf] 5.2s sidebar passes=1 sessions=3 rows=3 sections=1 | group max 3.7ms avg 3.7ms | resolved 3 in 0.0ms (cache 3), per pass max 3, while scrolling 0 | changed: other 1 | 1 quiet windows before

@@ -1,0 +1,1 @@
+{"app":"MinisApp","version":"1.15","rpc":"jsonrpc-2.0","auth":"off","pair_path":"/pair","rpc_path":"/rpc","skill_path":"/skill"}
